@@ -34,26 +34,26 @@ args = [ "target/web", "-a", "127.0.0.1:${CARGO_MAKE_WEB_PORT}" ]
 #### Public
 
 [tasks.build]
-description = "Build desktop target"
+description = "Build desktop target. Rebuilds on change."
 category = "Build"
 command = "cargo"
 args = [ "build" ]
 watch = { watch = [ "./src/" ] }
 
 [tasks.build-web]
-description = "Build web target"
+description = "Build web target. Rebuilds on change."
 category = "Build"
 dependencies = [ "build-web-target", "build-web-bindings", "build-web-copy-static" ]
 watch = { watch = [ "./src/" ] }
 
 [tasks.run]
-description = "Run desktop target"
+description = "Run desktop target. Rebuilds app on change"
 category = "Run"
 command = "cargo"
 args = [ "run" ]
 watch = { watch = [ "./src/" ] }
 
 [tasks.run-web]
-description = "Run web target"
+description = "Run web target. Rebuilds app on change"
 category = "Run"
 run_task = { name = [ "run-web-server", "build-web" ], parallel = true }
