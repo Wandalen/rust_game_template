@@ -2,6 +2,21 @@
 Cross-platform rust game template 
 
 
+### Prerequisites
+
+```cargo install cargo-make```
+
+
 ### How to run on desktop
 
-```cargo run```
+```
+cargo make run
+```
+
+
+### How to run on web
+
+```
+cargo make run-web
+```
+

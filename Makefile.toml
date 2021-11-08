@@ -1,0 +1,53 @@
+[config] 
+skip_core_tasks = true #to skip default predefined flow
+
+#### Internal
+
+[tasks.build-web-target]
+private = true
+command = "cargo"
+install_script = "rustup target add wasm32-unknown-unknown"
+args = [ "build", "--target", "wasm32-unknown-unknown", "--features", "wgpu/webgl,winit/web-sys" ]
+
+[tasks.build-web-bindings]
+private = true
+install_crate = "wasm-bindgen-cli"
+command = "wasm-bindgen"
+args = [ "--target", "web", "--out-dir", "target/web", "target/wasm32-unknown-unknown/debug/webgpu.wasm" ]
+
+[tasks.build-web-static]
+private = true
+script_runner = "@shell"
+script = '''
+cp static/index.html target/web/index.html
+'''
+
+[tasks.run-web-server]
+private = true
+install_crate = "basic-http-server"
+command = "basic-http-server"
+args = [ "target/web", "-a", "127.0.0.1:8080" ]
+
+#### Interface
+
+[tasks.build]
+description = "Build desktop target"
+category = "Build"
+command = "cargo"
+args = [ "build" ]
+
+[tasks.build-web]
+description = "Build web target"
+category = "Build"
+dependencies = [ "build-web-target", "build-web-bindings", "build-web-static"  ]
+
+[tasks.run]
+description = "Run desktop target"
+category = "Run"
+command = "cargo"
+args = [ "run" ]
+
+[tasks.run-web]
+description = "Run web target"
+category = "Run"
+dependencies = [ "build-web", "run-web-server" ]
