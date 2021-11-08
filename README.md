@@ -2,16 +2,21 @@
 Cross-platform rust game template 
 
 
+### Prerequisites
+
+```cargo install cargo-make```
+
+
 ### How to run on desktop
 
-```cargo run```
+```
+cargo make run
+```
 
 
 ### How to run on web
 
 ```
-cargo install wasm-bindgen-cli 
-cargo install basic-http-server
-./step/BuildWeb.sh
+cargo make run-web
 ```
 
