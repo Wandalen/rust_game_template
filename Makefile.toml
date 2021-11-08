@@ -1,7 +1,10 @@
 [config] 
 skip_core_tasks = true #to skip default predefined flow
 
-#### Internal
+[env]
+CARGO_MAKE_WEB_PORT = 8080
+
+#### Private
 
 [tasks.build-web-target]
 private = true
@@ -15,7 +18,7 @@ install_crate = "wasm-bindgen-cli"
 command = "wasm-bindgen"
 args = [ "--target", "web", "--out-dir", "target/web", "target/wasm32-unknown-unknown/debug/webgpu.wasm" ]
 
-[tasks.build-web-static]
+[tasks.build-web-copy-static]
 private = true
 script_runner = "@shell"
 script = '''
@@ -26,28 +29,31 @@ cp static/index.html target/web/index.html
 private = true
 install_crate = "basic-http-server"
 command = "basic-http-server"
-args = [ "target/web", "-a", "127.0.0.1:8080" ]
+args = [ "target/web", "-a", "127.0.0.1:${CARGO_MAKE_WEB_PORT}" ]
 
-#### Interface
+#### Public
 
 [tasks.build]
 description = "Build desktop target"
 category = "Build"
 command = "cargo"
 args = [ "build" ]
+watch = { watch = [ "./src/" ] }
 
 [tasks.build-web]
 description = "Build web target"
 category = "Build"
-dependencies = [ "build-web-target", "build-web-bindings", "build-web-static"  ]
+dependencies = [ "build-web-target", "build-web-bindings", "build-web-copy-static" ]
+watch = { watch = [ "./src/" ] }
 
 [tasks.run]
 description = "Run desktop target"
 category = "Run"
 command = "cargo"
 args = [ "run" ]
+watch = { watch = [ "./src/" ] }
 
 [tasks.run-web]
 description = "Run web target"
 category = "Run"
-dependencies = [ "build-web", "run-web-server" ]
+run_task = { name = [ "run-web-server", "build-web" ], parallel = true }
