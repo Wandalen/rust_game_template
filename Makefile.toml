@@ -1,7 +1,10 @@
 [config] 
 skip_core_tasks = true #to skip default predefined flow
 
-#### Internal
+[env]
+CARGO_MAKE_WEB_PORT = 8080
+
+#### Private
 
 [tasks.build-web-target]
 private = true
@@ -15,39 +18,79 @@ install_crate = "wasm-bindgen-cli"
 command = "wasm-bindgen"
 args = [ "--target", "web", "--out-dir", "target/web", "target/wasm32-unknown-unknown/debug/webgpu.wasm" ]
 
-[tasks.build-web-static]
+[tasks.build-web-copy-static]
 private = true
 script_runner = "@shell"
 script = '''
 cp static/index.html target/web/index.html
 '''
 
+[tasks.build-android-target]
+private = true
+command = "cargo"
+args = [ "apk", "build" ]
+
+[tasks.run-android-target]
+private = true
+command = "cargo"
+args = [ "apk", "run" ]
+
 [tasks.run-web-server]
 private = true
 install_crate = "basic-http-server"
 command = "basic-http-server"
-args = [ "target/web", "-a", "127.0.0.1:8080" ]
+args = [ "target/web", "-a", "127.0.0.1:${CARGO_MAKE_WEB_PORT}" ]
 
-#### Interface
+[tasks.watch]
+private = true
+watch = { watch = [ "./src/" ] }
+
+#### Public
 
 [tasks.build]
-description = "Build desktop target"
+description = "Build desktop target. Rebuilds on change."
+private = false
+extend = "watch"
 category = "Build"
 command = "cargo"
 args = [ "build" ]
 
 [tasks.build-web]
-description = "Build web target"
+description = "Build web target. Rebuilds on change."
+private = false
+extend = "watch"
 category = "Build"
-dependencies = [ "build-web-target", "build-web-bindings", "build-web-static"  ]
+dependencies = [ "build-web-target", "build-web-bindings", "build-web-copy-static" ]
+
+[tasks.build-android]
+description = "Build android target. Rebuilds on change."
+private = false
+extend = "watch"
+category = "Build"
+dependencies = [ "build-android-target" ]
 
 [tasks.run]
-description = "Run desktop target"
+description = "Run desktop target. Rebuilds app on change"
+private = false
+extend = "watch"
 category = "Run"
 command = "cargo"
 args = [ "run" ]
 
+#[tasks.run-web]
+#description = "Run web target. Rebuilds app on change"
+#category = "Run"
+#run_task = { name = [ "run-web-server", "build-web" ], parallel = true }
+
 [tasks.run-web]
-description = "Run web target"
+description = "Run web target. Rebuilds app on change"
 category = "Run"
-dependencies = [ "build-web", "run-web-server" ]
+extend = "build-web"
+run_task = { name = [ "run-web-server" ] }
+
+[tasks.run-android]
+description = "Run android target. Rebuilds on change."
+private = false
+extend = "watch"
+category = "Run"
+dependencies = [ "run-android-target" ]
