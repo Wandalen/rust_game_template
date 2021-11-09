@@ -31,29 +31,42 @@ install_crate = "basic-http-server"
 command = "basic-http-server"
 args = [ "target/web", "-a", "127.0.0.1:${CARGO_MAKE_WEB_PORT}" ]
 
+[tasks.watch]
+private = true
+watch = { watch = [ "./src/" ] }
+
 #### Public
 
 [tasks.build]
 description = "Build desktop target. Rebuilds on change."
+private = false
+extend = "watch"
 category = "Build"
 command = "cargo"
 args = [ "build" ]
-watch = { watch = [ "./src/" ] }
 
 [tasks.build-web]
 description = "Build web target. Rebuilds on change."
+private = false
+extend = "watch"
 category = "Build"
 dependencies = [ "build-web-target", "build-web-bindings", "build-web-copy-static" ]
-watch = { watch = [ "./src/" ] }
 
 [tasks.run]
 description = "Run desktop target. Rebuilds app on change"
+private = false
+extend = "watch"
 category = "Run"
 command = "cargo"
 args = [ "run" ]
-watch = { watch = [ "./src/" ] }
+
+#[tasks.run-web]
+#description = "Run web target. Rebuilds app on change"
+#category = "Run"
+#run_task = { name = [ "run-web-server", "build-web" ], parallel = true }
 
 [tasks.run-web]
 description = "Run web target. Rebuilds app on change"
 category = "Run"
-run_task = { name = [ "run-web-server", "build-web" ], parallel = true }
+extend = "build-web"
+run_task = { name = [ "run-web-server" ] }
