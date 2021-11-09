@@ -25,6 +25,16 @@ script = '''
 cp static/index.html target/web/index.html
 '''
 
+[tasks.build-android-target]
+private = true
+command = "cargo"
+args = [ "apk", "build" ]
+
+[tasks.run-android-target]
+private = true
+command = "cargo"
+args = [ "apk", "run" ]
+
 [tasks.run-web-server]
 private = true
 install_crate = "basic-http-server"
@@ -52,6 +62,13 @@ extend = "watch"
 category = "Build"
 dependencies = [ "build-web-target", "build-web-bindings", "build-web-copy-static" ]
 
+[tasks.build-android]
+description = "Build android target. Rebuilds on change."
+private = false
+extend = "watch"
+category = "Build"
+dependencies = [ "build-android-target" ]
+
 [tasks.run]
 description = "Run desktop target. Rebuilds app on change"
 private = false
@@ -70,3 +87,10 @@ description = "Run web target. Rebuilds app on change"
 category = "Run"
 extend = "build-web"
 run_task = { name = [ "run-web-server" ] }
+
+[tasks.run-android]
+description = "Run android target. Rebuilds on change."
+private = false
+extend = "watch"
+category = "Run"
+dependencies = [ "run-android-target" ]

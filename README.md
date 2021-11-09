@@ -2,21 +2,37 @@
 Cross-platform rust game template 
 
 
-### Prerequisites
+## General prerequisites
 
-```cargo install cargo-make```
+```
+cargo install cargo-make
+```
 
+## How to run
 
-### How to run on desktop
+**Desktop:**
 
 ```
 cargo make run
 ```
 
-
-### How to run on web
+**Web:**
 
 ```
 cargo make run-web
+```
+
+**Android:**
+
+Prerequisites:
+
+* [Android setup](https://github.com/dodorare/crossbow/wiki)
+* NDK: 22.1.7171670	
+* API Level : 30.0.3
+
+Connect your Android device or start an emulator and then execute:
+
+```
+cargo make run-android
 ```
 

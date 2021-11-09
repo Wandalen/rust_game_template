@@ -148,7 +148,7 @@ web-sys = { version = "0.3.53", features = [
 ]}
 
 [lib]
-name = "webgpu_android"
+# name = "webgpu_android"
 crate-type = ["staticlib", "lib", "cdylib"]
 path = "src/android.rs"
 
@@ -164,5 +164,3 @@ launch_mode = "singleTask"
 min_sdk_version = 30
 target_sdk_version = 30
 build_targets = ["aarch64-linux-android"]
-
-
