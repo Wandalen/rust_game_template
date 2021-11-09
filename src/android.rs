@@ -8,10 +8,8 @@ use common::*;
 )]
 #[allow(dead_code)]
 fn android_entry() {
-  
   let event_loop = EventLoop::new();
   let window = winit::window::Window::new(&event_loop).unwrap();
 
   pollster::block_on(run(event_loop, window));
-
 }
