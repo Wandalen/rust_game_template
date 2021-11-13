@@ -36,6 +36,18 @@ Connect your Android device or start an emulator and then execute:
 cargo make run-android
 ```
 
+**iOS:**
+
+Open the file `mobile.toml` and put your development team id into field `development-team`, save the file.
+
+```
+cd ios
+xcodegen
+```
+
+Open the XCode project `ios/webgpu`, build and run the app on target device.
+
+
 ## Commands
 
 Avaiable commands:

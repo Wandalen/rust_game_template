@@ -1,0 +1,85 @@
+name: webgpu
+options:
+  bundleIdPrefix: com.example
+  deploymentTarget:
+    iOS: 15.0
+fileGroups: [../src]
+configs:
+  debug: debug
+  release: release
+settingGroups:
+  app:
+    base:
+      PRODUCT_NAME: webgpu
+      PRODUCT_BUNDLE_IDENTIFIER: com.example.webgpu
+targetTemplates:
+  app:
+    type: application
+    sources:
+      - path: Sources
+    scheme:
+      environmentVariables:
+        RUST_BACKTRACE: full
+        RUST_LOG: info
+    settings:
+      groups: [app]
+targets:
+  webgpu_iOS:
+    type: application
+    platform: iOS
+    sources:
+      - path: Sources
+      - path: assets
+        buildPhase: resources
+        type: folder
+    info:
+      path: webgpu_iOS/Info.plist
+      properties:
+        LSRequiresIPhoneOS: true
+        UILaunchStoryboardName: LaunchScreen
+        UIRequiredDeviceCapabilities: [arm64, metal]
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+    scheme:
+      environmentVariables:
+        RUST_BACKTRACE: full
+        RUST_LOG: info
+    settings:
+      base:
+        ENABLE_BITCODE: false
+        ARCHS: [arm64, x86_64] # rustc doesn't support arm64e yet
+        VALID_ARCHS: arm64 x86_64 # rustc doesn't support arm64e yet
+        LIBRARY_SEARCH_PATHS[sdk=iphoneos*]: $(inherited) "../target/aarch64-apple-ios/$(CONFIGURATION)"
+        LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]: $(inherited) "../target/x86_64-apple-ios/$(CONFIGURATION)"
+      groups: [app]
+    dependencies:
+      - target: lib_webgpu_iOS
+        embed: false
+        link: false
+      - framework: libwebgpu.a
+        embed: false
+      - sdk: CoreGraphics.framework
+      - sdk: Metal.framework
+      - sdk: MetalKit.framework
+      - sdk: QuartzCore.framework
+      - sdk: Security.framework
+      - sdk: UIKit.framework
+  lib_webgpu_iOS:
+    type: ""
+    platform: iOS
+    settings:
+      ENABLE_BITCODE: false
+      ARCHS: [arm64, x86_64] # rustc doesn't support arm64e yet
+      VALID_ARCHS: arm64 x86_64 # rustc doesn't support arm64e yet
+    legacy:
+      toolPath: ${HOME}/.cargo/bin/cargo-apple
+      arguments: xcode-script -v --platform ${PLATFORM_DISPLAY_NAME:?} --sdk-root ${SDKROOT:?} --configuration ${CONFIGURATION:?} ${FORCE_COLOR} ${ARCHS:?}
+      passSettings: false # prevents evil linker errors
+      workingDirectory: $(SRCROOT)/..
