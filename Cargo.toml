@@ -13,6 +13,9 @@ edition = "2021"
 wgpu = "0.11.0"
 winit = "0.25.0"
 pollster = "0.2"
+# ios
+mobile-entry-point = "0.1.0"
+
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 async-executor = "1.0"
@@ -147,10 +150,13 @@ web-sys = { version = "0.3.53", features = [
     "Window",
 ]}
 
+[[bin]]
+name = "webgpu-desktop"
+path = "src/main.rs"
+
 [lib]
-# name = "webgpu_android"
 crate-type = ["staticlib", "lib", "cdylib"]
-path = "src/android.rs"
+path = "src/lib.rs"
 
 [target.'cfg(target_os = "android")'.dependencies]
 android_logger = "0.10.1"
@@ -164,3 +170,5 @@ launch_mode = "singleTask"
 min_sdk_version = 30
 target_sdk_version = 30
 build_targets = ["aarch64-linux-android"]
+
+

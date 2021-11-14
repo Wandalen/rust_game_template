@@ -924,6 +924,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "mobile-entry-point"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "81bef5a90018326583471cccca10424d7b3e770397b02f03276543cbb9b6a1a6"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "naga"
 version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1599,6 +1610,7 @@ dependencies = [
  "console_log",
  "env_logger 0.9.0",
  "log",
+ "mobile-entry-point",
  "ndk-glue",
  "ndk-sys",
  "pollster",
