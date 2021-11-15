@@ -27,6 +27,7 @@ Cargo.lock
 .idea
 
 ios/build
+ios/out
 ios/project.yml
 ios/*.xcodeproj
 ios/*_IOS

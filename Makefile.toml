@@ -91,12 +91,21 @@ condition = { files_not_exist = [ "${CARGO_MAKE_WORKING_DIRECTORY}/ios/webgpu.xc
 command = "xcodegen"
 args = [ "--spec", "ios/project.yml" ]
 
-[tasks.run-ios-target]
+[tasks.build-ios-target]
 private = true
-extend = "watch"
 script_runner = "@shell"
 script = '''
-xcrun xcodebuild -project ios/webgpu.xcodeproj -target webgpu_iOS -destination 'platform=iOS Simulator,name=iPhone 12,OS=15.0' build
+xcrun xcodebuild -project ios/webgpu.xcodeproj -scheme webgpu_iOS -arch x86_64 -derivedDataPath ios/out
+'''
+
+[tasks.run-ios-target]
+private = true
+script_runner = "@shell"
+script = '''
+open -a simulator
+sleep 5
+xcrun simctl install booted ios/out/Build/Products/debug-iphonesimulator/webgpu.app
+xcrun simctl launch booted com.example.webgpu
 '''
 
 [tasks.run-web-server]
@@ -160,4 +169,4 @@ dependencies = [ "run-android-target" ]
 description = "Run ios target. Rebuilds on change."
 private = false
 category = "Run"
-dependencies = [ "generate-ios-project", "run-ios-target" ]
+dependencies = [ "generate-ios-project", "build-ios-target", "run-ios-target" ]
