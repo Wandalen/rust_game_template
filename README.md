@@ -38,11 +38,16 @@ cargo make run-android
 
 **iOS:**
 
-Open the file `mobile.toml` and put your development team id into field `development-team`, save the file.
+Create the file `config/private.toml` and add next fields:
+
+```toml
+[ios]
+development_team = "TEAM_ID"
+```
+Then run:
 
 ```
-cd ios
-xcodegen
+cargo make generate-ios-project
 ```
 
 Open the XCode project `ios/webgpu`, build and run the app on target device.

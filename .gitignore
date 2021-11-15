@@ -27,6 +27,11 @@ Cargo.lock
 .idea
 
 ios/build
-ios/project.yaml
+ios/project.yml
 ios/*.xcodeproj
 ios/*_IOS
+
+config/private.toml
+config/public.toml
+
+mobile.toml
