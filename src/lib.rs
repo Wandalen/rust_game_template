@@ -1,9 +1,9 @@
 mod common;
 
 use common::*;
-use mobile_entry_point::mobile_entry_point;
 
-#[mobile_entry_point]
+#[cfg( target_os = "ios" )]
+#[mobile_entry_point::mobile_entry_point]
 pub fn main() 
 {
   let event_loop = EventLoop::new();
