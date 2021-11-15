@@ -47,10 +47,10 @@ development_team = "TEAM_ID"
 Then run:
 
 ```
-cargo make generate-ios-project
+cargo make run-ios
 ```
 
-Open the XCode project `ios/webgpu`, build and run the app on target device.
+Generated Xcode project can be found at `ios/webgpu`.
 
 
 ## Commands
