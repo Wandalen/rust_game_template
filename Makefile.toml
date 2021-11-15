@@ -6,6 +6,10 @@ CARGO_MAKE_WEB_PORT = 8080
 
 #### Private
 
+[tasks.watch]
+private = true
+watch = { watch = [ "./src/" ] }
+
 [tasks.build-web-target]
 private = true
 command = "cargo"
@@ -35,15 +39,56 @@ private = true
 command = "cargo"
 args = [ "apk", "run" ]
 
+[tasks.generate-ios-config]
+private = true
+condition = { files_not_exist = [ "${CARGO_MAKE_WORKING_DIRECTORY}/ios/project.yml" ] }
+script_runner = "@rust"
+script = '''
+//! ```cargo
+//! [dependencies]
+//! handlebars = "4.1.4"
+//! serde = { version = "1.0.130", features = ["derive"] }
+//! ```
+
+#[derive(serde::Serialize)]
+struct Data 
+{
+  development_team: String,
+}
+
+fn main() {
+    let cwd_path = std::env::var("CARGO_MAKE_WORKING_DIRECTORY").unwrap();
+    let cwd = std::path::Path::new( &cwd_path );
+    let template = std::fs::read_to_string( cwd.join( "ios/project.hbs" ) ).unwrap();
+    let handlebars = handlebars::Handlebars::new();
+    let development_team = std::env::var("DEVELOPMENT_TEAM").unwrap();
+    let data = Data { development_team };
+    let rendered = handlebars.render_template(template.as_str(), &data).unwrap();
+    std::fs::write( cwd.join( "ios/project.yml" ), rendered ).expect("Unable to write file");
+}
+'''
+
+[tasks.generate-ios-project]
+private = true
+dependencies = [ "generate-ios-config" ]
+condition = { files_not_exist = [ "${CARGO_MAKE_WORKING_DIRECTORY}/ios/webgpu.xcodeproj" ] }
+command = "xcodegen"
+args = [ "--spec", "ios/project.yml" ]
+
+[tasks.run-ios-target]
+private = true
+extend = "watch"
+script_runner = "@shell"
+script = '''
+xcrun xcodebuild -project ios/webgpu.xcodeproj -target webgpu_iOS -destination 'platform=iOS Simulator,name=iPhone 12,OS=15.0' build
+'''
+
 [tasks.run-web-server]
 private = true
 install_crate = "basic-http-server"
 command = "basic-http-server"
 args = [ "target/web", "-a", "127.0.0.1:${CARGO_MAKE_WEB_PORT}" ]
 
-[tasks.watch]
-private = true
-watch = { watch = [ "./src/" ] }
 
 #### Public
 
@@ -94,3 +139,9 @@ private = false
 extend = "watch"
 category = "Run"
 dependencies = [ "run-android-target" ]
+
+[tasks.run-ios]
+description = "Run ios target. Rebuilds on change."
+private = false
+category = "Run"
+dependencies = [ "generate-ios-project", "run-ios-target" ]

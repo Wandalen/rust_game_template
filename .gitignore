@@ -25,3 +25,8 @@ Cargo.lock
 *.build
 .DS_Store
 .idea
+
+ios/build
+ios/project.yaml
+ios/*.xcodeproj
+ios/*_IOS
