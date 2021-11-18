@@ -42,47 +42,9 @@ args = [ "apk", "run" ]
 [tasks.generate-ios-config]
 private = true
 condition = { files_not_exist = [ "${CARGO_MAKE_WORKING_DIRECTORY}/ios/project.yml" ] }
-script_runner = "@rust"
-script = '''
-//! ```cargo
-//! [dependencies]
-//! handlebars = "4.1.4"
-//! toml = "0.5.8"
-//! serde = { version = "1.0.130", features = ["derive"] }
-//! ```
-
-#[derive( serde::Serialize, serde::Deserialize )]
-struct IOSConfig
-{
-  development_team: String
-} 
-
-#[derive( serde::Serialize, serde::Deserialize )]
-struct Config 
-{
-  ios: IOSConfig,
-}
-
-fn main()
-{
-  let cwd_path = std::env::var( "CARGO_MAKE_WORKING_DIRECTORY" ).unwrap();
-  let cwd = std::path::Path::new( &cwd_path );
-  let xcode_project_template = std::fs::read_to_string( cwd.join( "ios/project.hbs" ) ).unwrap();
-  let mobile_template = std::fs::read_to_string( cwd.join( "mobile.hbs" ) ).unwrap();
-
-  let handlebars = handlebars::Handlebars::new();
-
-  let toml_str = std::fs::read_to_string( cwd.join( "config/private.toml" ) ).unwrap();
-  let config:Config = toml::from_str( &toml_str ).unwrap();
-  let ios:IOSConfig = config.ios;
-  
-  let xcode_project = handlebars.render_template(xcode_project_template.as_str(), &ios ).unwrap();
-  std::fs::write( cwd.join( "ios/project.yml" ), xcode_project ).expect( "Unable to write ios/project.yml file" );
-
-  let mobile_config = handlebars.render_template(mobile_template.as_str(), &ios ).unwrap();
-  std::fs::write( cwd.join( "mobile.toml" ), mobile_config ).expect( "Unable to write mobile.toml file" );
-}
-'''
+# install_crate = "rust-script"
+command = "rust-script"
+args = [ "${CARGO_MAKE_WORKING_DIRECTORY}/scripts/generate-ios-config.rs" ]
 
 [tasks.generate-ios-project]
 # private = true
