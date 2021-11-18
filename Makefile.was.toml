@@ -1,19 +1,36 @@
-extend = [
-  
-  { path = "./web/Makefile.toml" }
-]
-
 [config] 
 skip_core_tasks = true #to skip default predefined flow
 # skip_git_env_info = true #??
 # skip_rust_env_info = true #??
 # skip_crate_env_info = true #??
 
+[env]
+CARGO_MAKE_WEB_PORT = 8080
+
 #### Private
 
 [tasks.watch]
 private = true
 watch = { watch = [ "./src/" ] }
+
+[tasks.build-web-target]
+private = true
+command = "cargo"
+install_script = "rustup target add wasm32-unknown-unknown"
+args = [ "build", "--target", "wasm32-unknown-unknown", "--features", "wgpu/webgl,winit/web-sys" ]
+
+[tasks.build-web-bindings]
+private = true
+install_crate = "wasm-bindgen-cli"
+command = "wasm-bindgen"
+args = [ "--target", "web", "--out-dir", "target/web", "target/wasm32-unknown-unknown/debug/webgpu.wasm" ]
+
+[tasks.build-web-copy-static]
+private = true
+script_runner = "@shell"
+script = '''
+cp static/index.html target/web/index.html
+'''
 
 [tasks.build-android-target]
 private = true
@@ -56,6 +73,13 @@ xcrun simctl install booted ios/out/Build/Products/debug-iphonesimulator/webgpu.
 xcrun simctl launch booted com.example.webgpu
 '''
 
+[tasks.run-web-server]
+private = true
+install_crate = "basic-http-server"
+command = "basic-http-server"
+args = [ "target/web", "-a", "127.0.0.1:${CARGO_MAKE_WEB_PORT}" ]
+
+
 #### Public
 
 [tasks.build]
@@ -65,6 +89,13 @@ extend = "watch"
 category = "Build"
 command = "cargo"
 args = [ "build" ]
+
+[tasks.build-web]
+description = "Build web target. Rebuilds on change."
+private = false
+extend = "watch"
+category = "Build"
+dependencies = [ "build-web-target", "build-web-bindings", "build-web-copy-static" ]
 
 [tasks.build-android]
 description = "Build android target. Rebuilds on change."
@@ -80,6 +111,17 @@ extend = "watch"
 category = "Run"
 command = "cargo"
 args = [ "run" ]
+
+#[tasks.run-web]
+#description = "Run web target. Rebuilds app on change"
+#category = "Run"
+#run_task = { name = [ "run-web-server", "build-web" ], parallel = true }
+
+[tasks.run-web]
+description = "Run web target. Rebuilds app on change"
+category = "Run"
+extend = "build-web"
+run_task = { name = [ "run-web-server" ] }
 
 [tasks.run-android]
 description = "Run android target. Rebuilds on change."

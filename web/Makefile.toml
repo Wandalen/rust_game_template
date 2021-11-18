@@ -14,18 +14,19 @@ watch = { watch = [ "./src/" ] }
 private = true
 command = "cargo"
 install_script = "rustup target add wasm32-unknown-unknown"
-args = [ "build", "--target", "wasm32-unknown-unknown", "--features", "webgpu/webgl,webgpu/web-sys" ]
+args = [ "build", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml", "--target", "wasm32-unknown-unknown", "--features", "webgpu/webgl,webgpu/web-sys" ]
 
 [tasks.build-web-bindings]
 private = true
 install_crate = "wasm-bindgen-cli"
 command = "wasm-bindgen"
-args = [ "--target", "web", "--out-dir", "target/web", "target/wasm32-unknown-unknown/debug/webgpu-web.wasm" ]
+args = [ "--target", "web", "--out-dir", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/target/web", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/target/wasm32-unknown-unknown/debug/webgpu-web.wasm" ]
 
 [tasks.build-web-copy-static]
 private = true
 script_runner = "@shell"
 script = '''
+cd ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}
 cp static/index.html target/web/index.html
 '''
 
@@ -33,8 +34,7 @@ cp static/index.html target/web/index.html
 private = true
 install_crate = "basic-http-server"
 command = "basic-http-server"
-args = [ "target/web", "-a", "127.0.0.1:${CARGO_MAKE_WEB_PORT}" ]
-
+args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/target/web", "-a", "127.0.0.1:${CARGO_MAKE_WEB_PORT}" ]
 
 #### Public
 
@@ -44,6 +44,11 @@ private = false
 extend = "watch"
 category = "Build"
 dependencies = [ "build-web-target", "build-web-bindings", "build-web-copy-static" ]
+
+#[tasks.run-web]
+#description = "Run web target. Rebuilds app on change"
+#category = "Run"
+#run_task = { name = [ "run-web-server", "build-web" ], parallel = true }
 
 [tasks.run-web]
 description = "Run web target. Rebuilds app on change"
