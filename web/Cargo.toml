@@ -1,0 +1,14 @@
+[package]
+name = "webgpu-web"
+version = "0.1.0"
+edition = "2021"
+
+[features]
+default = [ "webgpu/webgl", "webgpu/web-sys" ]
+
+[dependencies]
+webgpu = { path = "..", features = [ "webgl", "web-sys"] }
+wasm-bindgen-futures = "0.4.28"
+console_error_panic_hook = "0.1.7"
+console_log = "0.2.0"
+web-sys = "0.3.53"
