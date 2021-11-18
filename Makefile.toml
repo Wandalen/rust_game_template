@@ -1,5 +1,6 @@
 extend = [
   
+  { path = "./desktop/Makefile.toml" },
   { path = "./web/Makefile.toml" }
 ]
 
@@ -58,28 +59,12 @@ xcrun simctl launch booted com.example.webgpu
 
 #### Public
 
-[tasks.build]
-description = "Build desktop target. Rebuilds on change."
-private = false
-extend = "watch"
-category = "Build"
-command = "cargo"
-args = [ "build" ]
-
 [tasks.build-android]
 description = "Build android target. Rebuilds on change."
 private = false
 extend = "watch"
 category = "Build"
 dependencies = [ "build-android-target" ]
-
-[tasks.run]
-description = "Run desktop target. Rebuilds app on change"
-private = false
-extend = "watch"
-category = "Run"
-command = "cargo"
-args = [ "run" ]
 
 [tasks.run-android]
 description = "Run android target. Rebuilds on change."

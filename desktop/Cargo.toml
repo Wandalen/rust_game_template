@@ -1,0 +1,7 @@
+[package]
+name = "webgpu-desktop"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+webgpu = { path = ".." }

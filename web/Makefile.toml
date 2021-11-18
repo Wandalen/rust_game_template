@@ -6,9 +6,9 @@ CARGO_MAKE_WEB_PORT = 8080
 
 #### Private
 
-[tasks.watch]
+[tasks.watch-web]
 private = true
-watch = { watch = [ "./src/" ] }
+watch = { watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/src/" ] }
 
 [tasks.build-web-target]
 private = true
@@ -41,7 +41,7 @@ args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/target/web", "-a
 [tasks.build-web]
 description = "Build web target. Rebuilds on change."
 private = false
-extend = "watch"
+extend = "watch-web"
 category = "Build"
 dependencies = [ "build-web-target", "build-web-bindings", "build-web-copy-static" ]
 
