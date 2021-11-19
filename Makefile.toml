@@ -1,7 +1,8 @@
 extend = [
   
   { path = "./desktop/Makefile.toml" },
-  { path = "./web/Makefile.toml" }
+  { path = "./web/Makefile.toml" },
+  { path = "./ios/Makefile.toml" }
 ]
 
 [config] 
@@ -26,37 +27,6 @@ private = true
 command = "cargo"
 args = [ "apk", "run" ]
 
-[tasks.generate-ios-config]
-private = true
-condition = { files_not_exist = [ "${CARGO_MAKE_WORKING_DIRECTORY}/ios/project.yml" ] }
-# install_crate = "rust-script"
-command = "rust-script"
-args = [ "${CARGO_MAKE_WORKING_DIRECTORY}/scripts/generate-ios-config.rs" ]
-
-[tasks.generate-ios-project]
-# private = true
-dependencies = [ "generate-ios-config" ]
-condition = { files_not_exist = [ "${CARGO_MAKE_WORKING_DIRECTORY}/ios/webgpu.xcodeproj" ] }
-command = "xcodegen"
-args = [ "--spec", "ios/project.yml" ]
-
-[tasks.build-ios-target]
-private = true
-script_runner = "@shell"
-script = '''
-xcrun xcodebuild -project ios/webgpu.xcodeproj -scheme webgpu_iOS -arch x86_64 -derivedDataPath ios/out
-'''
-
-[tasks.run-ios-target]
-private = true
-script_runner = "@shell"
-script = '''
-open -a simulator
-sleep 5
-xcrun simctl install booted ios/out/Build/Products/debug-iphonesimulator/webgpu.app
-xcrun simctl launch booted com.example.webgpu
-'''
-
 #### Public
 
 [tasks.build-android]
@@ -72,9 +42,3 @@ private = false
 extend = "watch"
 category = "Run"
 dependencies = [ "run-android-target" ]
-
-[tasks.run-ios]
-description = "Run ios target. Rebuilds on change."
-private = false
-category = "Run"
-dependencies = [ "generate-ios-project", "build-ios-target", "run-ios-target" ]
