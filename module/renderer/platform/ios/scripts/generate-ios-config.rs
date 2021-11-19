@@ -19,19 +19,19 @@ struct Config
 
 fn main()
 {
-  let cwd_path = std::env::var( "CARGO_MAKE_WORKING_DIRECTORY" ).unwrap();
+  let cwd_path = std::env::var( "CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY" ).unwrap();
   let cwd = std::path::Path::new( &cwd_path );
-  let xcode_project_template = std::fs::read_to_string( cwd.join( "ios/project.hbs" ) ).unwrap();
+  let xcode_project_template = std::fs::read_to_string( cwd.join( "xcode/project.hbs" ) ).unwrap();
   let mobile_template = std::fs::read_to_string( cwd.join( "mobile.hbs" ) ).unwrap();
 
   let handlebars = handlebars::Handlebars::new();
 
-  let toml_str = std::fs::read_to_string( cwd.join( "config/private.toml" ) ).unwrap();
+  let toml_str = std::fs::read_to_string( cwd.join( "../../config/private.toml" ) ).unwrap();
   let config:Config = toml::from_str( &toml_str ).unwrap();
   let ios:IOSConfig = config.ios;
 
   let xcode_project = handlebars.render_template(xcode_project_template.as_str(), &ios ).unwrap();
-  std::fs::write( cwd.join( "ios/project.yml" ), xcode_project ).expect( "Unable to write ios/project.yml file" );
+  std::fs::write( cwd.join( "xcode/project.yml" ), xcode_project ).expect( "Unable to write xcode/project.yml file" );
 
   let mobile_config = handlebars.render_template(mobile_template.as_str(), &ios ).unwrap();
   std::fs::write( cwd.join( "mobile.toml" ), mobile_config ).expect( "Unable to write mobile.toml file" );

@@ -1,0 +1,34 @@
+[config] 
+skip_core_tasks = true #to skip default predefined flow
+
+#### Private
+
+[tasks.watch-android]
+private = true
+watch = { watch = [ "./src/" ] }
+
+[tasks.build-android-target]
+private = true
+extend = "watch-android"
+command = "cargo"
+args = [ "apk", "build", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml" ]
+
+[tasks.run-android-target]
+private = true
+extend = "watch-android"
+command = "cargo"
+args = [ "apk", "run", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml" ]
+
+#### Public
+
+[tasks.build-android]
+description = "Build android target. Rebuilds on change."
+private = false
+category = "Build"
+dependencies = [ "build-android-target" ]
+
+[tasks.run-android]
+description = "Run android target. Rebuilds on change."
+private = false
+category = "Run"
+dependencies = [ "run-android-target" ]

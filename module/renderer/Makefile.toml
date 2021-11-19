@@ -1,0 +1,13 @@
+extend = [
+  
+  { path = "./platform/desktop/Makefile.toml" },
+  { path = "./platform/web/Makefile.toml" },
+  { path = "./platform/ios/Makefile.toml" },
+  { path = "./platform/android/Makefile.toml" }
+]
+
+[config] 
+skip_core_tasks = true #to skip default predefined flow
+# skip_git_env_info = true #??
+# skip_rust_env_info = true #??
+# skip_crate_env_info = true #??

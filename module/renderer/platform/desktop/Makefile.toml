@@ -1,0 +1,26 @@
+[config] 
+skip_core_tasks = true #to skip default predefined flow
+
+#### Private
+
+[tasks.watch-desktop]
+private = true
+watch = { watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/src/" ] }
+
+#### Public
+
+[tasks.build]
+description = "Build desktop target. Rebuilds on change."
+private = false
+extend = "watch-desktop"
+category = "Build"
+command = "cargo"
+args = [ "build", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml" ]
+
+[tasks.run]
+description = "Run desktop target. Rebuilds app on change"
+private = false
+extend = "watch-desktop"
+category = "Run"
+command = "cargo"
+args = [ "run", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml" ]
