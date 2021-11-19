@@ -9,11 +9,6 @@ watch = { watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/src/"
 
 #### Public
 
-[tasks.t]
-private = false
-command = "echo"
-args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml" ]
-
 [tasks.build]
 description = "Build desktop target. Rebuilds on change."
 private = false

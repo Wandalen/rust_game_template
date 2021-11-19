@@ -8,5 +8,5 @@ crate-type = ["staticlib", "lib", "cdylib"]
 path = "src/lib.rs"
 
 [dependencies]
-webgpu = { path = ".." }
+webgpu = { path = "../.." }
 mobile-entry-point = "0.1.0"

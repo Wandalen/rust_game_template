@@ -1,13 +1,9 @@
 extend = [
   
-  { path = "./desktop/Makefile.toml" },
-  { path = "./web/Makefile.toml" },
-  { path = "./ios/Makefile.toml" },
-  { path = "./android/Makefile.toml" }
+  { path = "./module/renderer/Makefile.toml" }
 ]
 
-[config] 
-skip_core_tasks = true #to skip default predefined flow
-# skip_git_env_info = true #??
-# skip_rust_env_info = true #??
-# skip_crate_env_info = true #??
+[env]
+CARGO_MAKE_EXTEND_WORKSPACE_MAKEFILE = true
+CARGO_MAKE_WORKSPACE_EMULATION = true
+CARGO_MAKE_CRATE_WORKSPACE_MEMBERS = [ "module/renderer" ]
