@@ -50,7 +50,7 @@ Then run:
 cargo make run-ios
 ```
 
-Generated Xcode project can be found at `ios/webgpu`.
+Generated Xcode project can be found at `ios/xcode`.
 
 
 ## Commands
