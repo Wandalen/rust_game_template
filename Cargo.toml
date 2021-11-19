@@ -12,28 +12,4 @@ wgpu = "0.11.0"
 winit = "0.25.0"
 pollster = "0.2"
 
-[target.'cfg(target_os = "ios")'.dependencies]
-mobile-entry-point = "0.1.0"
-
-[[bin]]
-name = "webgpu-desktop"
-path = "src/main.rs"
-
-[lib]
-crate-type = ["staticlib", "lib", "cdylib"]
-path = "src/lib.rs"
-
-[target.'cfg(target_os = "android")'.dependencies]
-android_logger = "0.10.1"
-ndk-glue = {version = "0.3.0", features = ["logger"]}
-ndk-sys = "0.2.1"
-log = "0.4"
-
-[package.metadata.android]
-fullscreen = false
-launch_mode = "singleTask"
-min_sdk_version = 30
-target_sdk_version = 30
-build_targets = ["aarch64-linux-android"]
-
 

@@ -2,7 +2,8 @@ extend = [
   
   { path = "./desktop/Makefile.toml" },
   { path = "./web/Makefile.toml" },
-  { path = "./ios/Makefile.toml" }
+  { path = "./ios/Makefile.toml" },
+  { path = "./android/Makefile.toml" }
 ]
 
 [config] 
@@ -10,35 +11,3 @@ skip_core_tasks = true #to skip default predefined flow
 # skip_git_env_info = true #??
 # skip_rust_env_info = true #??
 # skip_crate_env_info = true #??
-
-#### Private
-
-[tasks.watch]
-private = true
-watch = { watch = [ "./src/" ] }
-
-[tasks.build-android-target]
-private = true
-command = "cargo"
-args = [ "apk", "build" ]
-
-[tasks.run-android-target]
-private = true
-command = "cargo"
-args = [ "apk", "run" ]
-
-#### Public
-
-[tasks.build-android]
-description = "Build android target. Rebuilds on change."
-private = false
-extend = "watch"
-category = "Build"
-dependencies = [ "build-android-target" ]
-
-[tasks.run-android]
-description = "Run android target. Rebuilds on change."
-private = false
-extend = "watch"
-category = "Run"
-dependencies = [ "run-android-target" ]
