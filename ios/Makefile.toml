@@ -47,13 +47,13 @@ category = "Run"
 dependencies = [ "generate-ios-project", "build-ios-target", "run-ios-target" ]
 
 [tasks.clean-ios]
-description = "Cleanup files generated for ios target."
+description = "Cleanup generated files of ios target."
 category = "Run"
 script_runner = "@shell"
 script = '''
-rm -rf ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/mobile.toml
+rm -f ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/mobile.toml
+rm -f ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/project.yml
 rm -rf ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out
 rm -rf ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/webgpu-ios_iOS
 rm -rf ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/webgpu-ios.xcodeproj
-rm -rf ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/project.yml
 '''
