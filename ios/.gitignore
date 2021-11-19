@@ -1,0 +1,6 @@
+xcode/build
+xcode/out
+xcode/project.yml
+xcode/*.xcodeproj
+xcode/*_IOS
+mobile.toml

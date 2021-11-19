@@ -1,0 +1,59 @@
+[config] 
+skip_core_tasks = true #to skip default predefined flow
+
+#### Private
+
+[tasks.watch-ios]
+private = true
+watch = { watch = [ "./src/" ] }
+
+[tasks.generate-ios-config]
+private = true
+condition = { files_not_exist = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/project.yml" ] }
+# install_crate = "rust-script"
+command = "rust-script"
+args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/scripts/generate-ios-config.rs" ]
+
+[tasks.generate-ios-project]
+private = true
+dependencies = [ "generate-ios-config" ]
+condition = { files_not_exist = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/webgpu-ios.xcodeproj" ] }
+command = "xcodegen"
+args = [ "--spec", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/project.yml" ]
+
+[tasks.build-ios-target]
+private = true
+script_runner = "@shell"
+script = '''
+xcrun xcodebuild -project ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/webgpu-ios.xcodeproj -scheme webgpu-ios_iOS -arch x86_64 -derivedDataPath ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out
+'''
+
+[tasks.run-ios-target]
+private = true
+script_runner = "@shell"
+script = '''
+open -a simulator
+sleep 5
+xcrun simctl install booted ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out/Build/Products/debug-iphonesimulator/webgpu-ios.app
+xcrun simctl launch booted com.example.webgpu-ios
+'''
+
+#### Public
+
+[tasks.run-ios]
+description = "Run ios target. Rebuilds on change."
+private = false
+category = "Run"
+dependencies = [ "generate-ios-project", "build-ios-target", "run-ios-target" ]
+
+[tasks.clean-ios]
+description = "Cleanup files generated for ios target."
+category = "Run"
+script_runner = "@shell"
+script = '''
+rm -rf ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/mobile.toml
+rm -rf ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out
+rm -rf ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/webgpu-ios_iOS
+rm -rf ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/webgpu-ios.xcodeproj
+rm -rf ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/project.yml
+'''
