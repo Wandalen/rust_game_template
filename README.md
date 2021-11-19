@@ -38,7 +38,7 @@ cargo make run-android
 
 **iOS:**
 
-Create the file `config/private.toml` and add next fields:
+Create the file `module/renderer/config/private.toml` and add next fields:
 
 ```toml
 [ios]
@@ -50,7 +50,7 @@ Then run:
 cargo make run-ios
 ```
 
-Generated Xcode project can be found at `ios/xcode`.
+Generated Xcode project can be found at `module/renderer/platform/ios/xcode`.
 
 
 ## Commands
