@@ -1,0 +1,43 @@
+name: iOS
+
+on:
+  push:
+    branches: [ 'ci/ios' ]
+  pull_request:
+    branches: [ 'ci/ios' ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo-mobile/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            module/renderer/target/
+            module/renderer/platform/*/target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - uses: davidB/rust-cargo-make@v1
+      - name: Install dependencies
+        run: |
+          brew install ios-deploy
+          brew install xcodegen
+      - name: Create private config file
+        env:
+           PRIVATE_TOML: ${{ secrets.PRIVATE_CONFIG }}
+           PRIVATE_TOML_DIR_PATH: module/renderer/config
+        run: 'mkdir -p "$PRIVATE_TOML_DIR_PATH" && echo "$PRIVATE_TOML" > module/renderer/config/private.toml'
+        shell: bash
+      - name: Build project
+        run: cargo make build-ios
+      
+      
