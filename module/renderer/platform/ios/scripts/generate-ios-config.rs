@@ -22,11 +22,11 @@ fn main()
   let cwd_path = std::env::var( "CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY" ).unwrap();
   let cwd = std::path::Path::new( &cwd_path );
   let xcode_project_template = std::fs::read_to_string( cwd.join( "xcode/project.hbs" ) ).unwrap();
-  let mobile_template = std::fs::read_to_string( cwd.join( "mobile.hbs" ) ).unwrap();
+  let mobile_template = std::fs::read_to_string( cwd.join( "mobile.hbs" ) ).expect( "Failed to read mobile.hbs" );
 
   let handlebars = handlebars::Handlebars::new();
 
-  let toml_str = std::fs::read_to_string( cwd.join( "../../config/private.toml" ) ).unwrap();
+  let toml_str = std::fs::read_to_string( cwd.join( "../../config/private.toml" ) ).expect( "Failed to read config/private.toml" );
   let config:Config = toml::from_str( &toml_str ).unwrap();
   let ios:IOSConfig = config.ios;
 
