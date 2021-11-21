@@ -2,9 +2,9 @@ name: iOS
 
 on:
   push:
-    branches: [ 'ci/ios' ]
+    branches: [ 'master' ]
   pull_request:
-    branches: [ 'ci/ios' ]
+    branches: [ 'master' ]
 
 env:
   CARGO_TERM_COLOR: always
