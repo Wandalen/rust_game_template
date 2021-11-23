@@ -9,13 +9,11 @@ watch = { watch = [ "./src/" ] }
 
 [tasks.build-android-target]
 private = true
-extend = "watch-android"
 command = "cargo"
 args = [ "apk", "build", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml" ]
 
 [tasks.run-android-target]
 private = true
-extend = "watch-android"
 command = "cargo"
 args = [ "apk", "run", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml" ]
 
@@ -24,11 +22,13 @@ args = [ "apk", "run", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAK
 [tasks.build-android]
 description = "Build android target. Rebuilds on change."
 private = false
+extend = "watch-android"
 category = "Build"
 dependencies = [ "build-android-target" ]
 
 [tasks.run-android]
 description = "Run android target. Rebuilds on change."
 private = false
+extend = "watch-android"
 category = "Run"
 dependencies = [ "run-android-target" ]

@@ -1,0 +1,35 @@
+name: Android
+
+on:
+  push:
+    branches: [ 'master' ]
+  pull_request:
+    branches: [ 'master' ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            module/renderer/target/
+            module/renderer/platform/*/target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - uses: davidB/rust-cargo-make@v1
+      - name: Build project
+        run: |
+              unset ANDROID_HOME
+              rustup target add aarch64-linux-android
+              cargo make --allow-private build-android-target
+      
+      
