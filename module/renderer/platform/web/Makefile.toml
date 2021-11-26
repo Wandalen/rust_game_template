@@ -42,7 +42,22 @@ install_crate = "basic-http-server"
 command = "basic-http-server"
 args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/target/web", "-a", "127.0.0.1:${CARGO_MAKE_WEB_PORT}" ]
 
+[tasks.run-browserstack-server]
+private = true
+command = 'node'
+args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/scripts/browserSync.ss" ]
+
 #### Public
+
+[tasks.install-web-dependencies]
+description = "Install web dependencies"
+private = false
+category = "Prerequisites"
+script_runner = "@shell"
+script = '''
+cd ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}
+npm ci
+'''
 
 [tasks.build-web]
 description = "Build web target. Rebuilds on change."
@@ -67,9 +82,10 @@ dependencies = [ "build-web-target", "build-web-bindings-fast" ]
 description = "Run web target. Rebuilds app on change"
 category = "Run"
 extend = "build-web"
-run_task = { name = [ "run-web-server" ] }
+# run_task = { name = [ "run-web-server" ] }
+run_task = { name = [ "run-browserstack-server" ] }
 
 [tasks.run-web-fast]
 description = "Run web target. Rebuilds app on change"
 category = "Run"
-run_task = { name = [ "run-web-server", "build-web-fast" ], parallel = true }
+run_task = { name = [ "run-browserstack-server", "build-web-fast" ], parallel = true }

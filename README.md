@@ -18,6 +18,13 @@ cargo make run
 
 **Web:**
 
+Install dev dependencies: 
+```
+cargo make install-web-dependencies
+```
+
+Run web target:
+
 ```
 cargo make run-web
 ```
