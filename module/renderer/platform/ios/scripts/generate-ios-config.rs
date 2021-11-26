@@ -3,12 +3,52 @@
 //! handlebars = "4.1.4"
 //! toml = "0.5.8"
 //! serde = { version = "1.0.130", features = ["derive"] }
+//! regex = "1.5.4"
 //! ```
+
+use regex::Regex;
+use serde::de::{Deserialize, Deserializer};
+use serde::{Serializer, Serialize};
+
+fn env_get_maybe( val: String ) -> String
+{
+  let re = Regex::new(r"^\$\{(.*)\}").unwrap();
+  if let Some ( caps ) = re.captures( &val )
+  {
+    if let Some( env_name ) = caps.get( 1 )
+    {
+      return std::env::var( env_name.as_str() ).expect( &format!( "Env variable {} does't exist.", env_name.as_str() ) )
+    }
+  }
+  val
+}
+
+#[derive( Debug, serde::Deserialize )]
+#[serde(untagged)]
+enum Field<T>
+{
+  EnvLike( String ),
+  Raw( T ),
+}
+
+impl <T: std::fmt::Debug + Serialize> serde::Serialize for Field<T>
+{
+  fn serialize<S>( &self, s: S ) -> Result<S::Ok, S::Error>
+  where
+      S: Serializer,
+  {
+    match self
+    {
+      Field::EnvLike( env_like ) => env_get_maybe( env_like.to_string() ).serialize( s ),
+      Field::Raw( raw ) => raw.serialize( s ),
+    }
+  }
+}
 
 #[derive( serde::Serialize, serde::Deserialize )]
 struct IOSConfig
 {
-  development_team: String
+  development_team: Field<String>,
 }
 
 #[derive( serde::Serialize, serde::Deserialize )]
