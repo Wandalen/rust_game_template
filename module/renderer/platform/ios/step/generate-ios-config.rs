@@ -7,7 +7,6 @@
 //! ```
 
 use regex::Regex;
-use serde::de::{Deserialize, Deserializer};
 use serde::{Serializer, Serialize};
 
 fn env_get_maybe( val: String ) -> String
