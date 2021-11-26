@@ -46,7 +46,7 @@ dependencies = [ "install_cargo_mobile" ]
 script_runner = "@shell"
 script = '''
 rustup target add x86_64_apple_ios
-cargo build --manifest_path ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml --target=x86_64_apple_ios
+cargo build --manifest-path ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml --target=x86_64_apple_ios
 xcrun xcodebuild _project ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/webgpu_ios.xcodeproj _scheme webgpu_ios_iOS _arch x86_64 _derivedDataPath ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out
 '''
 

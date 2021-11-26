@@ -13,12 +13,12 @@ watch = { watch = [ "./src/" ] }
 [tasks.build_android_target]
 private = true
 command = "cargo"
-args = [ "apk", "build", "--manifest_path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml" ]
+args = [ "apk", "build", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml" ]
 
 [tasks.run_android_target]
 private = true
 command = "cargo"
-args = [ "apk", "run", "--manifest_path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml" ]
+args = [ "apk", "run", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml" ]
 
 # Public
 
