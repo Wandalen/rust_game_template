@@ -15,7 +15,7 @@ homepage = "https://github.com/Wandalen/rust_game_template/tree/master/module/re
 description = """
 Neutral cross-platform Rust game template.
 """
-categories = [ "game development", "game engines" ]
+categories = [ "game-development", "game-engines" ]
 keywords = [ "game-template", "gamedev" ]
 
 include = [
