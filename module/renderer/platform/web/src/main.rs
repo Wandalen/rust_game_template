@@ -15,13 +15,13 @@ use webgpu::winit::
 
 struct Web;
 
-impl Renderer for Web 
+impl Renderer for Web
 {
   fn new() -> Web
   {
     Web{}
   }
-  
+
   fn run( &self ) -> ()
   {
     let event_loop = EventLoop::new();
@@ -37,7 +37,7 @@ impl Renderer for Web
     .expect( "couldn't append canvas to document body" );
     wasm_bindgen_futures::spawn_local( run( event_loop, window ) );
   }
-  
+
 }
 
 pub fn main()
