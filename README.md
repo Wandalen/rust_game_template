@@ -1,4 +1,4 @@
-# rust_game_template [![iOS](https://github.com/Wandalen/rust_game_template/actions/workflows/iOS.yml/badge.svg)](https://github.com/Wandalen/rust_game_template/actions/workflows/iOS.yml) [![Android](https://github.com/Wandalen/rust_game_template/actions/workflows/Android.yml/badge.svg)](https://github.com/Wandalen/rust_game_template/actions/workflows/Android.yml) [![stable](https://img.shields.io/badge/stability-stable-brightgreen.svg)](https://github.com/emersion/stability-badges#stable)
+# rust_game_template [![iOS](https://github.com/Wandalen/rust_game_template/actions/workflows/iOS.yml/badge.svg)](https://github.com/Wandalen/rust_game_template/actions/workflows/iOS.yml) [![Android](https://github.com/Wandalen/rust_game_template/actions/workflows/Android.yml/badge.svg)](https://github.com/Wandalen/rust_game_template/actions/workflows/Android.yml) [![stability-experimental](https://img.shields.io/badge/stability-experimental-orange.svg)](https://github.com/emersion/stability-badges#experimental)
 Cross-platform rust game template 
 
 
