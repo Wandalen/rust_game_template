@@ -1,12 +1,12 @@
 #[cfg( target_arch = "wasm32" )]
 
-use webgpu::
+use game_template::
 {
   common::*,
   Renderer
 };
 
-use webgpu::winit::
+use game_template::winit::
 {
   event_loop::{ EventLoop },
   window::Window,

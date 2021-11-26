@@ -10,8 +10,8 @@ authors = [
 license = "MIT"
 readme = "Readme.md"
 documentation = "https://docs.rs/game_template"
-repository = "https://github.com/Wandalen/rust_game_template/tree/master/module/renderer"
-homepage = "https://github.com/Wandalen/rust_game_template/tree/master/module/renderer"
+repository = "https://github.com/Wandalen/rust_game_template/"
+homepage = "https://github.com/Wandalen/rust_game_template/"
 description = """
 Neutral cross-platform Rust game template.
 """
@@ -26,14 +26,14 @@ include = [
 ]
 
 [features]
-# webgl = [ "wgpu/webgl" ]
-# web-sys = [ "winit/web-sys" ]
+webgl = [ "wgpu/webgl" ]
+web-sys = [ "winit/web-sys" ]
 
-[lib]
-name = "game_template"
-path = "./src/main.rs"
+# [lib]
+# name = "game_template"
+# path = "./src/main.rs"
 
 [dependencies]
-# wgpu = "0.11.0"
-# winit = "0.25.0"
-# pollster = "0.2"
+wgpu = "0.11.0"
+winit = "0.25.0"
+pollster = "0.2"

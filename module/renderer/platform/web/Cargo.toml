@@ -1,13 +1,13 @@
 [package]
-name = "webgpu-web"
+name = "game_template_web"
 version = "0.1.0"
 edition = "2021"
 
 [features]
-default = [ "webgpu/webgl", "webgpu/web-sys" ]
+default = [ "game_template/webgl", "game_template/web-sys" ]
 
 [dependencies]
-webgpu = { path = "../..", features = [ "webgl", "web-sys"] }
+game_template = { path = "../..", features = [ "webgl", "web-sys"] }
 wasm-bindgen-futures = "0.4.28"
 console_error_panic_hook = "0.1.7"
 console_log = "0.2.0"

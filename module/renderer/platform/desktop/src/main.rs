@@ -1,4 +1,4 @@
-use webgpu::
+use game_template::
 {
   Renderer
 };
@@ -11,7 +11,6 @@ impl Renderer for Desktop
   {
     Desktop{}
   }
-
 }
 
 pub fn main()

@@ -16,7 +16,7 @@ pub use winit::
 
 //
 
-pub struct State
+pub struct Context
 {
   config : SurfaceConfiguration,
   surface : Surface,
@@ -25,9 +25,11 @@ pub struct State
   queue : Queue,
 }
 
-impl State
+//
+
+impl Context
 {
-  async fn new( window: &Window ) -> State
+  async fn new( window: &Window ) -> Context
   {
     let size = window.inner_size();
 
@@ -167,15 +169,17 @@ impl State
   }
 }
 
+//
+
 pub async fn run( event_loop : EventLoop<()>, window : Window )
 {
-  let mut option_state : Option<State> = if cfg!( target_os = "android" )
+  let mut option_state : Option<Context> = if cfg!( target_os = "android" )
   {
     None
   }
   else
   {
-    Some( pollster::block_on(State::new( &window ) ) )
+    Some( pollster::block_on(Context::new( &window ) ) )
   };
 
   event_loop.run(move |event, _, control_flow|
@@ -189,7 +193,7 @@ pub async fn run( event_loop : EventLoop<()>, window : Window )
 
     match &mut option_state
     {
-      Some( s) =>
+      Some( s ) =>
       {
         match event
         {
@@ -251,8 +255,8 @@ pub async fn run( event_loop : EventLoop<()>, window : Window )
           Event::Resumed =>
           {
             // log::info!("App resumed");
-            std::thread::sleep(std::time::Duration::from_millis( 250 ) );
-            option_state = Some( pollster::block_on(State::new( &window ) ) );
+            std::thread::sleep( std::time::Duration::from_millis( 250 ) );
+            option_state = Some( pollster::block_on(Context::new( &window ) ) );
           }
           _ => {}
         }

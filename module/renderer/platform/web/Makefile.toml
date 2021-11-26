@@ -1,4 +1,4 @@
-[config] 
+[config]
 skip_core_tasks = true
 skip_git_env_info = true
 skip_rust_env_info = true
@@ -42,10 +42,10 @@ install_crate = "basic-http-server"
 command = "basic-http-server"
 args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/target/web", "-a", "127.0.0.1:${CARGO_MAKE_WEB_PORT}" ]
 
-[tasks.run-browserstack-server]
+[tasks.run-browsersync-server]
 private = true
 command = 'node'
-args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/browserSync.ss" ]
+args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/BrowserSync.ss" ]
 
 #### Public
 
@@ -83,7 +83,7 @@ description = "Run web target. Rebuilds app on change"
 category = "Run"
 extend = "build-web"
 # run_task = { name = [ "run-web-server" ] }
-run_task = { name = [ "run-browserstack-server" ] }
+run_task = { name = [ "run-browsersync-server" ] }
 
 [tasks.run-web-fast]
 description = "Run web target. Rebuilds app on change"
