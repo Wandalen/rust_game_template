@@ -92,6 +92,7 @@ impl Context
       max_vertex_buffer_array_stride : 255,
     };
 
+
     eprintln!( "Get device and queue" );
     // Create the logical device and command queue
     let ( device, queue ) = adapter.request_device( &wgpu::DeviceDescriptor
@@ -173,16 +174,17 @@ impl Context
 
 pub async fn run( event_loop : EventLoop<()>, window : Window )
 {
+
   let mut option_state : Option<Context> = if cfg!( target_os = "android" )
   {
     None
   }
   else
   {
-    Some( pollster::block_on(Context::new( &window ) ) )
+    Some( pollster::block_on( Context::new( &window ) ) )
   };
 
-  event_loop.run(move |event, _, control_flow|
+  event_loop.run( move | event, _, control_flow |
   {
     // Have the closure take ownership of the resources.
     // `event_loop.run` never returns, therefore we must do this to ensure
@@ -213,15 +215,15 @@ pub async fn run( event_loop : EventLoop<()>, window : Window )
             let frame = s
             .surface
             .get_current_texture()
-            .expect("Failed to acquire next swap chain texture" );
+            .expect( "Failed to acquire next swap chain texture" );
 
-            let view = frame.texture.create_view(&wgpu::TextureViewDescriptor::default() );
+            let view = frame.texture.create_view( &wgpu::TextureViewDescriptor::default() );
             let mut encoder = s.device.create_command_encoder( &wgpu::CommandEncoderDescriptor { label: None } );
             {
               let mut rpass = encoder.begin_render_pass( &wgpu::RenderPassDescriptor
               {
                 label : None,
-                color_attachments : &[wgpu::RenderPassColorAttachment
+                color_attachments : &[ wgpu::RenderPassColorAttachment
                 {
                   view : &view,
                   resolve_target : None,
@@ -263,4 +265,5 @@ pub async fn run( event_loop : EventLoop<()>, window : Window )
       }
     }
   });
+
 }

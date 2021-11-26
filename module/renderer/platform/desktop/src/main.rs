@@ -5,6 +5,7 @@ use game_template::
 
 struct Desktop;
 
+
 impl Renderer for Desktop
 {
   fn new() -> Desktop
@@ -12,6 +13,7 @@ impl Renderer for Desktop
     Desktop{}
   }
 }
+
 
 pub fn main()
 {

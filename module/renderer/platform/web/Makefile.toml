@@ -7,28 +7,28 @@ skip_crate_env_info = true
 [env]
 CARGO_MAKE_WEB_PORT = 8080
 
-#### Private
+# Private
 
-[tasks.watch-web]
+[tasks.watch_web]
 private = true
 watch = { watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/src/" ] }
 
-[tasks.build-web-target]
+[tasks.build_web_target]
 private = true
 command = "cargo"
-install_script = "rustup target add wasm32-unknown-unknown"
-args = [ "build", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml", "--target", "wasm32-unknown-unknown", "--features", "webgpu/webgl,webgpu/web-sys" ]
+install_script = "rustup target add wasm32_unknown_unknown"
+args = [ "build", "--manifest_path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml", "--target", "wasm32_unknown_unknown", "--features", "game_template/webgl,game_template/web_sys" ]
 
-[tasks.build-web-bindings-fast]
+[tasks.build_web_bindings_fast]
 private = true
-command = "wasm-bindgen"
-args = [ "--target", "web", "--out-dir", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/target/web", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/target/wasm32-unknown-unknown/debug/webgpu-web.wasm" ]
+command = "wasm_bindgen"
+args = [ "--target", "web", "--out_dir", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/target/web", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/target/wasm32_unknown_unknown/debug/webgpu_web.wasm" ]
 
-[tasks.build-web-bindings]
-extend = "build-web-bindings-fast"
-install_crate = "wasm-bindgen-cli"
+[tasks.build_web_bindings]
+extend = "build_web_bindings_fast"
+install_crate = "wasm_bindgen_cli"
 
-[tasks.build-web-copy-static]
+[tasks.build_web_copy_static]
 private = true
 script_runner = "@shell"
 script = '''
@@ -36,20 +36,20 @@ cd ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}
 cp static/index.html target/web/index.html
 '''
 
-[tasks.run-web-server]
+[tasks.run_web_server]
 private = true
-install_crate = "basic-http-server"
-command = "basic-http-server"
-args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/target/web", "-a", "127.0.0.1:${CARGO_MAKE_WEB_PORT}" ]
+install_crate = "basic_http_server"
+command = "basic_http_server"
+args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/target/web", "_a", "127.0.0.1:${CARGO_MAKE_WEB_PORT}" ]
 
-[tasks.run-browsersync-server]
+[tasks.run_browsersync_server]
 private = true
 command = 'node'
 args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/BrowserSync.ss" ]
 
-#### Public
+# Public
 
-[tasks.install-web-dependencies]
+[tasks.install_web_dependencies]
 description = "Install web dependencies"
 private = false
 category = "Prerequisites"
@@ -59,33 +59,33 @@ cd ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}
 npm ci
 '''
 
-[tasks.build-web]
+[tasks.build_web]
 description = "Build web target. Rebuilds on change."
 private = false
-extend = "watch-web"
+extend = "watch_web"
 category = "Build"
-dependencies = [ "build-web-target", "build-web-bindings", "build-web-copy-static" ]
+dependencies = [ "build_web_target", "build_web_bindings", "build_web_copy_static" ]
 
-[tasks.build-web-fast]
+[tasks.build_web_fast]
 description = "Build web target. Rebuilds on change."
 private = false
-extend = "watch-web"
+extend = "watch_web"
 category = "Build"
-dependencies = [ "build-web-target", "build-web-bindings-fast" ]
+dependencies = [ "build_web_target", "build_web_bindings_fast" ]
 
-#[tasks.run-web]
+#[tasks.run_web]
 #description = "Run web target. Rebuilds app on change"
 #category = "Run"
-#run_task = { name = [ "run-web-server", "build-web" ], parallel = true }
+#run_task = { name = [ "run_web_server", "build_web" ], parallel = true }
 
-[tasks.run-web]
+[tasks.run_web]
 description = "Run web target. Rebuilds app on change"
 category = "Run"
-extend = "build-web"
-# run_task = { name = [ "run-web-server" ] }
-run_task = { name = [ "run-browsersync-server" ] }
+extend = "build_web"
+# run_task = { name = [ "run_web_server" ] }
+run_task = { name = [ "run_browsersync_server" ] }
 
-[tasks.run-web-fast]
+[tasks.run_web_fast]
 description = "Run web target. Rebuilds app on change"
 category = "Run"
-run_task = { name = [ "run-browserstack-server", "build-web-fast" ], parallel = true }
+run_task = { name = [ "run_browserstack_server", "build_web_fast" ], parallel = true }
