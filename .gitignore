@@ -26,8 +26,5 @@ Cargo.lock
 .DS_Store
 .idea
 
-
-
-config/private.toml
-config/public.toml
+private.toml
 

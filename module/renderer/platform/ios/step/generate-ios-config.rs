@@ -7,7 +7,6 @@
 //! ```
 
 use regex::Regex;
-use serde::de::{Deserialize, Deserializer};
 use serde::{Serializer, Serialize};
 
 fn env_get_maybe( val: String ) -> String
@@ -66,7 +65,7 @@ fn main()
 
   let handlebars = handlebars::Handlebars::new();
 
-  let toml_str = std::fs::read_to_string( cwd.join( "../../config/private.toml" ) ).expect( "Failed to read config/private.toml" );
+  let toml_str = std::fs::read_to_string( cwd.join( "../../../../private.toml" ) ).expect( "Failed to read config/private.toml" );
   let config:Config = toml::from_str( &toml_str ).unwrap();
   let ios:IOSConfig = config.ios;
 

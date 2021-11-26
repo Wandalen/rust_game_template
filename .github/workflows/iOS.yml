@@ -34,8 +34,7 @@ jobs:
       - name: Create private config file
         env:
            PRIVATE_TOML: ${{ secrets.PRIVATE_CONFIG }}
-           PRIVATE_TOML_DIR_PATH: module/renderer/config
-        run: 'mkdir -p "$PRIVATE_TOML_DIR_PATH" && echo "$PRIVATE_TOML" > module/renderer/config/private.toml'
+        run: 'echo "$PRIVATE_TOML" > private.toml'
         shell: bash
       - name: Build project
         run: cargo make build-ios
