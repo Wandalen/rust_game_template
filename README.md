@@ -1,4 +1,4 @@
-# rust_game_template
+# rust_game_template [![iOS](https://github.com/Wandalen/rust_game_template/actions/workflows/iOS.yml/badge.svg)](https://github.com/Wandalen/rust_game_template/actions/workflows/iOS.yml) [![Android](https://github.com/Wandalen/rust_game_template/actions/workflows/Android.yml/badge.svg)](https://github.com/Wandalen/rust_game_template/actions/workflows/Android.yml)
 Cross-platform rust game template 
 
 
@@ -18,9 +18,24 @@ cargo make run
 
 **Web:**
 
+Install dev dependencies: 
+```
+cargo make install-web-dependencies
+```
+
+Run web target:
+
 ```
 cargo make run-web
 ```
+
+To speedup incremental builds use:
+
+```
+cargo make run-web-fast
+```
+
+This command doesn't perform crate installation checks to reduce total build time.
 
 **Android:**
 
@@ -44,6 +59,16 @@ Create the file `module/renderer/config/private.toml` and add next fields:
 [ios]
 development_team = "TEAM_ID"
 ```
+
+Any field can also may contain environment variable as a value:
+
+```toml
+[ios]
+development_team = "${TEAM_ID}"
+```
+
+In this case value will be taken from your environment variable during the build.
+
 Then run:
 
 ```
