@@ -16,7 +16,7 @@ description = """
 Neutral cross-platform Rust game template.
 """
 categories = [ "game development", "game engines" ]
-keywords = [ "game template", "gamedev" ]
+keywords = [ "game-template", "gamedev" ]
 
 include = [
   "/src",
@@ -26,10 +26,10 @@ include = [
 ]
 
 [features]
-webgl = [ "wgpu/webgl" ]
-web-sys = [ "winit/web-sys" ]
+# webgl = [ "wgpu/webgl" ]
+# web-sys = [ "winit/web-sys" ]
 
 [dependencies]
-wgpu = "0.11.0"
-winit = "0.25.0"
-pollster = "0.2"
+# wgpu = "0.11.0"
+# winit = "0.25.0"
+# pollster = "0.2"
