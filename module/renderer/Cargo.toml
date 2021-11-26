@@ -1,7 +1,29 @@
 [package]
-name = "webgpu"
-version = "0.1.0"
+name = "game_template"
+version = "0.0.0"
 edition = "2021"
+authors = [
+  "Kostiantyn Wandalen <wandalen@obox.systems>",
+  "Volodymyr M. <volodymyr.migdal@gmail.com>",
+  "Dmytro Kryvoruchko <dm.vict.kr@gmail.com>",
+]
+license = "MIT"
+readme = "Readme.md"
+documentation = "https://docs.rs/game_template"
+repository = "https://github.com/Wandalen/rust_game_template/tree/master/module/renderer"
+homepage = "https://github.com/Wandalen/rust_game_template/tree/master/module/renderer"
+description = """
+Neutral cross-platform Rust game template.
+"""
+categories = [ "game development", "game engines" ]
+keywords = [ "game template", "gamedev" ]
+
+include = [
+  "/src",
+  "/Cargo.toml",
+  "/Readme.md",
+  "/License",
+]
 
 [features]
 webgl = [ "wgpu/webgl" ]
@@ -11,5 +33,3 @@ web-sys = [ "winit/web-sys" ]
 wgpu = "0.11.0"
 winit = "0.25.0"
 pollster = "0.2"
-
-
