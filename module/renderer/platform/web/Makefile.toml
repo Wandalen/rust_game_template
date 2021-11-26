@@ -68,3 +68,8 @@ description = "Run web target. Rebuilds app on change"
 category = "Run"
 extend = "build-web"
 run_task = { name = [ "run-web-server" ] }
+
+[tasks.run-web-fast]
+description = "Run web target. Rebuilds app on change"
+category = "Run"
+run_task = { name = [ "run-web-server", "build-web-fast" ], parallel = true }
