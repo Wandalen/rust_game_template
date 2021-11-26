@@ -22,6 +22,14 @@ cargo make run
 cargo make run-web
 ```
 
+To speedup incremental builds use:
+
+```
+cargo make run-web-fast
+```
+
+This command doesn't perform crate installation checks to reduce total build time.
+
 **Android:**
 
 Prerequisites:
