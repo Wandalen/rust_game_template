@@ -29,6 +29,10 @@ include = [
 # webgl = [ "wgpu/webgl" ]
 # web-sys = [ "winit/web-sys" ]
 
+[lib]
+name = "game_template"
+path = "/src/main.rs"
+
 [dependencies]
 # wgpu = "0.11.0"
 # winit = "0.25.0"
