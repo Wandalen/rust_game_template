@@ -45,7 +45,7 @@ args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/target/web", "-a
 [tasks.run-browserstack-server]
 private = true
 command = 'node'
-args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/scripts/browserSync.ss" ]
+args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/browserSync.ss" ]
 
 #### Public
 

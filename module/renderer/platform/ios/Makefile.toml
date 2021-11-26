@@ -23,7 +23,7 @@ private = true
 condition = { files_not_exist = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/project.yml" ] }
 dependencies = [ "install-rust-script" ]
 command = "rust-script"
-args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/scripts/generate-ios-config.rs" ]
+args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/generate-ios-config.rs" ]
 
 [tasks.generate-ios-project]
 private = true
