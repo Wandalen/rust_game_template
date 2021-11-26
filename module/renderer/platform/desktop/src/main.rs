@@ -1,18 +1,22 @@
-use webgpu::common::*;
-use webgpu::pollster;
-
-use webgpu::winit::
+use webgpu::
 {
-  event_loop::{ EventLoop },
-  window::Window
+  Renderer
 };
+
+struct Desktop;
+
+impl Renderer for Desktop 
+{
+  fn new() -> Desktop
+  {
+    Desktop{}
+  }
+  
+}
 
 pub fn main()
 {
-  let event_loop = EventLoop::new();
-  let window = Window::new( &event_loop ).unwrap();
-
-  // Temporarily avoid srgb formats for the swapchain on the web
-  pollster::block_on(run( event_loop, window ) );
+  let renderer = Desktop::new();
+  renderer.run();
 }
 
