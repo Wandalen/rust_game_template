@@ -19,7 +19,7 @@ categories = [ "game development", "game engines" ]
 keywords = [ "game-template", "gamedev" ]
 
 include = [
-  "/src",
+  # "/src",
   "/Cargo.toml",
   "/Readme.md",
   "/License",
