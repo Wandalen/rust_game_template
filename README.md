@@ -44,6 +44,16 @@ Create the file `module/renderer/config/private.toml` and add next fields:
 [ios]
 development_team = "TEAM_ID"
 ```
+
+Any field can also may contain environment variable as a value:
+
+```toml
+[ios]
+development_team = "${TEAM_ID}"
+```
+
+In this case value will be taken from your environment variable during the build.
+
 Then run:
 
 ```
