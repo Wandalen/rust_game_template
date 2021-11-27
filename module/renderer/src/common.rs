@@ -1,4 +1,6 @@
 pub use std::borrow::Cow;
+
+/* qqq : remove */
 pub use wgpu::
 {
   Device,
@@ -7,6 +9,8 @@ pub use wgpu::
   Surface,
   SurfaceConfiguration
 };
+
+/* qqq : remove */
 pub use winit::
 {
   event::{ Event, WindowEvent },
@@ -32,6 +36,11 @@ impl Context
   async fn new( window: &Window ) -> Context
   {
     let size = window.inner_size();
+
+    // #[cfg(target_arch = "wasm32")]
+    // log::debug!( "{:?}", size );
+    // qqq : discuss
+    println!( "size : {:?}", &size );
 
     eprintln!( "Get instance" );
     #[cfg( not( target_os = "android" ) )]
@@ -91,7 +100,6 @@ impl Context
       max_storage_buffer_binding_size : 0,
       max_vertex_buffer_array_stride : 255,
     };
-
 
     eprintln!( "Get device and queue" );
     // Create the logical device and command queue
@@ -218,7 +226,7 @@ pub async fn run( event_loop : EventLoop<()>, window : Window )
             .expect( "Failed to acquire next swap chain texture" );
 
             let view = frame.texture.create_view( &wgpu::TextureViewDescriptor::default() );
-            let mut encoder = s.device.create_command_encoder( &wgpu::CommandEncoderDescriptor { label: None } );
+            let mut encoder = s.device.create_command_encoder( &wgpu::CommandEncoderDescriptor { label : None } );
             {
               let mut rpass = encoder.begin_render_pass( &wgpu::RenderPassDescriptor
               {
@@ -233,13 +241,13 @@ pub async fn run( event_loop : EventLoop<()>, window : Window )
                     store : true,
                   },
                 }],
-                depth_stencil_attachment: None,
+                depth_stencil_attachment : None,
               });
               rpass.set_pipeline( &s.render_pipeline );
               rpass.draw( 0..3, 0..1 );
             }
 
-            s.queue.submit(Some( encoder.finish() ) );
+            s.queue.submit( Some( encoder.finish() ) );
             frame.present();
           }
           Event::WindowEvent
@@ -258,7 +266,7 @@ pub async fn run( event_loop : EventLoop<()>, window : Window )
           {
             // log::info!("App resumed");
             std::thread::sleep( std::time::Duration::from_millis( 250 ) );
-            option_state = Some( pollster::block_on(Context::new( &window ) ) );
+            option_state = Some( pollster::block_on( Context::new( &window ) ) );
           }
           _ => {}
         }

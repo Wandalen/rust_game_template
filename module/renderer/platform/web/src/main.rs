@@ -31,9 +31,9 @@ impl Renderer for Web
     console_log::init().expect( "could not initialize logger" );
     // On wasm, append the canvas to the document body
     web_sys::window()
-    .and_then( |win| win.document() )
-    .and_then( |doc| doc.body() )
-    .and_then( |body| body.append_child( &web_sys::Element::from( window.canvas() ) ).ok() )
+    .and_then( | win | win.document() )
+    .and_then( | doc | doc.body() )
+    .and_then( | body | body.append_child( &web_sys::Element::from( window.canvas() ) ).ok() )
     .expect( "couldn't append canvas to document body" );
     wasm_bindgen_futures::spawn_local( run( event_loop, window ) );
   }
@@ -46,3 +46,10 @@ pub fn main()
   renderer.run();
 }
 
+/* qqq : where is that output from? why?
+
+Compiled shader WebShaderKey(2v3)
+game_template_web.js:1184 	Compiled shader WebShaderKey(1v3)
+game_template_web.js:1184
+
+*/
