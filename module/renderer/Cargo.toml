@@ -38,3 +38,4 @@ default = [ "webgl", "web-sys" ]
 wgpu = "0.11.0"
 winit = "0.25.0"
 pollster = "0.2"
+byte-slice-cast = "1.2.0"

@@ -2,8 +2,8 @@
 
 use game_template::
 {
-  common::*,
-  Renderer
+  // common::*,
+  Renderer,
 };
 
 use game_template::winit::
@@ -15,8 +15,9 @@ use game_template::winit::
 
 struct Web;
 
-impl Renderer for Web
+impl game_template::Renderer for Web
 {
+
   fn new() -> Web
   {
     Web{}
@@ -35,7 +36,7 @@ impl Renderer for Web
     .and_then( | doc | doc.body() )
     .and_then( | body | body.append_child( &web_sys::Element::from( window.canvas() ) ).ok() )
     .expect( "couldn't append canvas to document body" );
-    wasm_bindgen_futures::spawn_local( run( event_loop, window ) );
+    wasm_bindgen_futures::spawn_local( game_template::run( event_loop, window ) );
   }
 
 }
@@ -52,4 +53,10 @@ Compiled shader WebShaderKey(2v3)
 game_template_web.js:1184 	Compiled shader WebShaderKey(1v3)
 game_template_web.js:1184
 
+*/
+
+/* qqq : output file is too large 10mb
+*/
+
+/* qqq : implement release build
 */
