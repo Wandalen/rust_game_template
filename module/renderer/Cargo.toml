@@ -28,6 +28,7 @@ include = [
 [features]
 webgl = [ "wgpu/webgl" ]
 web-sys = [ "winit/web-sys" ]
+default = [ "webgl", "web-sys" ]
 
 # [lib]
 # name = "game_template"

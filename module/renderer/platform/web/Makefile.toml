@@ -17,30 +17,31 @@ watch = { watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/src/"
 private = true
 command = "cargo"
 install_script = "rustup target add wasm32-unknown-unknown"
-args = [ "build", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml", "--target", "wasm32-unknown-unknown", "--features", "game_template/webgl,game_template/web_sys" ]
+# args = [ "build", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml", "--target", "wasm32-unknown-unknown", "--features", "game_template/webgl,game_template/web-sys" ]
+args = [ "build", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml", "--target", "wasm32-unknown-unknown" ]
 
 [tasks.web_wasm_rebuild]
 private = true
-command = "wasm_bindgen"
-args = [ "--target", "web", "--out_dir", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/target/web", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/target/wasm32-unknown-unknown/debug/webgpu_web.wasm" ]
+command = "wasm-bindgen"
+args = [ "--target", "web", "--out-dir", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/wasm32-unknown-unknown/debug/game_template_web.wasm" ]
 
 [tasks.web_wasm_build]
 extend = "web_wasm_rebuild"
-install_crate = "wasm_bindgen_cli"
+install_crate = "wasm-bindgen-cli"
 
 [tasks.web_build_copy_static]
 private = true
-script_runner = "@shell"
+script_runner = "@shell" # qqq : replace all @shell -> @duckscript
 script = '''
 cd ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}
-cp static/index.html target/web/index.html
+cp -r --copy-contents ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/static/* ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web
 '''
 
 [tasks.web_server_run]
 private = true
-install_crate = "basic_http_server"
-command = "basic_http_server"
-args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/target/web", "_a", "127.0.0.1:${CARGO_MAKE_WEB_PORT}" ]
+install_crate = "basic-http-server"
+command = "basic-http-server"
+args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web", "-a", "127.0.0.1:${CARGO_MAKE_WEB_PORT}" ]
 
 [tasks.web_server_browsersync]
 private = true
@@ -62,30 +63,27 @@ npm ci
 [tasks.web_build]
 description = "Build web target. Rebuilds on change."
 private = false
-# extend = "web_watch" /* qqq : what for?? */
 category = "Build"
 dependencies = [ "web_build_target", "web_wasm_build", "web_build_copy_static" ]
 
 [tasks.web_rebuild]
 description = "Build web target. Rebuilds on change."
 private = false
-# extend = "web_watch" /* qqq : what for?? */
 category = "Build"
 dependencies = [ "web_build_target", "web_wasm_rebuild" ]
-
-#[tasks.web_run]
-#description = "Run web target. Rebuilds app on change"
-#category = "Run"
-#run_task = { name = [ "web_run_server", "web_build" ], parallel = true }
 
 [tasks.web_run]
 description = "Run web target. Rebuilds app on change"
 category = "Run"
 extend = "web_build"
-# run_task = { name = [ "web_server_run" ] }
-run_task = { name = [ "web_server_browsersync" ] }
+run_task = { name = [ "web_server_run" ] }
+# run_task = { name = [ "web_server_browsersync" ] }
 
-[tasks.web_run_fast]
+[tasks.web_rerun]
 description = "Run web target. Rebuilds app on change"
 category = "Run"
 run_task = { name = [ "web_server_browsersync", "web_rebuild" ], parallel = true }
+
+# [tasks.echo]
+# command = "echo"
+# args = [ "CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY : ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}" ]

@@ -28,7 +28,7 @@ args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/generate_io
 [tasks.generate_ios_project]
 private = true
 dependencies = [ "generate_ios_config" ]
-condition = { files_not_exist = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/webgpu_ios.xcodeproj" ] }
+condition = { files_not_exist = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/game_template_ios.xcodeproj" ] }
 command = "xcodegen"
 args = [ "--spec", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/project.yml" ]
 
@@ -47,7 +47,7 @@ script_runner = "@shell"
 script = '''
 rustup target add x86_64_apple_ios
 cargo build --manifest-path ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml --target=x86_64_apple_ios
-xcrun xcodebuild _project ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/webgpu_ios.xcodeproj _scheme webgpu_ios_iOS _arch x86_64 _derivedDataPath ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out
+xcrun xcodebuild _project ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/game_template_ios.xcodeproj _scheme game_template_ios _arch x86_64 _derivedDataPath ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out
 '''
 
 [tasks.run_ios_target]
@@ -56,8 +56,8 @@ script_runner = "@shell"
 script = '''
 open _a simulator
 sleep 5
-xcrun simctl install booted ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out/Build/Products/debug_iphonesimulator/webgpu_ios.app
-xcrun simctl launch booted com.example.webgpu_ios
+xcrun simctl install booted ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out/Build/Products/debug_iphonesimulator/game_template_ios.app
+xcrun simctl launch booted com.example.game_template_ios
 '''
 
 # Public
@@ -82,6 +82,6 @@ script = '''
 rm _f ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/mobile.toml
 rm _f ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/project.yml
 rm _rf ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out
-rm _rf ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/webgpu_ios_iOS
-rm _rf ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/webgpu_ios.xcodeproj
+rm _rf ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/game_template_ios
+rm _rf ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/game_template_ios.xcodeproj
 '''
