@@ -1,4 +1,22 @@
 
+/* qqq : move all code to renderer/src and maybe remove submodules?
+*/
+
+/* qqq : make bin targets for each platform
+is it possible to cross-compile: osx, windows, linux...?
+*/
+
+/* qqq : main should be single
+*/
+
+/* qqq : esc should terminate application */
+
+/* qqq : is it possible to stop watching if application was terminated? */
+
+/* qqq : seems webgl backend of WebGPU is broken? */
+
+/* qqq : all variables should be move to public config. now template have lots of variables inlined into different files */
+
 pub use wgpu;
 pub use winit;
 pub use pollster;
@@ -31,7 +49,7 @@ pub trait Renderer
 {
   fn new() -> Self;
 
-  fn run ( &self ) -> ()
+  fn run( &self ) -> ()
   {
     let event_loop = EventLoop::new();
     let window = Window::new( &event_loop ).unwrap();
