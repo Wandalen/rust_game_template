@@ -13,7 +13,7 @@ is it possible to cross-compile: osx, windows, linux...?
 
 /* qqq : is it possible to stop watching if application was terminated? */
 
-/* qqq : seems webgl backend of WebGPU is broken? */
+/* !!! qqq : seems webgl backend of WebGPU is broken? */
 
 /* qqq : all variables should be move to public config. now template have lots of variables inlined into different files */
 
@@ -364,7 +364,7 @@ pub async fn run( event_loop : EventLoop<()>, window : Window )
             c.config.height = size.height;
             c.surface.configure( &c.device, &c.config );
           }
-          Event::RedrawRequested( _ ) =>
+          Event::RedrawRequested( _ ) => /* qqq : Find event that fires every frame */
           {
             let frame = c.surface
             .get_current_texture()
