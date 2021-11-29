@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "test": "tst .run"
+  },
+  "devDependencies": {
+    "express": "4.17.1",
+    "opencv4nodejs-prebuilt": "5.3.4",
+    "puppeteer": "^10.2.0",
+    "wTesting": "delta"
+  }
+}
