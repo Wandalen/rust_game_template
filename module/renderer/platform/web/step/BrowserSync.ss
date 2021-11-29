@@ -1,6 +1,6 @@
 let browserSync = require('browser-sync');
 let path = require( 'path' );
-let rootPath = path.join( __dirname, '..' );
+let rootPath = path.join( __dirname, '../../../../..' );
 
 let o = 
 {
