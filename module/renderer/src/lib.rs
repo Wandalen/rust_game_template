@@ -364,6 +364,11 @@ pub async fn run( event_loop : EventLoop<()>, window : Window )
             c.config.height = size.height;
             c.surface.configure( &c.device, &c.config );
           }
+          Event::MainEventsCleared =>
+          {
+            /* https://docs.rs/winit/latest/winit/event/enum.Event.html#variant.MainEventsCleared */
+            window.request_redraw();
+          }
           Event::RedrawRequested( _ ) => /* qqq : Find event that fires every frame */
           {
             let frame = c.surface
