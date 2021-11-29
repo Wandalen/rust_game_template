@@ -65,7 +65,16 @@ fn main()
 
   let handlebars = handlebars::Handlebars::new();
 
-  let toml_str = std::fs::read_to_string( cwd.join( "../../../../private.toml" ) ).expect( "Failed to read config/private.toml" );
+  let root_dir_path = cwd.join( "../../../.." );
+
+  let mut private_toml_path = root_dir_path.join( "private.toml" );
+  if !private_toml_path.exists()
+  {
+    eprintln!( "Failed to find private.toml config file. Default configuration file will be used." );
+    private_toml_path = root_dir_path.join( "private.toml.hbs" );
+  }
+  let expect_msg = &format!( "Failed to read {:#?}", private_toml_path );
+  let toml_str = std::fs::read_to_string( private_toml_path ).expect( expect_msg );
   let config:Config = toml::from_str( &toml_str ).unwrap();
   let ios:IOSConfig = config.ios;
 
