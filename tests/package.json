@@ -6,6 +6,10 @@
     "express": "4.17.1",
     "opencv4nodejs-prebuilt": "5.3.4",
     "puppeteer": "^10.2.0",
+    "browserstack-local": "1.4.8",
+    "needle": "2.9.1",
+    "webdriverio": "7.16.3",
+    "wpuppet": "https://github.com/volodymyrmigdal/wPuppet.git",
     "wTesting": "delta"
   }
 }
