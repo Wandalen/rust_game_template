@@ -156,7 +156,7 @@ async function chromiumDownloadMaybe ()
 function serverStart () 
 {
   const context = this;
-  const distPath = __.path.join( __dirname, '../module/renderer/platform/web/target/web' );
+  const distPath = __.path.join( __dirname, '../target/web' );
 
   __.assert( __.fileProvider.fileExists( distPath ), `The dist path: ${distPath} doesn't exist.` );
 
@@ -540,7 +540,7 @@ const Suite =
 
     //BrowserStack toggle
 
-    browserStackEnabled : true,
+    browserStackEnabled : false,
 
     //BrowserStack general settings
 
