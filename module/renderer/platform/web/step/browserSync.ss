@@ -1,6 +1,9 @@
-var browserSync = require('browser-sync');
+let browserSync = require('browser-sync');
+let path = require( 'path' );
+let rootPath = path.join( __dirname, '..' );
 
-browserSync({
-    server: 'target/web',
-    files: ['target/web/*.html', 'target/web/*.js' ]
-});
+let o = 
+{
+  server: path.join( rootPath, 'target/web' )
+}
+browserSync( o );
