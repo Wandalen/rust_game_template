@@ -14,7 +14,7 @@ async function trivial ( test ) {
 
   return a.inBrowser( async ( page ) =>
   { 
-    await __.time.out( 1000 );
+    await __.time.out( 5000 );
 
     if( a.tro.verbosity >= 5 ) 
     {

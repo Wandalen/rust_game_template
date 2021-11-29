@@ -7,6 +7,7 @@ const Revisions = require( 'puppeteer/lib/cjs/puppeteer/revisions.js' );
 const Express = require( 'express' );
 const cv = require( 'opencv4nodejs-prebuilt' );
 require( 'wpuppet' );
+const BrowserStackLocal = require( 'browserstack-local' );
 
 const __ = _globals_.testing.wTools;
 const puppet = _global_.wTools.puppet;
@@ -20,17 +21,112 @@ async function onSuiteBegin ( suite )
   self.suiteTempPath = __.path.join( suiteDirPath, '.tmp' );
 
   await self.chromiumDownloadMaybe( suite );
-
-  return self.serverStart();
+  await self.browserStackBegin();
+  await self.serverStart();
 
 }
 
 //
 
-function onSuiteEnd () 
+async function onSuiteEnd () 
 {
   const self = this;
-  return self.serverStop();
+  await self.browserStackEnd();
+  await self.browserStackSessionClose();
+  await self.serverStop();
+}
+
+//
+
+async function onRoutineEnd ( tro )
+{
+  const self = this;
+  await self.browserStackSessionStatusSet( tro );
+  await self.browserStackSessionClose();
+     
+}
+
+//
+
+//
+
+function browserStackBegin () 
+{
+  const self = this;
+  const ready = __.Consequence();
+
+  if( !self.browserStackEnabled )
+  return false;
+
+  self.browserStackLocal = new BrowserStackLocal.Local();
+  self.browserStackLocal.start( { 'key': self.browserStackAccessKey }, () => 
+  {
+      ready.take( null );
+  });
+
+  return ready;
+}
+
+//
+
+function browserStackEnd () 
+{
+  const self = this;
+
+  if( !self.browserStackEnabled )
+  return false;
+
+  const ready = __.Consequence();
+  self.browserStackLocal.stop( () => ready.take( null ) );
+  return ready;
+}
+
+//
+
+async function browserStackSessionStatusSet( tro )
+{
+  let context = this;
+
+  if( !context.browserStackEnabled ) return;
+  if( !context.browserStackCurrentSession ) return 
+
+  const sid = context.browserStackCurrentSession;
+  const status = tro.report.outcome ? 'passed' : 'failed';
+  const reason = !tro.report.outcome ? tro.report.reason || 'test check failed' : '';
+  const url = `https://api.browserstack.com/automate/sessions/${sid}.json`;
+  const data = { status, reason }
+  const opts = { json : true, username : context.browserStackUser, password: context.browserStackAccessKey  };
+  const putReady = __.Consequence();
+
+  needle.put( url, data, opts, ( err, resp ) => 
+  {
+    if( resp && resp.statusMessage === 'OK' )
+    putReady.take( resp );
+    else
+    putReady.error( __.err( `Failed to set status of BrowserStack session ${sid}. \nErr:${err}, \nResponse:${resp}` ) )
+
+  });
+
+  return putReady;
+}
+
+//
+
+async function browserStackSessionClose()
+{
+  let context = this;
+
+  if( !context.browser ) return;
+  if( !context.browser.isConnected() ) return;
+      
+  try
+  {
+    return context.browser.close();
+  }
+  catch( err )
+  {
+    __.errLogOnce( err );
+  }
 }
 
 //
@@ -430,6 +526,8 @@ const Suite =
   onSuiteBegin,
   onSuiteEnd,
 
+  onRoutineEnd,
+
   context: 
   {
     port: null,
@@ -442,7 +540,7 @@ const Suite =
 
     //BrowserStack toggle
 
-    browserStackEnabled : false,
+    browserStackEnabled : true,
 
     //BrowserStack general settings
 
@@ -457,7 +555,7 @@ const Suite =
     configs : [ 
 
       'Windows-10;Chrome-90', 
-      'OS X-Catalina;Chrome-90',
+      // 'OS X-Catalina;Chrome-90',
       // 'Samsung Galaxy S20'
     ],
 
@@ -471,6 +569,10 @@ const Suite =
     chromiumDownloadMaybe,
     serverStart,
     serverStop,
+    browserStackBegin,
+    browserStackEnd,
+    browserStackSessionStatusSet,
+    browserStackSessionClose,
     assetFor,
   }
 }
