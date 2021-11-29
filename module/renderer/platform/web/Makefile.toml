@@ -31,10 +31,9 @@ install_crate = "wasm-bindgen-cli"
 
 [tasks.web_build_copy_static]
 private = true
-script_runner = "@shell" # qqq : replace all @shell -> @duckscript
+script_runner = "@duckscript" # qqq : replace all @shell -> @duckscript aaa:replaced where possible
 script = '''
-cd ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}
-cp -r --copy-contents ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/static/* ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web
+glob_cp ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/static/* ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web
 '''
 
 [tasks.web_server_run]
@@ -54,10 +53,10 @@ args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/BrowserSync
 description = "Install web dependencies"
 private = false
 category = "Prerequisites"
-script_runner = "@shell"
+script_runner = "@duckscript"
 script = '''
-cd ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}
-npm ci
+exec cd ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}
+exec npm ci
 '''
 
 [tasks.web_build]
