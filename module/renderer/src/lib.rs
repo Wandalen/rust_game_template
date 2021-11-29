@@ -17,6 +17,9 @@ is it possible to cross-compile: osx, windows, linux...?
 
 /* qqq : all variables should be move to public config. now template have lots of variables inlined into different files */
 
+#[cfg( target_arch = "wasm32" )]
+use web_log::println as println;
+
 pub use wgpu;
 pub use winit;
 pub use pollster;
@@ -347,7 +350,14 @@ pub async fn run( event_loop : EventLoop<()>, window : Window )
     // the resources are properly cleaned up.
     // let _ = (&instance, &adapter, &shader, &pipeline_layout);
 
-    *control_flow = ControlFlow::Wait;
+    // ControlFlow::Poll continuously runs the event loop, even if the OS hasn't
+    // dispatched any events. This is ideal for games and similar applications.
+    *control_flow = ControlFlow::Poll;
+
+    // ControlFlow::Wait pauses the event loop if no events are available to process.
+    // This is ideal for non-game applications that only update in response to user
+    // input, and uses significantly less power/CPU time than ControlFlow::Poll.
+    // *control_flow = ControlFlow::Wait;
 
     match &mut option_state
     {

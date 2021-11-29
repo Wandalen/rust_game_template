@@ -41,3 +41,6 @@ pollster = "0.2"
 byte-slice-cast = "1.2.0"
 bytemuck = { version = "1.7.2", features = [ "derive" ] }
 
+[target.'cfg( target_arch = "wasm32" )'.dependencies]
+web-log = "1.0.0"
+
