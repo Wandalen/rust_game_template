@@ -1,12 +1,12 @@
 #[cfg( target_arch = "wasm32" )]
 
-use webgpu::
+use game_template::
 {
-  common::*,
-  Renderer
+  // common::*,
+  Renderer,
 };
 
-use webgpu::winit::
+use game_template::winit::
 {
   event_loop::{ EventLoop },
   window::Window,
@@ -15,8 +15,9 @@ use webgpu::winit::
 
 struct Web;
 
-impl Renderer for Web
+impl game_template::Renderer for Web
 {
+
   fn new() -> Web
   {
     Web{}
@@ -31,11 +32,11 @@ impl Renderer for Web
     console_log::init().expect( "could not initialize logger" );
     // On wasm, append the canvas to the document body
     web_sys::window()
-    .and_then( |win| win.document() )
-    .and_then( |doc| doc.body() )
-    .and_then( |body| body.append_child( &web_sys::Element::from( window.canvas() ) ).ok() )
+    .and_then( | win | win.document() )
+    .and_then( | doc | doc.body() )
+    .and_then( | body | body.append_child( &web_sys::Element::from( window.canvas() ) ).ok() )
     .expect( "couldn't append canvas to document body" );
-    wasm_bindgen_futures::spawn_local( run( event_loop, window ) );
+    wasm_bindgen_futures::spawn_local( game_template::run( event_loop, window ) );
   }
 
 }
@@ -46,3 +47,16 @@ pub fn main()
   renderer.run();
 }
 
+/* qqq : where is that output from? why?
+
+Compiled shader WebShaderKey(2v3)
+game_template_web.js:1184 	Compiled shader WebShaderKey(1v3)
+game_template_web.js:1184
+
+*/
+
+/* qqq : output file is too large 10mb
+*/
+
+/* qqq : implement release build
+*/

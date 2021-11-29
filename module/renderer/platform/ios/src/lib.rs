@@ -1,19 +1,19 @@
-#[cfg( target_os = "ios" )]
+// #[cfg( target_os = "ios" )]
 
-use webgpu::
+use game_template::
 {
   Renderer
 };
 
 struct IOS;
 
-impl Renderer for IOS 
+impl Renderer for IOS
 {
   fn new() -> IOS
   {
     IOS{}
   }
-  
+
 }
 
 #[mobile_entry_point::mobile_entry_point]
@@ -22,8 +22,4 @@ pub fn main()
   let renderer = IOS::new();
   renderer.run();
 }
-
-
-
-
 

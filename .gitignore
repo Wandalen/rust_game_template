@@ -13,6 +13,7 @@ node_modules
 /package-lock.json
 /Cargo.lock
 /.vscode
+/private.*
 
 -*
 .module
@@ -25,6 +26,3 @@ Cargo.lock
 *.build
 .DS_Store
 .idea
-
-private.toml
-

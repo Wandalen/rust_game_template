@@ -1,6 +1,6 @@
-# rust_game_template [![iOS](https://github.com/Wandalen/rust_game_template/actions/workflows/iOS.yml/badge.svg)](https://github.com/Wandalen/rust_game_template/actions/workflows/iOS.yml) [![Android](https://github.com/Wandalen/rust_game_template/actions/workflows/Android.yml/badge.svg)](https://github.com/Wandalen/rust_game_template/actions/workflows/Android.yml) [![stability-experimental](https://img.shields.io/badge/stability-experimental-orange.svg)](https://github.com/emersion/stability-badges#experimental)
-Cross-platform rust game template 
+# Rust Game Template [![stability-experimental](https://img.shields.io/badge/stability-experimental-orange.svg)](https://github.com/emersion/stability-badges#experimental) [![ios](https://github.com/Wandalen/rust_game_template/actions/workflows/iOS.yml/badge.svg)](https://github.com/Wandalen/rust_game_template/actions/workflows/iOS.yml) [![android](https://github.com/Wandalen/rust_game_template/actions/workflows/Android.yml/badge.svg)](https://github.com/Wandalen/rust_game_template/actions/workflows/Android.yml)
 
+Neutral cross-platform Rust game template.
 
 ## General prerequisites
 
@@ -18,7 +18,7 @@ cargo make run
 
 **Web:**
 
-Install dev dependencies: 
+Install dev dependencies:
 ```
 cargo make install-web-dependencies
 ```
@@ -42,7 +42,7 @@ This command doesn't perform crate installation checks to reduce total build tim
 Prerequisites:
 
 * [Android setup](https://github.com/dodorare/crossbow/wiki)
-* NDK: 22.1.7171670	
+* NDK: 22.1.7171670
 * API Level : 30.0.3
 
 Connect your Android device or start an emulator and then execute:
@@ -99,5 +99,3 @@ run-web - Run web target. Rebuilds app on change
 To execute the command use following syntax ```cargo make [command]```.
 
 Execute `cargo make --list-all-steps` to get list of commands.
-
-

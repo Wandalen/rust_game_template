@@ -7,11 +7,11 @@
 //! ```
 
 use regex::Regex;
-use serde::{Serializer, Serialize};
+use serde::{Serializer, Serialize}; /* qqq : ! */
 
 fn env_get_maybe( val: String ) -> String
 {
-  let re = Regex::new(r"^\$\{(.*)\}").unwrap();
+  let re = Regex::new(r"^\$\{(.*)\}").unwrap(); /* qqq : ! */
   if let Some ( caps ) = re.captures( &val )
   {
     if let Some( env_name ) = caps.get( 1 )
@@ -45,15 +45,15 @@ impl <T: std::fmt::Debug + Serialize> serde::Serialize for Field<T>
 }
 
 #[derive( serde::Serialize, serde::Deserialize )]
-struct IOSConfig
+struct IOSConfig /* qqq : ! */
 {
-  development_team: Field<String>,
+  development_team: Field<String>, /* qqq : ! */
 }
 
 #[derive( serde::Serialize, serde::Deserialize )]
 struct Config
 {
-  ios: IOSConfig,
+  ios: IOSConfig, /* qqq : ! */
 }
 
 fn main()
@@ -75,12 +75,12 @@ fn main()
   }
   let expect_msg = &format!( "Failed to read {:#?}", private_toml_path );
   let toml_str = std::fs::read_to_string( private_toml_path ).expect( expect_msg );
-  let config:Config = toml::from_str( &toml_str ).unwrap();
-  let ios:IOSConfig = config.ios;
+  let config:Config = toml::from_str( &toml_str ).unwrap(); /* qqq : ! */
+  let ios:IOSConfig = config.ios; /* qqq : ! */
 
   let xcode_project = handlebars.render_template(xcode_project_template.as_str(), &ios ).unwrap();
   std::fs::write( cwd.join( "xcode/project.yml" ), xcode_project ).expect( "Unable to write xcode/project.yml file" );
 
-  let mobile_config = handlebars.render_template(mobile_template.as_str(), &ios ).unwrap();
+  let mobile_config = handlebars.render_template(mobile_template.as_str(), &ios ).unwrap();/* qqq : ! */
   std::fs::write( cwd.join( "mobile.toml" ), mobile_config ).expect( "Unable to write mobile.toml file" );
 }

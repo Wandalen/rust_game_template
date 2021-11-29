@@ -1,87 +1,87 @@
-[config] 
+[config]
 skip_core_tasks = true
 skip_git_env_info = true
 skip_rust_env_info = true
 skip_crate_env_info = true
 
-#### Private
+# Private
 
-[tasks.watch-ios]
+[tasks.watch_ios]
 private = true
 watch = { watch = [ "./src/" ] }
 
-[tasks.install-rust-script]
+[tasks.install_rust_script]
 private = true
-condition = { files_not_exist = [ "${HOME}/.cargo/bin/rust-script" ] }
+condition = { files_not_exist = [ "${HOME}/.cargo/bin/rust_script" ] }
 script_runner = "@shell"
 script = '''
-cargo install rust-script
+cargo install rust_script
 '''
 
-[tasks.generate-ios-config]
+[tasks.generate_ios_config]
 private = true
 condition = { files_not_exist = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/project.yml" ] }
-dependencies = [ "install-rust-script" ]
-command = "rust-script"
-args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/generate-ios-config.rs" ]
+dependencies = [ "install_rust_script" ]
+command = "rust_script"
+args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/generate_ios_config.rs" ]
 
-[tasks.generate-ios-project]
+[tasks.generate_ios_project]
 private = true
-dependencies = [ "generate-ios-config" ]
-condition = { files_not_exist = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/webgpu-ios.xcodeproj" ] }
+dependencies = [ "generate_ios_config" ]
+condition = { files_not_exist = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/game_template_ios.xcodeproj" ] }
 command = "xcodegen"
 args = [ "--spec", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/project.yml" ]
 
-[tasks.install-cargo-mobile]
+[tasks.install_cargo_mobile]
 private = true
-condition = { files_not_exist = [ "${HOME}/.cargo/bin/cargo-mobile" ] }
+condition = { files_not_exist = [ "${HOME}/.cargo/bin/cargo_mobile" ] }
 script_runner = "@shell"
 script = '''
-cargo install --git https://github.com/volodymyrmigdal/cargo-mobile.git
+cargo install --git https://github.com/volodymyrmigdal/cargo_mobile.git
 '''
 
-[tasks.build-ios-target]
+[tasks.build_ios_target]
 private = true
-dependencies = [ "install-cargo-mobile" ]
+dependencies = [ "install_cargo_mobile" ]
 script_runner = "@shell"
 script = '''
-rustup target add x86_64-apple-ios
-cargo build --manifest-path ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml --target=x86_64-apple-ios
-xcrun xcodebuild -project ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/webgpu-ios.xcodeproj -scheme webgpu-ios_iOS -arch x86_64 -derivedDataPath ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out
+rustup target add x86_64_apple_ios
+cargo build --manifest-path ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml --target=x86_64_apple_ios
+xcrun xcodebuild _project ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/game_template_ios.xcodeproj _scheme game_template_ios _arch x86_64 _derivedDataPath ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out
 '''
 
-[tasks.run-ios-target]
+[tasks.run_ios_target]
 private = true
 script_runner = "@shell"
 script = '''
-open -a simulator
+open _a simulator
 sleep 5
-xcrun simctl install booted ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out/Build/Products/debug-iphonesimulator/webgpu-ios.app
-xcrun simctl launch booted com.example.webgpu-ios
+xcrun simctl install booted ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out/Build/Products/debug_iphonesimulator/game_template_ios.app
+xcrun simctl launch booted com.example.game_template_ios
 '''
 
-#### Public
+# Public
 
-[tasks.build-ios]
+[tasks.build_ios]
 description = "Build ios target."
 private = false
 category = "Build"
-dependencies = [ "generate-ios-project", "build-ios-target" ]
+dependencies = [ "generate_ios_project", "build_ios_target" ]
 
-[tasks.run-ios]
+[tasks.run_ios]
 description = "Run ios target."
 private = false
 category = "Run"
-dependencies = [ "generate-ios-project", "build-ios-target", "run-ios-target" ]
+dependencies = [ "generate_ios_project", "build_ios_target", "run_ios_target" ]
 
-[tasks.clean-ios]
+[tasks.clean_ios]
 description = "Cleanup generated files of ios target."
 category = "Run"
 script_runner = "@shell"
 script = '''
-rm -f ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/mobile.toml
-rm -f ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/project.yml
-rm -rf ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out
-rm -rf ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/webgpu-ios_iOS
-rm -rf ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/webgpu-ios.xcodeproj
+rm _f ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/mobile.toml
+rm _f ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/project.yml
+rm _rf ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out
+rm _rf ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/game_template_ios
+rm _rf ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/game_template_ios.xcodeproj
 '''

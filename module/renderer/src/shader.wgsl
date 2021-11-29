@@ -1,13 +1,42 @@
-[[stage( vertex )]]
-fn vs_main([[builtin( vertex_index )]] in_vertex_index: u32) -> [[builtin( position )]] vec4<f32> 
+
+[[block]]
+struct TimeUniform
 {
-    let x = f32( i32( in_vertex_index ) - 1);
-    let y = f32( i32( in_vertex_index & 1u ) * 2 - 1);
-    return vec4<f32>( x, y, 0.0, 1.0 );
+  time : i32;
+};
+
+[[group( 0 ), binding( 0 )]]
+var< uniform > u1 : TimeUniform;
+
+struct VertexInput
+{
+  [[builtin( vertex_index )]] vertex_index : u32;
+};
+
+struct VertexOutput
+{
+  [[ builtin( position ) ]] position : vec4< f32 >;
+};
+
+struct FragmentOutput
+{
+  [[location( 0 )]] color0 : vec4< f32 >;
+};
+
+[[stage( vertex )]]
+fn vs_main( in : VertexInput ) -> VertexOutput
+{
+  let x = f32( i32( in.vertex_index ) - 1);
+  let y = f32( i32( in.vertex_index & 1u ) * 2 - 1);
+  var out : VertexOutput;
+  out.position = vec4< f32 >( x, y, 0.0, 1.0 );
+  return out;
 }
 
 [[stage( fragment )]]
-fn fs_main() -> [[location( 0 )]] vec4<f32> 
+fn fs_main( in : VertexOutput ) -> FragmentOutput
 {
-    return vec4<f32>( 1.0, 0.0, 0.0, 1.0 );
+  var out : FragmentOutput;
+  out.color0 = vec4< f32 >( 1.0, in.position[ 1 ] / 1000.0, f32( u1.time ) / 100., 1.0 );
+  return out;
 }

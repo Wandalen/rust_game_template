@@ -1,37 +1,37 @@
-[config] 
+[config]
 skip_core_tasks = true
 skip_git_env_info = true
 skip_rust_env_info = true
 skip_crate_env_info = true
 
-#### Private
+# Private
 
-[tasks.watch-android]
+[tasks.watch_android]
 private = true
 watch = { watch = [ "./src/" ] }
 
-[tasks.build-android-target]
+[tasks.build_android_target]
 private = true
 command = "cargo"
 args = [ "apk", "build", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml" ]
 
-[tasks.run-android-target]
+[tasks.run_android_target]
 private = true
 command = "cargo"
 args = [ "apk", "run", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml" ]
 
-#### Public
+# Public
 
-[tasks.build-android]
+[tasks.build_android]
 description = "Build android target. Rebuilds on change."
 private = false
-extend = "watch-android"
+extend = "watch_android"
 category = "Build"
-dependencies = [ "build-android-target" ]
+dependencies = [ "build_android_target" ]
 
-[tasks.run-android]
+[tasks.run_android]
 description = "Run android target. Rebuilds on change."
 private = false
-extend = "watch-android"
+extend = "watch_android"
 category = "Run"
-dependencies = [ "run-android-target" ]
+dependencies = [ "run_android_target" ]

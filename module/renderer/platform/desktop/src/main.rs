@@ -1,9 +1,10 @@
-use webgpu::
+use game_template::
 {
   Renderer
 };
 
 struct Desktop;
+
 
 impl Renderer for Desktop
 {
@@ -11,8 +12,8 @@ impl Renderer for Desktop
   {
     Desktop{}
   }
-
 }
+
 
 pub fn main()
 {
