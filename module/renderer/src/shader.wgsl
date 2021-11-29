@@ -2,7 +2,7 @@
 [[block]]
 struct TimeUniform
 {
-  time : i32;
+  time : vec4<i32>;
 };
 
 [[group( 0 ), binding( 0 )]]
@@ -37,6 +37,6 @@ fn vs_main( in : VertexInput ) -> VertexOutput
 fn fs_main( in : VertexOutput ) -> FragmentOutput
 {
   var out : FragmentOutput;
-  out.color0 = vec4< f32 >( 1.0, in.position[ 1 ] / 1000.0, f32( u1.time ) / 100., 1.0 );
+  out.color0 = vec4< f32 >( 1.0, in.position[ 1 ] / 1000.0, f32( u1.time.x ) / 100., 1.0 );
   return out;
 }

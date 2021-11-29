@@ -11,7 +11,7 @@ CARGO_MAKE_WEB_PORT = 8080 # qqq : !
 
 [tasks.web_watch]
 private = true
-watch = { watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/src/" ] }
+watch = { watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/src/", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../src/" ] }
 
 [tasks.web_build_target]
 private = true
