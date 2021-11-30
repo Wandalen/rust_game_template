@@ -13,7 +13,7 @@ is it possible to cross-compile: osx, windows, linux...?
 
 /* qqq : is it possible to stop watching if application was terminated? */
 
-/* !!! qqq : seems webgl backend of WebGPU is broken? */
+/* qqq : seems webgl backend of WebGPU is broken? aaa:repaired */
 
 /* qqq : all variables should be move to public config. now template have lots of variables inlined into different files */
 
@@ -381,7 +381,7 @@ pub async fn run( event_loop : EventLoop<()>, window : Window )
             /* https://docs.rs/winit/latest/winit/event/enum.Event.html#variant.MainEventsCleared */
             window.request_redraw();
           }
-          Event::RedrawRequested( _ ) => /* qqq : Find event that fires every frame */
+          Event::RedrawRequested( _ ) => /* qqq : Find event that fires every frame aaa:done*/
           {
             let frame = c.surface
             .get_current_texture()
