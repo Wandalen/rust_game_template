@@ -77,11 +77,11 @@ dependencies = [ "generate_ios_project", "build_ios_target", "run_ios_target" ]
 [tasks.clean_ios]
 description = "Cleanup generated files of ios target."
 category = "Run"
-script_runner = "@shell"
+script_runner = "@duckscript"
 script = '''
-rm _f ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/mobile.toml
-rm _f ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/project.yml
-rm _rf ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out
-rm _rf ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/game_template_ios
-rm _rf ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/game_template_ios.xcodeproj
+rm ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/mobile.toml
+rm ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/project.yml
+rm -r ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out
+rm -r ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/game_template_ios
+rm -r ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/game_template_ios.xcodeproj
 '''

@@ -13,13 +13,17 @@ is it possible to cross-compile: osx, windows, linux...?
 
 /* qqq : is it possible to stop watching if application was terminated? */
 
-/* qqq : seems webgl backend of WebGPU is broken? */
+/* qqq : seems webgl backend of WebGPU is broken? aaa:repaired */
 
 /* qqq : all variables should be move to public config. now template have lots of variables inlined into different files */
+
+#[cfg( target_arch = "wasm32" )]
+use web_log::println as println;
 
 pub use wgpu;
 pub use winit;
 pub use pollster;
+pub use bytemuck;
 
 // pub use self::common::*;
 
@@ -60,10 +64,10 @@ pub trait Renderer
 //
 
 #[repr( C )]
-#[derive( Debug, Copy, Clone )]
+#[derive( Debug, Copy, Clone, bytemuck::Pod, bytemuck::Zeroable )]
 struct TimeUniformData
 {
-  time : i32,
+  time : [ i32; 4 ],
 }
 
 impl TimeUniformData
@@ -72,23 +76,23 @@ impl TimeUniformData
   {
     Self
     {
-      time : 0,
+      time : [ 0, 0, 0, 0 ],
     }
   }
 }
 
-unsafe impl<> ToByteSlice for TimeUniformData
-{
-  fn to_byte_slice< T : AsRef<[ TimeUniformData ]> + ?Sized >( src : &T ) -> &[ u8 ]
-  {
-    let src = src.as_ref();
-    let size = core::mem::size_of::< TimeUniformData >();
-    unsafe
-    {
-      core::slice::from_raw_parts( src.as_ptr() as *const u8, size )
-    }
-  }
-}
+// unsafe impl<> ToByteSlice for TimeUniformData
+// {
+//   fn to_byte_slice< T : AsRef<[ TimeUniformData ]> + ?Sized >( src : &T ) -> &[ u8 ]
+//   {
+//     let src = src.as_ref();
+//     let size = core::mem::size_of::< TimeUniformData >();
+//     unsafe
+//     {
+//       core::slice::from_raw_parts( src.as_ptr() as *const u8, size )
+//     }
+//   }
+// }
 
 // impl AsByteSlice for TimeUniformData
 // {
@@ -214,8 +218,8 @@ impl Context
       &wgpu::util::BufferInitDescriptor
       {
         label : Some( "Camera Buffer" ),
-        // contents : bytemuck::cast_slice( &[ time_uniform_data ] ),
-        contents : &[ time_uniform_data ].as_byte_slice(),
+        contents : bytemuck::cast_slice( &[ time_uniform_data ] ),
+        // contents : &[ time_uniform_data ].as_byte_slice(),
         usage : wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
       }
     );
@@ -299,7 +303,8 @@ impl Context
       format : swapchain_format,
       width : size.width,
       height : size.height,
-      present_mode : wgpu::PresentMode::Mailbox,
+      // present_mode : wgpu::PresentMode::Mailbox, /* ! */
+      present_mode : wgpu::PresentMode::Fifo,
     };
 
     eprintln!( "Surface configure!" );
@@ -345,7 +350,14 @@ pub async fn run( event_loop : EventLoop<()>, window : Window )
     // the resources are properly cleaned up.
     // let _ = (&instance, &adapter, &shader, &pipeline_layout);
 
-    *control_flow = ControlFlow::Wait;
+    // ControlFlow::Poll continuously runs the event loop, even if the OS hasn't
+    // dispatched any events. This is ideal for games and similar applications.
+    *control_flow = ControlFlow::Poll;
+
+    // ControlFlow::Wait pauses the event loop if no events are available to process.
+    // This is ideal for non-game applications that only update in response to user
+    // input, and uses significantly less power/CPU time than ControlFlow::Poll.
+    // *control_flow = ControlFlow::Wait;
 
     match &mut option_state
     {
@@ -364,15 +376,21 @@ pub async fn run( event_loop : EventLoop<()>, window : Window )
             c.config.height = size.height;
             c.surface.configure( &c.device, &c.config );
           }
-          Event::RedrawRequested( _ ) =>
+          Event::MainEventsCleared =>
+          {
+            /* https://docs.rs/winit/latest/winit/event/enum.Event.html#variant.MainEventsCleared */
+            window.request_redraw();
+          }
+          Event::RedrawRequested( _ ) => /* qqq : Find event that fires every frame aaa:done*/
           {
             let frame = c.surface
             .get_current_texture()
             .expect( "Failed to acquire next swap chain texture" );
 
-            c.time_uniform_data.time += 1;
-            c.queue.write_buffer( &c.time_buffer, 0, &[ c.time_uniform_data ].as_byte_slice() );
-            println!( "time : {}", c.time_uniform_data.time );
+            c.time_uniform_data.time[ 0 ] += 1;
+            // c.queue.write_buffer( &c.time_buffer, 0, &[ c.time_uniform_data ].as_byte_slice() );
+            c.queue.write_buffer( &c.time_buffer, 0, bytemuck::cast_slice(&[c.time_uniform_data]) );
+            println!( "time : {}", c.time_uniform_data.time[ 0 ] );
 
             let view = frame.texture.create_view( &wgpu::TextureViewDescriptor::default() );
             let mut encoder = c.device.create_command_encoder( &wgpu::CommandEncoderDescriptor { label : None } );
