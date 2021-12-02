@@ -19,7 +19,7 @@ private = false
 # extend = "desktop_watch"
 # category = "Build"
 command = "cargo"
-args = [ "build", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml" ]
+args = [ "build", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml" ]
 
 [tasks.desktop_run]
 description = "Run desktop target"
@@ -27,7 +27,7 @@ private = false
 # extend = "desktop_watch"
 # category = "Run"
 command = "cargo"
-args = [ "run", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml" ]
+args = [ "run", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml" ]
 
 [tasks.desktop_run_watching]
 description = "Run desktop target. Rebuilds app on change"
@@ -35,7 +35,7 @@ private = false
 extend = "desktop_watch"
 # category = "Run"
 command = "cargo"
-args = [ "run", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml" ]
+args = [ "run", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml" ]
 
 # [tasks.echo]
 # private = false
