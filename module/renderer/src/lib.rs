@@ -30,24 +30,11 @@ pub use bytemuck;
 pub use std::borrow::Cow;
 pub use byte_slice_cast::*;
 
-/* qqq : remove what possible */
-use wgpu::
-{
-  Device,
-  Queue,
-  RenderPipeline,
-  Surface,
-  SurfaceConfiguration,
-  util::DeviceExt,
-};
+/* qqq : remove what possible aaa:done*/
+pub use wgpu::util::DeviceExt;
 
-/* qqq : remove */
-use winit::
-{
-  event::{ Event, WindowEvent },
-  event_loop::{ ControlFlow, EventLoop },
-  window::Window,
-};
+/* qqq : remove aaa:done */
+
 
 pub trait Renderer
 {
@@ -55,8 +42,8 @@ pub trait Renderer
 
   fn run( &self ) -> ()
   {
-    let event_loop = EventLoop::new();
-    let window = Window::new( &event_loop ).unwrap();
+    let event_loop = winit::event_loop::EventLoop::new();
+    let window = winit::window::Window::new( &event_loop ).unwrap();
     pollster::block_on(run( event_loop, window ) );
   }
 }
@@ -106,11 +93,11 @@ impl TimeUniformData
 
 pub struct Context
 {
-  config : SurfaceConfiguration,
-  surface : Surface,
-  device : Device,
-  render_pipeline : RenderPipeline,
-  queue : Queue,
+  config : wgpu::SurfaceConfiguration,
+  surface : wgpu::Surface,
+  device : wgpu::Device,
+  render_pipeline : wgpu::RenderPipeline,
+  queue : wgpu::Queue,
   time_uniform_data : TimeUniformData,
   time_buffer : wgpu::Buffer,
   time_bind_group_layout : wgpu::BindGroupLayout,
@@ -121,7 +108,7 @@ pub struct Context
 
 impl Context
 {
-  async fn new( window: &Window ) -> Context
+  async fn new( window: &winit::window::Window ) -> Context
   {
     let size = window.inner_size();
 
@@ -331,7 +318,7 @@ impl Context
 
 //
 
-pub async fn run( event_loop : EventLoop<()>, window : Window )
+pub async fn run( event_loop : winit::event_loop::EventLoop<()>, window : winit::window::Window )
 {
 
   let mut option_state : Option<Context> = if cfg!( target_os = "android" )
@@ -352,12 +339,12 @@ pub async fn run( event_loop : EventLoop<()>, window : Window )
 
     // ControlFlow::Poll continuously runs the event loop, even if the OS hasn't
     // dispatched any events. This is ideal for games and similar applications.
-    *control_flow = ControlFlow::Poll;
+    *control_flow = winit::event_loop::ControlFlow::Poll;
 
     // ControlFlow::Wait pauses the event loop if no events are available to process.
     // This is ideal for non-game applications that only update in response to user
     // input, and uses significantly less power/CPU time than ControlFlow::Poll.
-    // *control_flow = ControlFlow::Wait;
+    // *control_flow = winit::event_loop::ControlFlow::Wait;
 
     match &mut option_state
     {
@@ -365,9 +352,9 @@ pub async fn run( event_loop : EventLoop<()>, window : Window )
       {
         match event
         {
-          Event::WindowEvent
+          winit::event::Event::WindowEvent
           {
-            event: WindowEvent::Resized( size ),
+            event: winit::event::WindowEvent::Resized( size ),
             ..
           } =>
           {
@@ -376,12 +363,12 @@ pub async fn run( event_loop : EventLoop<()>, window : Window )
             c.config.height = size.height;
             c.surface.configure( &c.device, &c.config );
           }
-          Event::MainEventsCleared =>
+          winit::event::Event::MainEventsCleared =>
           {
             /* https://docs.rs/winit/latest/winit/event/enum.Event.html#variant.MainEventsCleared */
             window.request_redraw();
           }
-          Event::RedrawRequested( _ ) => /* qqq : Find event that fires every frame aaa:done*/
+          winit::event::Event::RedrawRequested( _ ) => /* qqq : Find event that fires every frame aaa:done*/
           {
             let frame = c.surface
             .get_current_texture()
@@ -431,7 +418,7 @@ pub async fn run( event_loop : EventLoop<()>, window : Window )
             c.queue.submit( Some( encoder.finish() ) );
             frame.present();
           }
-          Event::WindowEvent{ event: WindowEvent::CloseRequested, .. } => *control_flow = ControlFlow::Exit,
+          winit::event::Event::WindowEvent{ event: winit::event::WindowEvent::CloseRequested, .. } => *control_flow = winit::event_loop::ControlFlow::Exit,
           _ => {}
         };
       }
@@ -439,7 +426,7 @@ pub async fn run( event_loop : EventLoop<()>, window : Window )
       {
         match event
         {
-          Event::Resumed =>
+          winit::event::Event::Resumed =>
           {
             // log::info!("App resumed");
             std::thread::sleep( std::time::Duration::from_millis( 250 ) );
