@@ -76,7 +76,7 @@ fn main()
   let expect_msg = &format!( "Failed to read {:#?}", private_toml_path );
   let toml_str = std::fs::read_to_string( private_toml_path ).expect( expect_msg );
   let config : Config = toml::from_str( &toml_str ).unwrap();
-  let ios : IOSConfig = config.ios;
+  let ios : IosConfig = config.ios;
 
   let xcode_project = handlebars.render_template( xcode_project_template.as_str(), &ios ).unwrap();
   std::fs::write( cwd.join( "xcode/project.yml" ), xcode_project ).expect( "Unable to write xcode/project.yml file" );

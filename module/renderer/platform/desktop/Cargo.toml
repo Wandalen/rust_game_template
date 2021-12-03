@@ -3,5 +3,6 @@ name = "game_template_desktop"
 version = "0.0.0"
 edition = "2021"
 
-[dependencies]
-game_template = { path = "../.." }
+[[bin]]
+name = "game_template_desktop"
+path = "../../src/main.rs"

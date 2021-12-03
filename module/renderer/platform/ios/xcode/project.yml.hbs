@@ -3,7 +3,7 @@ options:
   bundleIdPrefix: com.example
   deploymentTarget:
     iOS: 15.0
-fileGroups: [../src]
+fileGroups: [../../../src]
 configs:
   debug: debug
   release: release
@@ -56,8 +56,8 @@ targets:
         ENABLE_BITCODE: false
         ARCHS: [arm64, x86_64] # rustc doesn't support arm64e yet
         VALID_ARCHS: arm64 x86_64 # rustc doesn't support arm64e yet
-        LIBRARY_SEARCH_PATHS[sdk=iphoneos*]: $(inherited) "../target/aarch64-apple_ios/$(CONFIGURATION)"
-        LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]: $(inherited) "../target/x86_64-apple_ios/$(CONFIGURATION)"
+        LIBRARY_SEARCH_PATHS[sdk=iphoneos*]: $(inherited) "../../../target/aarch64-apple_ios/$(CONFIGURATION)"
+        LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]: $(inherited) "../../../target/x86_64-apple_ios/$(CONFIGURATION)"
       groups: [app]
     dependencies:
       - target: lib_game_template_ios
@@ -82,4 +82,4 @@ targets:
       toolPath: ${HOME}/.cargo/bin/cargo-apple
       arguments: xcode-script -v --platform ${PLATFORM_DISPLAY_NAME:?} --sdk-root ${SDKROOT:?} --configuration ${CONFIGURATION:?} ${FORCE_COLOR} ${ARCHS:?}
       passSettings: false # prevents evil linker errors
-      workingDirectory: $(SRCROOT)/..
+      workingDirectory: $(SRCROOT)/../../..

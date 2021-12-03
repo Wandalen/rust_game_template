@@ -26,13 +26,18 @@ include = [
 ]
 
 [features]
-webgl = [ "wgpu/webgl" ]
-web-sys = [ "winit/web-sys" ]
-default = [ "webgl", "web-sys" ]
+# webgl = [ "wgpu/webgl" ]
+# web-sys = [ "winit/web-sys" ]
+default = [ "wgpu/webgl", "winit/web-sys" ]
 
 # [lib]
 # name = "game_template"
 # path = "./src/main.rs"
+
+[lib]
+name = "game_template"
+crate-type = [ "staticlib", "lib", "cdylib" ]
+path = "./src/main.rs"
 
 [dependencies]
 wgpu = "0.11.0"
@@ -42,5 +47,13 @@ byte-slice-cast = "1.2.0"
 bytemuck = { version = "1.7.2", features = [ "derive" ] }
 
 [target.'cfg( target_arch = "wasm32" )'.dependencies]
+wasm-bindgen-futures = "0.4.28"
+console_error_panic_hook = "0.1.7"
+console_log = "0.2.0"
+web-sys = "0.3.53"
 web-log = "1.0.0"
+
+[target.'cfg( target_os = "ios" )'.dependencies]
+mobile-entry-point = "0.1.0"
+
 

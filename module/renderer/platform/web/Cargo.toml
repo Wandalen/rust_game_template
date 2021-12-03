@@ -3,12 +3,6 @@ name = "game_template_web"
 version = "0.0.0"
 edition = "2021"
 
-[features]
-default = [ "game_template/webgl", "game_template/web-sys" ]
-
-[dependencies]
-game_template = { path = "../..", features = [ "webgl", "web-sys"] }
-wasm-bindgen-futures = "0.4.28"
-console_error_panic_hook = "0.1.7"
-console_log = "0.2.0"
-web-sys = "0.3.53"
+[[bin]]
+name = "game_template_web"
+path = "../../src/main.rs"

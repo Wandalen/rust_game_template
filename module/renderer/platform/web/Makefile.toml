@@ -11,19 +11,19 @@ CARGO_MAKE_WEB_PORT = 8080 # qqq : !
 
 [tasks.web_watch]
 private = true
-watch = { watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/src/", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../src/" ] }
+watch = { watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../src/" ] }
 
 [tasks.web_build_target]
 private = true
 command = "cargo"
 install_script = "rustup target add wasm32-unknown-unknown"
 # args = [ "build", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml", "--target", "wasm32-unknown-unknown", "--features", "game_template/webgl,game_template/web-sys" ]
-args = [ "build", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml", "--target", "wasm32-unknown-unknown" ]
+args = [ "build", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml", "--target", "wasm32-unknown-unknown" ]
 
 [tasks.web_wasm_rebuild]
 private = true
 command = "wasm-bindgen"
-args = [ "--target", "web", "--out-dir", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/wasm32-unknown-unknown/debug/game_template_web.wasm" ]
+args = [ "--target", "web", "--out-dir", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/wasm32-unknown-unknown/debug/game_template.wasm" ]
 
 [tasks.web_wasm_build]
 extend = "web_wasm_rebuild"
