@@ -1,6 +1,9 @@
 
 
-use game_template::*;
+
+mod lib;
+
+use lib::*;
 
 #[cfg( target_arch = "wasm32" )]
 use winit::platform::web::WindowExtWebSys;
@@ -22,7 +25,7 @@ use winit::platform::web::WindowExtWebSys;
 
 struct App;
 
-impl game_template::Renderer for App
+impl lib::Renderer for App
 {
   fn new() -> App
   {
@@ -44,10 +47,11 @@ impl game_template::Renderer for App
     .and_then( | doc | doc.body() )
     .and_then( | body | body.append_child( &web_sys::Element::from( window.canvas() ) ).ok() )
     .expect( "couldn't append canvas to document body" );
-    wasm_bindgen_futures::spawn_local( game_template::run( event_loop, window ) );
+    wasm_bindgen_futures::spawn_local( lib::run( event_loop, window ) );
   }
 }
 
+#[cfg_attr( target_os = "ios", mobile_entry_point::mobile_entry_point )]
 pub fn main()
 {
   let app = App::new();

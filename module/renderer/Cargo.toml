@@ -34,6 +34,11 @@ default = [ "wgpu/webgl", "winit/web-sys" ]
 # name = "game_template"
 # path = "./src/main.rs"
 
+[lib]
+name = "game_template"
+crate-type = [ "staticlib", "lib", "cdylib" ]
+path = "./src/main.rs"
+
 [dependencies]
 wgpu = "0.11.0"
 winit = "0.25.0"
@@ -47,5 +52,8 @@ console_error_panic_hook = "0.1.7"
 console_log = "0.2.0"
 web-sys = "0.3.53"
 web-log = "1.0.0"
+
+[target.'cfg( target_os = "ios" )'.dependencies]
+mobile-entry-point = "0.1.0"
 
 

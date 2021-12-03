@@ -8,21 +8,21 @@ skip_crate_env_info = true
 
 [tasks.watch_ios]
 private = true
-watch = { watch = [ "./src/" ] }
+watch = { watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../src/" ] }
 
 [tasks.install_rust_script]
 private = true
-condition = { files_not_exist = [ "${HOME}/.cargo/bin/rust_script" ] }
+condition = { files_not_exist = [ "${HOME}/.cargo/bin/rust-script" ] }
 script_runner = "@shell"
 script = '''
-cargo install rust_script
+cargo install rust-script
 '''
 
 [tasks.generate_ios_config]
 private = true
 condition = { files_not_exist = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/project.yml" ] }
 dependencies = [ "install_rust_script" ]
-command = "rust_script"
+command = "rust-script"
 args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/generate_ios_config.rs" ]
 
 [tasks.generate_ios_project]
@@ -34,10 +34,10 @@ args = [ "--spec", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/
 
 [tasks.install_cargo_mobile]
 private = true
-condition = { files_not_exist = [ "${HOME}/.cargo/bin/cargo_mobile" ] }
+condition = { files_not_exist = [ "${HOME}/.cargo/bin/cargo-mobile" ] }
 script_runner = "@shell"
 script = '''
-cargo install --git https://github.com/volodymyrmigdal/cargo_mobile.git
+cargo install --git https://github.com/volodymyrmigdal/cargo-mobile.git
 '''
 
 [tasks.build_ios_target]
@@ -46,7 +46,7 @@ dependencies = [ "install_cargo_mobile" ]
 script_runner = "@shell"
 script = '''
 rustup target add x86_64-apple-ios
-cargo build --manifest-path ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml --target=x86_64_apple_ios
+cargo build --manifest-path ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml --target=x86_64_apple_ios
 xcrun xcodebuild _project ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/game_template_ios.xcodeproj _scheme game_template_ios _arch x86_64 _derivedDataPath ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out
 '''
 
