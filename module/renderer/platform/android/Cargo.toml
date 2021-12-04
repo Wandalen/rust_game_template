@@ -7,17 +7,17 @@ edition = "2021"
 crate-type = ["staticlib", "lib", "cdylib"]
 path = "src/lib.rs"
 
-[dependencies]
-game_template = { path = "../.." }
-android_logger = "0.10.1"
-ndk-glue = {version = "0.3.0", features = ["logger"]}
-ndk-sys = "0.2.1"
-log = "0.4"
+# [dependencies]
+# game_template = { path = "../.." }
+# android_logger = "0.10.1"
+# ndk-glue = {version = "0.3.0", features = ["logger"]}
+# ndk-sys = "0.2.1"
+# log = "0.4"
 
-[package.metadata.android]
-fullscreen = false
-launch_mode = "singleTask"
-min_sdk_version = 30
-target_sdk_version = 30
-build_targets = ["aarch64-linux-android"]
+# [package.metadata.android]
+# fullscreen = false
+# launch_mode = "singleTask"
+# min_sdk_version = 30
+# target_sdk_version = 30
+# build_targets = ["aarch64-linux-android"]
 
