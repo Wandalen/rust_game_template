@@ -26,12 +26,12 @@ args = [ "apk", "run", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAK
 description = "Build android target. Rebuilds on change."
 private = false
 extend = "watch_android"
-category = "Build"
+category = "Android"
 dependencies = [ "build_android_target" ]
 
 [tasks.run_android]
 description = "Run android target. Rebuilds on change."
 private = false
 extend = "watch_android"
-category = "Run"
+category = "Android"
 dependencies = [ "run_android_target" ]
