@@ -1,4 +1,4 @@
-name: game_template_ios
+name: game_template
 options:
   bundleIdPrefix: com.example
   deploymentTarget:
@@ -10,8 +10,8 @@ configs:
 settingGroups:
   app:
     base:
-      PRODUCT_NAME: game_template_ios
-      PRODUCT_BUNDLE_IDENTIFIER: com.example.game_template_ios
+      PRODUCT_NAME: game_template
+      PRODUCT_BUNDLE_IDENTIFIER: com.example.game_template
       DEVELOPMENT_TEAM: {{development_team}}
 targetTemplates:
   app:
@@ -25,13 +25,13 @@ targetTemplates:
     settings:
       groups: [app]
 targets:
-  game_template_ios_iOS:
+  game_template_iOS:
     type: application
     platform: iOS
     sources:
       - path: Sources
     info:
-      path: game_template_ios_iOS/Info.plist
+      path: game_template_iOS/Info.plist
       properties:
         LSRequiresIPhoneOS: true
         UILaunchStoryboardName: LaunchScreen
@@ -58,7 +58,7 @@ targets:
         LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]: $(inherited) "$(SRCROOT)/../../../../../target/x86_64-apple-ios/$(CONFIGURATION)"
       groups: [app]
     dependencies:
-      - target: lib_game_template_ios_iOS
+      - target: lib_game_template_iOS
         embed: false
         link: false
       - framework: libgame_template_mobile.a
@@ -69,7 +69,7 @@ targets:
       - sdk: QuartzCore.framework
       - sdk: Security.framework
       - sdk: UIKit.framework
-  lib_game_template_ios_iOS:
+  lib_game_template_iOS:
     type: ""
     platform: iOS
     settings:

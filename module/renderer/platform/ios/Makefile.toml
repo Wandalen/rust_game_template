@@ -6,7 +6,7 @@ skip_crate_env_info = true
 
 
 [env]
-GAME_TEMPLATE_IOS_TARGET_NAME = "game_template_ios"
+GAME_TEMPLATE_IOS_TARGET_NAME = "game_template"
 
 # Private
 
@@ -84,7 +84,7 @@ description = "Cleanup generated files of ios target."
 category = "iOS"
 script_runner = "@duckscript"
 script = '''
-rm ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/mobile.toml
+rm ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../mobile.toml
 rm ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/project.yml
 rm -r ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out
 rm -r ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/${GAME_TEMPLATE_IOS_TARGET_NAME}_iOS
