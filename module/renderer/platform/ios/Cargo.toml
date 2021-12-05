@@ -5,8 +5,4 @@ edition = "2021"
 
 [lib]
 crate-type = ["staticlib", "lib", "cdylib"]
-path = "../../src/mobile.rs"
-
-# [dependencies]
-# game_template = { path = "../.." }
-# mobile-entry-point = "0.1.0"
+path = "../../src/main.rs"
