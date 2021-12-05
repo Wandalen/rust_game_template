@@ -54,8 +54,8 @@ targets:
         ENABLE_BITCODE: false
         ARCHS: [arm64, x86_64] # rustc doesn't support arm64e yet
         VALID_ARCHS: arm64 x86_64 # rustc doesn't support arm64e yet
-        LIBRARY_SEARCH_PATHS[sdk=iphoneos*]: $(inherited) "../target/aarch64-apple-ios/$(CONFIGURATION)"
-        LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]: $(inherited) "../target/x86_64-apple-ios/$(CONFIGURATION)"
+        LIBRARY_SEARCH_PATHS[sdk=iphoneos*]: $(inherited) "$(SRCROOT)/../../../../../target/aarch64-apple-ios/$(CONFIGURATION)"
+        LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]: $(inherited) "$(SRCROOT)/../../../../../target/x86_64-apple-ios/$(CONFIGURATION)"
       groups: [app]
     dependencies:
       - target: lib_game_template_ios_iOS
