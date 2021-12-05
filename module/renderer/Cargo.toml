@@ -33,7 +33,7 @@ default = [ "wgpu/webgl", "winit/web-sys" ]
 [lib]
 name = "game_template_mobile"
 crate-type = [ "staticlib", "lib", "cdylib" ]
-path = "./src/mobile.rs"
+path = "./src/main.rs"
 
 [dependencies]
 wgpu = "0.11.0"

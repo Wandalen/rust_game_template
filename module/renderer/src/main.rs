@@ -1,4 +1,3 @@
-
 mod common;
 
 use crate::common::Renderer;
@@ -53,5 +52,11 @@ pub fn main()
 {
   let app = App::new();
   app.run();
+}
+
+#[cfg_attr( target_os = "ios", mobile_entry_point::mobile_entry_point ) ]
+pub fn ios_main()
+{
+  main();
 }
 
