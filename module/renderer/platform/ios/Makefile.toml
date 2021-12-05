@@ -50,7 +50,7 @@ dependencies = [ "install_cargo_mobile" ]
 script_runner = "@shell"
 script = '''
 rustup target add x86_64-apple-ios
-cargo build --manifest-path ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml --target=x86_64-apple-ios
+cargo build --manifest-path ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml --target=x86_64-apple-ios
 xcrun xcodebuild -project ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/${GAME_TEMPLATE_IOS_TARGET_NAME}.xcodeproj -scheme ${GAME_TEMPLATE_IOS_TARGET_NAME}_iOS -arch x86_64 -derivedDataPath ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out
 '''
 

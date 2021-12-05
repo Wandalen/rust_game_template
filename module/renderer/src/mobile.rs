@@ -1,10 +1,12 @@
 #[cfg( target_os = "ios" )]
 
-use game_template::Renderer;
+mod common;
+
+use common::Renderer;
 
 struct App;
 
-impl game_template::Renderer for App
+impl common::Renderer for App
 {
   fn new() -> App
   {
