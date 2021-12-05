@@ -10,9 +10,9 @@ GAME_TEMPLATE_IOS_TARGET_NAME = "game_template"
 
 # Private
 
-[tasks.watch-ios]
+[tasks.watch_ios]
 private = true
-watch = { watch = [ "./src/" ] }
+watch = { watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../src" ] }
 
 [tasks.install_rust_script]
 private = true
@@ -22,16 +22,16 @@ script = '''
 cargo install rust-script
 '''
 
-[tasks.generate-ios-config]
+[tasks.generate_ios_config]
 private = true
 condition = { files_not_exist = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/project.yml" ] }
 dependencies = [ "install_rust_script" ]
 command = "rust-script"
 args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/generate_ios_config.rs" ]
 
-[tasks.generate-ios-project]
+[tasks.generate_ios_project]
 private = true
-dependencies = [ "generate-ios-config" ]
+dependencies = [ "generate_ios_config" ]
 condition = { files_not_exist = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/${GAME_TEMPLATE_IOS_TARGET_NAME}.xcodeproj" ] }
 command = "xcodegen"
 args = [ "--spec", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/project.yml" ]
@@ -44,7 +44,7 @@ script = '''
 cargo install --git https://github.com/volodymyrmigdal/cargo-mobile.git
 '''
 
-[tasks.build-ios-target]
+[tasks.build_ios_target]
 private = true
 dependencies = [ "install_cargo_mobile" ]
 script_runner = "@shell"
@@ -54,7 +54,7 @@ cargo build --manifest-path ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY
 xcrun xcodebuild -project ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/${GAME_TEMPLATE_IOS_TARGET_NAME}.xcodeproj -scheme ${GAME_TEMPLATE_IOS_TARGET_NAME}_iOS -arch x86_64 -derivedDataPath ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out
 '''
 
-[tasks.run-ios-target]
+[tasks.run_ios_target]
 private = true
 script_runner = "@shell"
 script = '''
@@ -71,15 +71,15 @@ xcrun simctl launch booted com.example.${GAME_TEMPLATE_IOS_TARGET_NAME}
 description = "Build ios target."
 private = false
 category = "iOS"
-dependencies = [ "generate-ios-project", "build-ios-target" ]
+dependencies = [ "generate_ios_project", "build_ios_target" ]
 
-[tasks.run-ios]
+[tasks.run_ios]
 description = "Run ios target. Rebuilds on change."
 private = false
 category = "iOS"
-dependencies = [ "generate-ios-project", "build-ios-target", "run-ios-target" ]
+dependencies = [ "generate_ios_project", "build_ios_target", "run_ios_target" ]
 
-[tasks.clean-ios]
+[tasks.clean_ios]
 description = "Cleanup generated files of ios target."
 category = "iOS"
 script_runner = "@duckscript"
