@@ -1,4 +1,4 @@
-name: webgpu-ios
+name: game_template_ios
 options:
   bundleIdPrefix: com.example
   deploymentTarget:
@@ -10,8 +10,8 @@ configs:
 settingGroups:
   app:
     base:
-      PRODUCT_NAME: webgpu-ios
-      PRODUCT_BUNDLE_IDENTIFIER: com.example.webgpu-ios
+      PRODUCT_NAME: game_template_ios
+      PRODUCT_BUNDLE_IDENTIFIER: com.example.game_template_ios
       DEVELOPMENT_TEAM: {{development_team}}
 targetTemplates:
   app:
@@ -25,13 +25,13 @@ targetTemplates:
     settings:
       groups: [app]
 targets:
-  webgpu-ios_iOS:
+  game_template_ios_iOS:
     type: application
     platform: iOS
     sources:
       - path: Sources
     info:
-      path: webgpu-ios_iOS/Info.plist
+      path: game_template_ios_iOS/Info.plist
       properties:
         LSRequiresIPhoneOS: true
         UILaunchStoryboardName: LaunchScreen
@@ -58,10 +58,10 @@ targets:
         LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]: $(inherited) "../target/x86_64-apple-ios/$(CONFIGURATION)"
       groups: [app]
     dependencies:
-      - target: lib_webgpu_ios_iOS
+      - target: lib_game_template_ios_iOS
         embed: false
         link: false
-      - framework: libwebgpu_ios.a
+      - framework: libgame_template_ios.a
         embed: false
       - sdk: CoreGraphics.framework
       - sdk: Metal.framework
@@ -69,7 +69,7 @@ targets:
       - sdk: QuartzCore.framework
       - sdk: Security.framework
       - sdk: UIKit.framework
-  lib_webgpu_ios_iOS:
+  lib_game_template_ios_iOS:
     type: ""
     platform: iOS
     settings:
