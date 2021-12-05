@@ -1,17 +1,17 @@
-name: game_template_ios
+name: webgpu-ios
 options:
   bundleIdPrefix: com.example
   deploymentTarget:
     iOS: 15.0
-fileGroups: [../../../src]
+fileGroups: [../src]
 configs:
   debug: debug
   release: release
 settingGroups:
   app:
     base:
-      PRODUCT_NAME: game_template_ios
-      PRODUCT_BUNDLE_IDENTIFIER: com.example.game_template_ios
+      PRODUCT_NAME: webgpu-ios
+      PRODUCT_BUNDLE_IDENTIFIER: com.example.webgpu-ios
       DEVELOPMENT_TEAM: {{development_team}}
 targetTemplates:
   app:
@@ -25,15 +25,13 @@ targetTemplates:
     settings:
       groups: [app]
 targets:
-  game_template_ios:
+  webgpu-ios_iOS:
     type: application
     platform: iOS
     sources:
       - path: Sources
-        buildPhase: resources
-        type: folder
     info:
-      path: game_template_ios/Info.plist
+      path: webgpu-ios_iOS/Info.plist
       properties:
         LSRequiresIPhoneOS: true
         UILaunchStoryboardName: LaunchScreen
@@ -56,14 +54,14 @@ targets:
         ENABLE_BITCODE: false
         ARCHS: [arm64, x86_64] # rustc doesn't support arm64e yet
         VALID_ARCHS: arm64 x86_64 # rustc doesn't support arm64e yet
-        LIBRARY_SEARCH_PATHS[sdk=iphoneos*]: $(inherited) "../../../target/aarch64-apple_ios/$(CONFIGURATION)"
-        LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]: $(inherited) "../../../target/x86_64-apple_ios/$(CONFIGURATION)"
+        LIBRARY_SEARCH_PATHS[sdk=iphoneos*]: $(inherited) "../target/aarch64-apple-ios/$(CONFIGURATION)"
+        LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]: $(inherited) "../target/x86_64-apple-ios/$(CONFIGURATION)"
       groups: [app]
     dependencies:
-      - target: lib_game_template_ios
+      - target: lib_webgpu_ios_iOS
         embed: false
         link: false
-      - framework: libgame_template_ios.a
+      - framework: libwebgpu_ios.a
         embed: false
       - sdk: CoreGraphics.framework
       - sdk: Metal.framework
@@ -71,7 +69,7 @@ targets:
       - sdk: QuartzCore.framework
       - sdk: Security.framework
       - sdk: UIKit.framework
-  lib_game_template_ios:
+  lib_webgpu_ios_iOS:
     type: ""
     platform: iOS
     settings:
@@ -82,4 +80,4 @@ targets:
       toolPath: ${HOME}/.cargo/bin/cargo-apple
       arguments: xcode-script -v --platform ${PLATFORM_DISPLAY_NAME:?} --sdk-root ${SDKROOT:?} --configuration ${CONFIGURATION:?} ${FORCE_COLOR} ${ARCHS:?}
       passSettings: false # prevents evil linker errors
-      workingDirectory: $(SRCROOT)/../../..
+      workingDirectory: $(SRCROOT)/..

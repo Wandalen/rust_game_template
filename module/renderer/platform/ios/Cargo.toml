@@ -1,8 +1,12 @@
 [package]
-name = "game_template_ios"
-version = "0.0.0"
+name = "webgpu-ios"
+version = "0.1.0"
 edition = "2021"
 
-[[bin]]
-name = "game_template_ios"
-path = "../../src/main.rs"
+[lib]
+crate-type = ["staticlib", "lib", "cdylib"]
+path = "src/lib.rs"
+
+[dependencies]
+game_template = { path = "../.." }
+mobile-entry-point = "0.1.0"
