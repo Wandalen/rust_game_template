@@ -356,7 +356,7 @@ pub fn window_redraw_handle( c: &mut Context )
   c.time_uniform_data.time[ 0 ] += 1;
   // c.queue.write_buffer( &c.time_buffer, 0, &[ c.time_uniform_data ].as_byte_slice() );
   c.queue.write_buffer( &c.time_buffer, 0, unsafe{ any_as_u8_slice( &c.time_uniform_data ) } );
-  println!( "time : {}", c.time_uniform_data.time[ 0 ] );
+  // println!( "time : {}", c.time_uniform_data.time[ 0 ] );
 
   let view = frame.texture.create_view( &wgpu::TextureViewDescriptor::default() );
   let mut encoder = c.device.create_command_encoder( &wgpu::CommandEncoderDescriptor { label : None } );
@@ -406,6 +406,18 @@ pub fn window_close_request_handle( control_flow : &mut winit::event_loop::Contr
 }
 
 //
+
+pub fn window_key_released_handle( virtual_code: winit::event::VirtualKeyCode, control_flow : &mut winit::event_loop::ControlFlow )
+{
+  // println!( "Pressed: {:#?}", virtual_code );
+  match virtual_code
+  {
+    winit::event::VirtualKeyCode::Escape => window_close_request_handle( control_flow ),
+    _ => {}
+  }
+}
+
+//
 // Run function
 //
 
@@ -444,10 +456,25 @@ pub async fn run( event_loop : winit::event_loop::EventLoop<()>, window : winit:
       {
         match event
         {
-          winit::event::Event::WindowEvent { event: winit::event::WindowEvent::Resized( size ), .. } => window_resize_handle( c, size ),
+          winit::event::Event::WindowEvent { event : winit::event::WindowEvent::Resized( size ), .. } => window_resize_handle( c, size ),
           winit::event::Event::MainEventsCleared => window_before_redraw_handle( &window ),
           winit::event::Event::RedrawRequested( _ ) => window_redraw_handle( c ),
-          winit::event::Event::WindowEvent{ event: winit::event::WindowEvent::CloseRequested, .. } => window_close_request_handle( control_flow ),
+          winit::event::Event::WindowEvent { event : winit::event::WindowEvent::CloseRequested, .. } => window_close_request_handle( control_flow ),
+          winit::event::Event::WindowEvent { event, .. } => {
+            match event {
+              winit::event::WindowEvent::KeyboardInput {
+                input:
+                winit::event::KeyboardInput {
+                        virtual_keycode: Some( virtual_code ),
+                        state: winit::event::ElementState::Released,
+                        ..
+                    },
+                ..
+              } => window_key_released_handle( virtual_code, control_flow ),
+              _ => {}
+
+            }
+          },
           _ => {}
         };
       }
