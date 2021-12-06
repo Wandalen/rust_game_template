@@ -30,10 +30,6 @@ include = [
 # web-sys = [ "winit/web-sys" ]
 default = [ "wgpu/webgl", "winit/web-sys" ]
 
-# [lib]
-# name = "game_template"
-# path = "./src/main.rs"
-
 [lib]
 name = "game_template"
 crate-type = [ "staticlib", "lib", "cdylib" ]
@@ -55,5 +51,24 @@ web-log = "1.0.0"
 
 [target.'cfg( target_os = "ios" )'.dependencies]
 mobile-entry-point = "0.1.0"
+
+[target.'cfg( target_os = "android" )'.dependencies]
+android_logger = "0.10.1"
+ndk-glue = {version = "0.3.0", features = ["logger"]}
+ndk-sys = "0.2.1"
+log = "0.4"
+
+[package.metadata.android]
+fullscreen = false
+launch_mode = "singleTask"
+min_sdk_version = 30
+target_sdk_version = 30
+build_targets = ["aarch64-linux-android"]
+
+
+
+
+
+
 
 

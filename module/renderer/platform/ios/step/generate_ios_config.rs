@@ -66,6 +66,7 @@ fn main()
   let handlebars = handlebars::Handlebars::new();
 
   let root_dir_path = cwd.join( "../../../.." );
+  let renderer_root_path = cwd.join( "../.." );
 
   let mut private_toml_path = root_dir_path.join( "private.toml" );
   if !private_toml_path.exists()
@@ -82,5 +83,5 @@ fn main()
   std::fs::write( cwd.join( "xcode/project.yml" ), xcode_project ).expect( "Unable to write xcode/project.yml file" );
 
   let mobile_config = handlebars.render_template( mobile_template.as_str(), &ios ).unwrap();
-  std::fs::write( cwd.join( "mobile.toml" ), mobile_config ).expect( "Unable to write mobile.toml file" );
+  std::fs::write( renderer_root_path.join( "mobile.toml" ), mobile_config ).expect( "Unable to write mobile.toml file" );
 }

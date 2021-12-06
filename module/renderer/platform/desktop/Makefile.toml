@@ -9,7 +9,7 @@ skip_crate_env_info = true
 
 [tasks.desktop_watch]
 private = true
-watch = { watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/src/", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../src/" ] }
+watch = { watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../src/" ] }
 
 # Public
 
@@ -17,7 +17,7 @@ watch = { watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/src/"
 description = "Build desktop target."
 private = false
 # extend = "desktop_watch"
-# category = "Build"
+category = "Desktop"
 command = "cargo"
 args = [ "build", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml" ]
 
@@ -25,7 +25,7 @@ args = [ "build", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE
 description = "Run desktop target"
 private = false
 # extend = "desktop_watch"
-# category = "Run"
+category = "Desktop"
 command = "cargo"
 args = [ "run", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml" ]
 
@@ -33,7 +33,7 @@ args = [ "run", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_D
 description = "Run desktop target. Rebuilds app on change"
 private = false
 extend = "desktop_watch"
-# category = "Run"
+category = "Desktop"
 command = "cargo"
 args = [ "run", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml" ]
 

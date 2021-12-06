@@ -1,4 +1,4 @@
-name: game_template_ios
+name: game_template
 options:
   bundleIdPrefix: com.example
   deploymentTarget:
@@ -10,8 +10,8 @@ configs:
 settingGroups:
   app:
     base:
-      PRODUCT_NAME: game_template_ios
-      PRODUCT_BUNDLE_IDENTIFIER: com.example.game_template_ios
+      PRODUCT_NAME: game_template
+      PRODUCT_BUNDLE_IDENTIFIER: com.example.game_template
       DEVELOPMENT_TEAM: {{development_team}}
 targetTemplates:
   app:
@@ -25,15 +25,13 @@ targetTemplates:
     settings:
       groups: [app]
 targets:
-  game_template_ios:
+  game_template_iOS:
     type: application
     platform: iOS
     sources:
       - path: Sources
-        buildPhase: resources
-        type: folder
     info:
-      path: game_template_ios/Info.plist
+      path: game_template_iOS/Info.plist
       properties:
         LSRequiresIPhoneOS: true
         UILaunchStoryboardName: LaunchScreen
@@ -56,14 +54,14 @@ targets:
         ENABLE_BITCODE: false
         ARCHS: [arm64, x86_64] # rustc doesn't support arm64e yet
         VALID_ARCHS: arm64 x86_64 # rustc doesn't support arm64e yet
-        LIBRARY_SEARCH_PATHS[sdk=iphoneos*]: $(inherited) "../../../target/aarch64-apple_ios/$(CONFIGURATION)"
-        LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]: $(inherited) "../../../target/x86_64-apple_ios/$(CONFIGURATION)"
+        LIBRARY_SEARCH_PATHS[sdk=iphoneos*]: $(inherited) "$(SRCROOT)/../../../../../target/aarch64-apple-ios/$(CONFIGURATION)"
+        LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]: $(inherited) "$(SRCROOT)/../../../../../target/x86_64-apple-ios/$(CONFIGURATION)"
       groups: [app]
     dependencies:
-      - target: lib_game_template_ios
+      - target: lib_game_template_iOS
         embed: false
         link: false
-      - framework: libgame_template_ios.a
+      - framework: libgame_template.a
         embed: false
       - sdk: CoreGraphics.framework
       - sdk: Metal.framework
@@ -71,7 +69,7 @@ targets:
       - sdk: QuartzCore.framework
       - sdk: Security.framework
       - sdk: UIKit.framework
-  lib_game_template_ios:
+  lib_game_template_iOS:
     type: ""
     platform: iOS
     settings:

@@ -62,25 +62,25 @@ exec npm ci
 [tasks.web_build]
 description = "Build web target. Rebuilds on change."
 private = false
-category = "Build"
+category = "Web"
 dependencies = [ "web_build_target", "web_wasm_build", "web_build_copy_static" ]
 
 [tasks.web_rebuild]
 description = "Build web target. Rebuilds on change."
 private = false
-category = "Build"
+category = "Web"
 dependencies = [ "web_build_target", "web_wasm_rebuild" ]
 
 [tasks.web_run]
 description = "Run web target. Rebuilds app on change"
-category = "Run"
+category = "Web"
 extend = "web_build"
 run_task = { name = [ "web_server_run" ] }
 # run_task = { name = [ "web_server_browsersync" ] }
 
 [tasks.web_rerun]
 description = "Run web target. Rebuilds app on change"
-category = "Run"
+category = "Web"
 run_task = { name = [ "web_server_browsersync", "web_rebuild" ], parallel = true }
 
 # [tasks.echo]
