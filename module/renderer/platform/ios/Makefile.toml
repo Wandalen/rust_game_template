@@ -24,7 +24,7 @@ cargo install rust-script
 
 [tasks.generate_ios_config]
 private = true
-condition = { files_not_exist = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/project.yml" ] }
+# condition = { files_not_exist = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/project.yml" ] }
 dependencies = [ "install_rust_script" ]
 command = "rust-script"
 args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/generate_ios_config.rs" ]
@@ -32,7 +32,7 @@ args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/generate_io
 [tasks.generate_ios_project]
 private = true
 dependencies = [ "generate_ios_config" ]
-condition = { files_not_exist = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/${GAME_TEMPLATE_IOS_TARGET_NAME}.xcodeproj" ] }
+# condition = { files_not_exist = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/${GAME_TEMPLATE_IOS_TARGET_NAME}.xcodeproj" ] }
 command = "xcodegen"
 args = [ "--spec", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/project.yml" ]
 
