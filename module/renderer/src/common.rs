@@ -23,7 +23,6 @@ use web_log::println as println;
 pub use wgpu;
 pub use winit;
 pub use pollster;
-pub use bytemuck;
 
 // pub use self::common::*;
 
@@ -51,7 +50,7 @@ pub trait Renderer
 //
 
 #[repr( C )]
-#[derive( Debug, Copy, Clone, bytemuck::Pod, bytemuck::Zeroable )]
+#[derive( Debug, Copy, Clone )]
 struct TimeUniformData
 {
   time : [ i32; 4 ],
@@ -88,6 +87,11 @@ impl TimeUniformData
 
 //   }
 // }
+
+unsafe fn any_as_u8_slice< T : Sized >( p : &T ) -> &[ u8 ]
+{
+  ::std::slice::from_raw_parts(( p as *const T ) as *const u8,::std::mem::size_of::< T >() )
+}
 
 //
 
@@ -205,8 +209,8 @@ impl Context
       &wgpu::util::BufferInitDescriptor
       {
         label : Some( "Camera Buffer" ),
-        contents : bytemuck::cast_slice( &[ time_uniform_data ] ),
         // contents : &[ time_uniform_data ].as_byte_slice(),
+        contents : unsafe{ any_as_u8_slice( &time_uniform_data ) },
         usage : wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
       }
     );
@@ -376,7 +380,7 @@ pub async fn run( event_loop : winit::event_loop::EventLoop<()>, window : winit:
 
             c.time_uniform_data.time[ 0 ] += 1;
             // c.queue.write_buffer( &c.time_buffer, 0, &[ c.time_uniform_data ].as_byte_slice() );
-            c.queue.write_buffer( &c.time_buffer, 0, bytemuck::cast_slice(&[c.time_uniform_data]) );
+            c.queue.write_buffer( &c.time_buffer, 0, unsafe{ any_as_u8_slice( &c.time_uniform_data ) } );
             println!( "time : {}", c.time_uniform_data.time[ 0 ] );
 
             let view = frame.texture.create_view( &wgpu::TextureViewDescriptor::default() );
