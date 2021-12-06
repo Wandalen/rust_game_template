@@ -60,8 +60,8 @@ fn main()
 {
   let cwd_path = std::env::var( "CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY" ).unwrap();
   let cwd = std::path::Path::new( &cwd_path );
-  let xcode_project_template = std::fs::read_to_string( cwd.join( "xcode/project.yml.hbs" ) ).unwrap();
-  let mobile_template = std::fs::read_to_string( cwd.join( "mobile.toml.hbs" ) ).expect( "Failed to read mobile.toml.hbs" );
+  let xcode_project_template = std::fs::read_to_string( cwd.join( "xcode/project.yml.template" ) ).unwrap();
+  let mobile_template = std::fs::read_to_string( cwd.join( "mobile.toml.template" ) ).expect( "Failed to read mobile.toml.template" );
 
   let handlebars = handlebars::Handlebars::new();
 
@@ -72,7 +72,7 @@ fn main()
   if !private_toml_path.exists()
   {
     eprintln!( "Failed to find private.toml config file. Default configuration file will be used." );
-    private_toml_path = root_dir_path.join( "private.toml.hbs" );
+    private_toml_path = root_dir_path.join( "private.toml.template" );
   }
   let expect_msg = &format!( "Failed to read {:#?}", private_toml_path );
   let toml_str = std::fs::read_to_string( private_toml_path ).expect( expect_msg );

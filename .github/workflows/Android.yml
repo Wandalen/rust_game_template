@@ -22,6 +22,7 @@ jobs:
             ~/.cargo/registry/index/
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
+            target/
             module/renderer/target/
             module/renderer/platform/*/target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
@@ -30,6 +31,6 @@ jobs:
         run: |
               unset ANDROID_HOME
               rustup target add aarch64-linux-android
-              cargo make --allow-private build-android-target
+              cargo make build_android
       
       

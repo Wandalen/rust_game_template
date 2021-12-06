@@ -10,3 +10,6 @@ skip_core_tasks = true #to skip default predefined flow
 # skip_git_env_info = true #??
 # skip_rust_env_info = true #??
 # skip_crate_env_info = true #??
+
+[tasks.default]
+extend = "desktop_run"

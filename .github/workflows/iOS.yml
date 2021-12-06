@@ -23,6 +23,7 @@ jobs:
             ~/.cargo/registry/index/
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
+            target/
             module/renderer/target/
             module/renderer/platform/*/target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
@@ -37,6 +38,6 @@ jobs:
         run: 'echo "$PRIVATE_TOML" > private.toml'
         shell: bash
       - name: Build project
-        run: cargo make build-ios
+        run: cargo make build_ios
       
       

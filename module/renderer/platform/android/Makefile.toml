@@ -8,7 +8,7 @@ skip_crate_env_info = true
 
 [tasks.watch_android]
 private = true
-watch = { watch = [ "./src/" ] }
+watch = { watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../src/" ] }
 
 [tasks.build_android_target]
 private = true
@@ -23,13 +23,20 @@ args = [ "apk", "run", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAK
 # Public
 
 [tasks.build_android]
-description = "Build android target. Rebuilds on change."
+description = "Build android target."
 private = false
-extend = "watch_android"
+# extend = "watch_android"
 category = "Android"
 dependencies = [ "build_android_target" ]
 
 [tasks.run_android]
+description = "Run android target."
+private = false
+# extend = "watch_android"
+category = "Android"
+dependencies = [ "run_android_target" ]
+
+[tasks.run_android_watching]
 description = "Run android target. Rebuilds on change."
 private = false
 extend = "watch_android"
