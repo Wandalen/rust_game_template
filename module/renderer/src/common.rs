@@ -16,6 +16,8 @@ is it possible to cross-compile: osx, windows, linux...?
 /* qqq : seems webgl backend of WebGPU is broken? aaa:repaired */
 
 /* qqq : all variables should be move to public config. now template have lots of variables inlined into different files */
+#[cfg( target_arch = "wasm32" )]
+use winit::platform::web::WindowExtWebSys;
 
 #[cfg( target_arch = "wasm32" )]
 use web_log::println as println;
@@ -342,6 +344,21 @@ pub fn window_before_redraw_handle( window : &winit::window::Window)
     qqq : Find event that fires every frame aaa:done
     Emitted when all of the event loop’s input events have been processed and redraw processing is about to begin.
   */
+  #[cfg( target_arch = "wasm32" )]
+  {
+    let canvas = window.canvas();
+    let ( canvas_width, canvs_height ) = (canvas.client_width(), canvas.client_height());
+
+    let js_window = web_sys::window().unwrap();
+    let window_width = js_window.inner_width().unwrap().as_f64().unwrap() as i32;
+    let window_height = js_window.inner_height().unwrap().as_f64().unwrap() as i32;
+
+    if canvas_width != window_width || canvs_height != window_height
+    {
+      window.set_inner_size( winit::dpi::PhysicalSize::new( window_width, window_height ) );
+    }
+  }
+
   window.request_redraw();
 }
 
@@ -357,7 +374,7 @@ pub fn window_redraw_handle( c: &mut Context )
 
   // c.queue.write_buffer( &c.time_buffer, 0, &[ c.time_uniform_data ].as_byte_slice() );
   c.queue.write_buffer( &c.time_buffer, 0, unsafe{ any_as_u8_slice( &c.time_uniform_data ) } );
-  println!( "time : {}", c.time_uniform_data.time[ 0 ] );
+  // println!( "time : {}", c.time_uniform_data.time[ 0 ] );
 
   let view = frame.texture.create_view( &wgpu::TextureViewDescriptor::default() );
   let mut encoder = c.device.create_command_encoder( &wgpu::CommandEncoderDescriptor { label : None } );
