@@ -53,7 +53,7 @@ pub trait Renderer
 #[derive( Debug, Copy, Clone )]
 struct TimeUniformData
 {
-  time : [ i32; 4 ],
+  time : [ f32; 4 ],
 }
 
 impl TimeUniformData
@@ -62,7 +62,7 @@ impl TimeUniformData
   {
     Self
     {
-      time : [ 0, 0, 0, 0 ],
+      time : [ 0.0, 0.0, 0.0, 0.0 ],
     }
   }
 }
@@ -353,10 +353,11 @@ pub fn window_redraw_handle( c: &mut Context )
   .get_current_texture()
   .expect( "Failed to acquire next swap chain texture" );
 
-  c.time_uniform_data.time[ 0 ] += 1;
+  c.time_uniform_data.time[ 0 ] += 0.001;
+
   // c.queue.write_buffer( &c.time_buffer, 0, &[ c.time_uniform_data ].as_byte_slice() );
   c.queue.write_buffer( &c.time_buffer, 0, unsafe{ any_as_u8_slice( &c.time_uniform_data ) } );
-  // println!( "time : {}", c.time_uniform_data.time[ 0 ] );
+  println!( "time : {}", c.time_uniform_data.time[ 0 ] );
 
   let view = frame.texture.create_view( &wgpu::TextureViewDescriptor::default() );
   let mut encoder = c.device.create_command_encoder( &wgpu::CommandEncoderDescriptor { label : None } );
