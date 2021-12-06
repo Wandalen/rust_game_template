@@ -17,9 +17,9 @@ watch = { watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../..
 [tasks.install_rust_script]
 private = true
 condition = { files_not_exist = [ "${HOME}/.cargo/bin/rust-script" ] }
-script_runner = "@shell"
+script_runner = "@duckscript"
 script = '''
-cargo install rust-script
+exec cargo install rust-script
 '''
 
 [tasks.generate_ios_config]
@@ -39,29 +39,29 @@ args = [ "--spec", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/
 [tasks.install_cargo_mobile]
 private = true
 condition = { files_not_exist = [ "${HOME}/.cargo/bin/cargo-mobile" ] }
-script_runner = "@shell"
+script_runner = "@duckscript"
 script = '''
-cargo install --git https://github.com/volodymyrmigdal/cargo-mobile.git
+exec cargo install --git https://github.com/volodymyrmigdal/cargo-mobile.git
 '''
 
 [tasks.build_ios_target]
 private = true
 dependencies = [ "install_cargo_mobile" ]
-script_runner = "@shell"
+script_runner = "@duckscript"
 script = '''
-rustup target add x86_64-apple-ios
-cargo build --manifest-path ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml --target=x86_64-apple-ios
-xcrun xcodebuild -project ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/${GAME_TEMPLATE_IOS_TARGET_NAME}.xcodeproj -scheme ${GAME_TEMPLATE_IOS_TARGET_NAME}_iOS -arch x86_64 -derivedDataPath ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out
+exec rustup target add x86_64-apple-ios
+exec cargo build --manifest-path ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml --target=x86_64-apple-ios
+exec xcrun xcodebuild -project ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/${GAME_TEMPLATE_IOS_TARGET_NAME}.xcodeproj -scheme ${GAME_TEMPLATE_IOS_TARGET_NAME}_iOS -arch x86_64 -derivedDataPath ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out
 '''
 
 [tasks.run_ios_target]
 private = true
-script_runner = "@shell"
+script_runner = "@duckscript"
 script = '''
-open -a simulator
-sleep 5
-xcrun simctl install booted ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out/Build/Products/debug-iphonesimulator/${GAME_TEMPLATE_IOS_TARGET_NAME}.app
-xcrun simctl launch booted com.example.${GAME_TEMPLATE_IOS_TARGET_NAME}
+exec open -a simulator
+exec sleep 5
+exec xcrun simctl install booted ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out/Build/Products/debug-iphonesimulator/${GAME_TEMPLATE_IOS_TARGET_NAME}.app
+exec xcrun simctl launch booted com.example.${GAME_TEMPLATE_IOS_TARGET_NAME}
 '''
 
 # Public
