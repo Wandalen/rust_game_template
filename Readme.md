@@ -13,26 +13,26 @@ cargo install cargo-make
 **Desktop:**
 
 ```
-cargo make run
+cargo make desktop_run
 ```
 
 **Web:**
 
 Install dev dependencies:
 ```
-cargo make install-web-dependencies
+cargo make web_install_dependencies
 ```
 
 Run web target:
 
 ```
-cargo make run-web
+cargo make web_run
 ```
 
 To speedup incremental builds use:
 
 ```
-cargo make run-web-fast
+cargo make web_rerun
 ```
 
 This command doesn't perform crate installation checks to reduce total build time.
@@ -48,12 +48,12 @@ Prerequisites:
 Connect your Android device or start an emulator and then execute:
 
 ```
-cargo make run-android
+cargo make run_android
 ```
 
 **iOS:**
 
-Create the file `module/renderer/config/private.toml` and add next fields:
+Create the file `private.toml` at the root of the repo and add next fields:
 
 ```toml
 [ios]
@@ -72,7 +72,7 @@ In this case value will be taken from your environment variable during the build
 Then run:
 
 ```
-cargo make run-ios
+cargo make run_ios
 ```
 
 Generated Xcode project can be found at `module/renderer/platform/ios/xcode`.
@@ -83,17 +83,33 @@ Generated Xcode project can be found at `module/renderer/platform/ios/xcode`.
 Avaiable commands:
 
 ```
-Build
+Android
 ----------
-build - Build desktop target. Rebuilds on change
-build-android - Build android target. Rebuilds on change
-build-web - Build web target. Rebuilds on change
+build_android - Build android target. Rebuilds on change.
+run_android - Run android target. Rebuilds on change.
 
-Run
+Desktop
 ----------
-run - Run desktop target. Rebuilds app on change
-run-android - Run android target. Rebuilds on change
-run-web - Run web target. Rebuilds app on change
+desktop_build - Build desktop target.
+desktop_run - Run desktop target
+desktop_run_watching - Run desktop target. Rebuilds app on change
+
+Prerequisites
+----------
+web_install_dependencies - Install web dependencies
+
+Web
+----------
+web_build - Build web target. Rebuilds on change.
+web_rebuild - Build web target. Rebuilds on change.
+web_rerun - Run web target. Rebuilds app on change
+web_run - Run web target. Rebuilds app on change
+
+iOS
+----------
+build_ios - Build ios target.
+clean_ios - Cleanup generated files of ios target.
+run_ios - Run ios target. Rebuilds on change.
 ```
 
 To execute the command use following syntax ```cargo make [command]```.
