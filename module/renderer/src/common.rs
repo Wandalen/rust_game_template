@@ -460,21 +460,7 @@ pub async fn run( event_loop : winit::event_loop::EventLoop<()>, window : winit:
           winit::event::Event::MainEventsCleared => window_before_redraw_handle( &window ),
           winit::event::Event::RedrawRequested( _ ) => window_redraw_handle( c ),
           winit::event::Event::WindowEvent { event : winit::event::WindowEvent::CloseRequested, .. } => window_close_request_handle( control_flow ),
-          winit::event::Event::WindowEvent { event, .. } => {
-            match event {
-              winit::event::WindowEvent::KeyboardInput {
-                input:
-                winit::event::KeyboardInput {
-                        virtual_keycode: Some( virtual_code ),
-                        state: winit::event::ElementState::Released,
-                        ..
-                    },
-                ..
-              } => window_key_released_handle( virtual_code, control_flow ),
-              _ => {}
-
-            }
-          },
+          winit::event::Event::WindowEvent { event : winit::event::WindowEvent::KeyboardInput { input : winit::event::KeyboardInput { virtual_keycode: Some( virtual_code ), state: winit::event::ElementState::Released, .. }, .. }, .. } => window_key_released_handle( virtual_code, control_flow ),
           _ => {}
         };
       }
