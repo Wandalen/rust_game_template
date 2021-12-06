@@ -321,6 +321,93 @@ impl Context
 }
 
 //
+// Event handlers
+//
+
+pub fn window_resize_handle( c: &mut Context, size : winit::dpi::PhysicalSize< u32 > )
+{
+    // Reconfigure the surface with the new size
+    println!( "Resized to: {:#?}", size );
+    c.config.width = size.width;
+    c.config.height = size.height;
+    c.surface.configure( &c.device, &c.config );
+}
+
+//
+
+pub fn window_main_events_cleared( window : &winit::window::Window)
+{
+   /*
+    https://docs.rs/winit/latest/winit/event/enum.Event.html#variant.MainEventsCleared
+    qqq : Find event that fires every frame aaa:done
+    Emitted when all of the event loop’s input events have been processed and redraw processing is about to begin.
+  */
+  window.request_redraw();
+}
+
+//
+
+pub fn window_redraw_handle( c: &mut Context )
+{
+  let frame = c.surface
+  .get_current_texture()
+  .expect( "Failed to acquire next swap chain texture" );
+
+  c.time_uniform_data.time[ 0 ] += 1;
+  // c.queue.write_buffer( &c.time_buffer, 0, &[ c.time_uniform_data ].as_byte_slice() );
+  c.queue.write_buffer( &c.time_buffer, 0, unsafe{ any_as_u8_slice( &c.time_uniform_data ) } );
+  println!( "time : {}", c.time_uniform_data.time[ 0 ] );
+
+  let view = frame.texture.create_view( &wgpu::TextureViewDescriptor::default() );
+  let mut encoder = c.device.create_command_encoder( &wgpu::CommandEncoderDescriptor { label : None } );
+  {
+
+    let mut rpass = encoder.begin_render_pass( &wgpu::RenderPassDescriptor
+    {
+      label : None,
+      color_attachments :
+      &[
+        wgpu::RenderPassColorAttachment
+        {
+          view : &view,
+          resolve_target : None,
+          ops : wgpu::Operations
+          {
+            load : wgpu::LoadOp::Clear( wgpu::Color::WHITE ),
+            store : true,
+          },
+        }
+      ],
+      depth_stencil_attachment : None,
+    });
+    rpass.set_pipeline( &c.render_pipeline );
+
+    // time_uniform_data : TimeUniformData,
+    // time_buffer : wgpu::Buffer,
+    // time_bind_group_layout : wgpu::BindGroupLayout,
+
+    rpass.set_bind_group( 0, &c.time_bind_group, &[] );
+    // rpass.set_bind_group( 1, &c.camera_bind_group, &[] );
+    // rpass.set_vertex_buffer( 0, c.vertex_buffer.slice(..) );
+    // rpass.set_index_buffer( c.index_buffer.slice(..), wgpu::IndexFormat::Uint16 );
+    // rpass.draw_indexed( 0..c.num_indices, 0, 0..1 );
+    rpass.draw( 0..3, 0..1 );
+  }
+
+  c.queue.submit( Some( encoder.finish() ) );
+  frame.present();
+}
+
+//
+
+pub fn window_close_request_handle( control_flow : &mut winit::event_loop::ControlFlow )
+{
+  *control_flow = winit::event_loop::ControlFlow::Exit
+}
+
+//
+// Run function
+//
 
 pub async fn run( event_loop : winit::event_loop::EventLoop<()>, window : winit::window::Window )
 {
@@ -343,6 +430,7 @@ pub async fn run( event_loop : winit::event_loop::EventLoop<()>, window : winit:
 
     // ControlFlow::Poll continuously runs the event loop, even if the OS hasn't
     // dispatched any events. This is ideal for games and similar applications.
+    // *control_flow = winit::event_loop::ControlFlow::Poll;
     *control_flow = winit::event_loop::ControlFlow::Poll;
 
     // ControlFlow::Wait pauses the event loop if no events are available to process.
@@ -356,73 +444,10 @@ pub async fn run( event_loop : winit::event_loop::EventLoop<()>, window : winit:
       {
         match event
         {
-          winit::event::Event::WindowEvent
-          {
-            event: winit::event::WindowEvent::Resized( size ),
-            ..
-          } =>
-          {
-            // Reconfigure the surface with the new size
-            c.config.width = size.width;
-            c.config.height = size.height;
-            c.surface.configure( &c.device, &c.config );
-          }
-          winit::event::Event::MainEventsCleared =>
-          {
-            /* https://docs.rs/winit/latest/winit/event/enum.Event.html#variant.MainEventsCleared */
-            window.request_redraw();
-          }
-          winit::event::Event::RedrawRequested( _ ) => /* qqq : Find event that fires every frame aaa:done*/
-          {
-            let frame = c.surface
-            .get_current_texture()
-            .expect( "Failed to acquire next swap chain texture" );
-
-            c.time_uniform_data.time[ 0 ] += 1;
-            // c.queue.write_buffer( &c.time_buffer, 0, &[ c.time_uniform_data ].as_byte_slice() );
-            c.queue.write_buffer( &c.time_buffer, 0, unsafe{ any_as_u8_slice( &c.time_uniform_data ) } );
-            println!( "time : {}", c.time_uniform_data.time[ 0 ] );
-
-            let view = frame.texture.create_view( &wgpu::TextureViewDescriptor::default() );
-            let mut encoder = c.device.create_command_encoder( &wgpu::CommandEncoderDescriptor { label : None } );
-            {
-
-              let mut rpass = encoder.begin_render_pass( &wgpu::RenderPassDescriptor
-              {
-                label : None,
-                color_attachments :
-                &[
-                  wgpu::RenderPassColorAttachment
-                  {
-                    view : &view,
-                    resolve_target : None,
-                    ops : wgpu::Operations
-                    {
-                      load : wgpu::LoadOp::Clear( wgpu::Color::WHITE ),
-                      store : true,
-                    },
-                  }
-                ],
-                depth_stencil_attachment : None,
-              });
-              rpass.set_pipeline( &c.render_pipeline );
-
-              // time_uniform_data : TimeUniformData,
-              // time_buffer : wgpu::Buffer,
-              // time_bind_group_layout : wgpu::BindGroupLayout,
-
-              rpass.set_bind_group( 0, &c.time_bind_group, &[] );
-              // rpass.set_bind_group( 1, &c.camera_bind_group, &[] );
-              // rpass.set_vertex_buffer( 0, c.vertex_buffer.slice(..) );
-              // rpass.set_index_buffer( c.index_buffer.slice(..), wgpu::IndexFormat::Uint16 );
-              // rpass.draw_indexed( 0..c.num_indices, 0, 0..1 );
-              rpass.draw( 0..3, 0..1 );
-            }
-
-            c.queue.submit( Some( encoder.finish() ) );
-            frame.present();
-          }
-          winit::event::Event::WindowEvent{ event: winit::event::WindowEvent::CloseRequested, .. } => *control_flow = winit::event_loop::ControlFlow::Exit,
+          winit::event::Event::WindowEvent { event: winit::event::WindowEvent::Resized( size ), .. } => window_resize_handle( c, size ),
+          winit::event::Event::MainEventsCleared => window_main_events_cleared( &window ),
+          winit::event::Event::RedrawRequested( _ ) => window_redraw_handle( c ),
+          winit::event::Event::WindowEvent{ event: winit::event::WindowEvent::CloseRequested, .. } => window_close_request_handle( control_flow ),
           _ => {}
         };
       }
