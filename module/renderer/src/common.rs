@@ -335,7 +335,7 @@ pub fn window_resize_handle( c: &mut Context, size : winit::dpi::PhysicalSize< u
 
 //
 
-pub fn window_main_events_cleared( window : &winit::window::Window)
+pub fn window_before_redraw_handle( window : &winit::window::Window)
 {
    /*
     https://docs.rs/winit/latest/winit/event/enum.Event.html#variant.MainEventsCleared
@@ -445,7 +445,7 @@ pub async fn run( event_loop : winit::event_loop::EventLoop<()>, window : winit:
         match event
         {
           winit::event::Event::WindowEvent { event: winit::event::WindowEvent::Resized( size ), .. } => window_resize_handle( c, size ),
-          winit::event::Event::MainEventsCleared => window_main_events_cleared( &window ),
+          winit::event::Event::MainEventsCleared => window_before_redraw_handle( &window ),
           winit::event::Event::RedrawRequested( _ ) => window_redraw_handle( c ),
           winit::event::Event::WindowEvent{ event: winit::event::WindowEvent::CloseRequested, .. } => window_close_request_handle( control_flow ),
           _ => {}
