@@ -32,18 +32,24 @@ impl common::Renderer for App
   #[cfg( target_arch = "wasm32" )]
   fn run( &self ) -> ()
   {
-
     let event_loop = winit::event_loop::EventLoop::new();
     let window = winit::window::Window::new( &event_loop ).unwrap();
 
+    /*
+      To control wgpu output create logger with custom maximal verbosity level.
+      Init function: https://docs.rs/console_log/0.2.0/console_log/fn.init_with_level.html
+      Levels: https://docs.rs/log/0.4.8/log/enum.Level.html
+    */
+    let max_log_level = if cfg!( debug_assertions ) { log::Level::Info } else { log::Level::Warn };
+    console_log::init_with_level( max_log_level ).expect( "Could not initialize logger" );
+
     std::panic::set_hook( Box::new( console_error_panic_hook::hook ) );
-    console_log::init().expect( "could not initialize logger" );
-    // On wasm, append the canvas to the document body
+
     web_sys::window()
     .and_then( | win | win.document() )
     .and_then( | doc | doc.body() )
     .and_then( | body | body.append_child( &web_sys::Element::from( window.canvas() ) ).ok() )
-    .expect( "couldn't append canvas to document body" );
+    .expect( "Couldn't append canvas to document body" );
     wasm_bindgen_futures::spawn_local( common::run( event_loop, window ) );
   }
 }
