@@ -36,7 +36,7 @@ crate-type = [ "staticlib", "lib", "cdylib" ]
 path = "./src/main.rs"
 
 [dependencies]
-wgpu = "0.11.0"
+wgpu = "0.11.0" #qqq: Update to latest, check changes https://github.com/gfx-rs/wgpu/blob/v0.11/CHANGELOG.md
 winit = "0.25.0"
 pollster = "0.2"
 byte-slice-cast = "1.2.0"

@@ -381,7 +381,7 @@ pub fn window_redraw_handle( c: &mut Context )
 
   // c.queue.write_buffer( &c.time_buffer, 0, &[ c.time_uniform_data ].as_byte_slice() );
   c.queue.write_buffer( &c.time_buffer, 0, unsafe{ any_as_u8_slice( &c.time_uniform_data ) } );
-  println!( "time : {}", c.time_uniform_data.time[ 0 ] );
+  // println!( "time : {}", c.time_uniform_data.time[ 0 ] );
 
   let view = frame.texture.create_view( &wgpu::TextureViewDescriptor::default() );
   let mut encoder = c.device.create_command_encoder( &wgpu::CommandEncoderDescriptor { label : None } );
