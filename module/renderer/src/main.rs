@@ -5,13 +5,8 @@ use crate::common::Renderer;
 #[cfg( target_arch = "wasm32" )]
 use winit::platform::web::WindowExtWebSys;
 
-// /* qqq : where is that output from? why?
 
-// Compiled shader WebShaderKey(2v3)
-// game_template_web.js:1184 	Compiled shader WebShaderKey(1v3)
-// game_template_web.js:1184
 
-// */
 
 // /* qqq : output file is too large 10mb
 // */
@@ -36,6 +31,12 @@ impl common::Renderer for App
     let window = winit::window::Window::new( &event_loop ).unwrap();
 
     /*
+      qqq : where is that output from? why?
+      Compiled shader WebShaderKey(2v3)
+      game_template_web.js:1184 	Compiled shader WebShaderKey(1v3)
+      game_template_web.js:1184
+      aaa: This output comes from wgpu webgl backend.
+
       To control wgpu output create logger with custom maximal verbosity level.
       Init function: https://docs.rs/console_log/0.2.0/console_log/fn.init_with_level.html
       Levels: https://docs.rs/log/0.4.8/log/enum.Level.html
