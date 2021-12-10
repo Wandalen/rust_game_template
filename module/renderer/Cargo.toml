@@ -28,7 +28,8 @@ include = [
 [features]
 # webgl = [ "wgpu/webgl" ]
 # web-sys = [ "winit/web-sys" ]
-default = [ "wgpu/webgl", "winit/web-sys" ]
+web = [ "wgpu/webgl", "winit/web-sys" ]
+default = [ "web" ]
 
 [lib]
 name = "game_template"
@@ -36,7 +37,7 @@ crate-type = [ "staticlib", "lib", "cdylib" ]
 path = "./src/main.rs"
 
 [dependencies]
-wgpu = "0.11.0"
+wgpu = "0.11.0" #qqq: Update to latest, check changes https://github.com/gfx-rs/wgpu/blob/v0.11/CHANGELOG.md
 winit = "0.25.0"
 pollster = "0.2"
 byte-slice-cast = "1.2.0"
@@ -47,6 +48,7 @@ console_error_panic_hook = "0.1.7"
 console_log = "0.2.0"
 web-sys = "0.3.53"
 web-log = "1.0.0"
+log = "0.4"
 
 [target.'cfg( target_os = "ios" )'.dependencies]
 mobile-entry-point = "0.1.0"
@@ -63,11 +65,3 @@ launch_mode = "singleTask"
 min_sdk_version = 30
 target_sdk_version = 30
 build_targets = ["aarch64-linux-android"]
-
-
-
-
-
-
-
-

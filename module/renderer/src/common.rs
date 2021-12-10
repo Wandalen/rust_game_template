@@ -370,7 +370,14 @@ pub fn window_redraw_handle( c: &mut Context )
   .get_current_texture()
   .expect( "Failed to acquire next swap chain texture" );
 
-  c.time_uniform_data.time[ 0 ] += 0.001;
+  if c.time_uniform_data.time[ 0 ] >= 1.0
+  {
+    c.time_uniform_data.time[ 0 ] = 0.001;
+  }
+  else
+  {
+    c.time_uniform_data.time[ 0 ] += 0.001;
+  }
 
   // c.queue.write_buffer( &c.time_buffer, 0, &[ c.time_uniform_data ].as_byte_slice() );
   c.queue.write_buffer( &c.time_buffer, 0, unsafe{ any_as_u8_slice( &c.time_uniform_data ) } );
