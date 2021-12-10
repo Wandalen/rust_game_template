@@ -10,4 +10,4 @@ members = [
 exclude = [
   "*",
 ]
-default-members = ["module/renderer"]
+default-members = [ "module/renderer" ]

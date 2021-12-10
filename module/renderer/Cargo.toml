@@ -28,7 +28,8 @@ include = [
 [features]
 # webgl = [ "wgpu/webgl" ]
 # web-sys = [ "winit/web-sys" ]
-default = [ "wgpu/webgl", "winit/web-sys" ]
+web = [ "wgpu/webgl", "winit/web-sys" ]
+default = [ "web" ]
 
 [lib]
 name = "game_template"
@@ -64,11 +65,3 @@ launch_mode = "singleTask"
 min_sdk_version = 30
 target_sdk_version = 30
 build_targets = ["aarch64-linux-android"]
-
-
-
-
-
-
-
-

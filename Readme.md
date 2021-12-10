@@ -107,13 +107,11 @@ web_run - Run web target. Rebuilds app on change
 
 iOS
 ----------
-build_ios - Build ios target.
-clean_ios - Cleanup generated files of ios target.
-run_ios - Run ios target. Rebuilds on change.
+build_ios - Build iOS target.
+clean_ios - Cleanup generated files of iOS target.
+run_ios - Run iOS target. Rebuilds on change.
 ```
 
 To execute the command use following syntax ```cargo make [command]```.
 
 Execute `cargo make --list-all-steps` to get list of commands.
-
-
