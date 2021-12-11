@@ -1,14 +1,7 @@
-
-/* qqq : move all code to renderer/src and maybe remove submodules?
-   aaa : done
-*/
+#![ allow( dead_code ) ]
 
 /* qqq : make bin targets for each platform
 is it possible to cross-compile: osx, windows, linux...?
-*/
-
-/* qqq : main should be single
-   aaa : done
 */
 
 /* qqq : esc should terminate application */
@@ -143,7 +136,7 @@ impl Context
     // limits: wgpu::Limits::downlevel_webgl2_defaults()
     //     .using_resolution(adapter.limits()),
     let limits = wgpu::Limits
-     {
+    {
       max_texture_dimension_1d : 2048,
       max_texture_dimension_2d : 2048,
       max_texture_dimension_3d : 256,
@@ -309,7 +302,7 @@ impl Context
 // Event handlers
 //
 
-pub fn window_resize_handle( c: &mut Context, size : winit::dpi::PhysicalSize< u32 > )
+pub fn window_resize_handle( c : &mut Context, size : winit::dpi::PhysicalSize< u32 > )
 {
     // Reconfigure the surface with the new size
     // println!( "Resized to: {:#?}", size );

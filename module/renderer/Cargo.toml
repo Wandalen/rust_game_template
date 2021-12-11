@@ -29,7 +29,7 @@ include = [
 # webgl = [ "wgpu/webgl" ]
 # web-sys = [ "winit/web-sys" ]
 web = [ "wgpu/webgl", "winit/web-sys" ]
-default = [ "web" ]
+default = []
 
 [lib]
 name = "game_template"
@@ -44,11 +44,13 @@ byte-slice-cast = "1.2.0"
 
 [target.'cfg( target_arch = "wasm32" )'.dependencies]
 wasm-bindgen-futures = "0.4.28"
-console_error_panic_hook = "0.1.7"
 console_log = "0.2.0"
 web-sys = "0.3.53"
 web-log = "1.0.0"
 log = "0.4"
+
+[target.'cfg( target_arch = "wasm32" )'.dev-dependencies]
+console_error_panic_hook = { version = "0.1.7" }
 
 [target.'cfg( target_os = "ios" )'.dependencies]
 mobile-entry-point = "0.1.0"

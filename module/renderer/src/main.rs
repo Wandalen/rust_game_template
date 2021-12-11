@@ -43,6 +43,7 @@ impl common::Renderer for App
     */
     console_log::init_with_level( log::Level::Warn ).expect( "Could not initialize logger" );
 
+    #[ cfg( debug ) ]
     std::panic::set_hook( Box::new( console_error_panic_hook::hook ) );
 
     web_sys::window()
