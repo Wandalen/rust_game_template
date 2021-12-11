@@ -13,23 +13,58 @@ CARGO_MAKE_WEB_PORT = 8080 # qqq : !
 private = true
 watch = { watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../src/" ] }
 
-[tasks.web_build_target]
+[tasks.web_install_wasm]
+private = true
+install_script = "rustup target add wasm32-unknown-unknown"
+
+[tasks.web_build_target_debug]
+private = true
+command = "cargo"
+args = [
+  "build", "--manifest-path",
+  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
+  "--target", "wasm32-unknown-unknown",
+  "--features", "web",
+]
+
+[tasks.web_build_target_release]
 private = true
 command = "cargo"
 install_script = "rustup target add wasm32-unknown-unknown"
-# args = [ "build", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml", "--target", "wasm32-unknown-unknown", "--features", "game_template/webgl,game_template/web-sys" ]
-args = [ "build", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml", "--target", "wasm32-unknown-unknown" ]
+args = [
+  "build", "--manifest-path",
+  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
+  "--target", "wasm32-unknown-unknown",
+  "--features", "web",
+  "--release",
+]
 
-[tasks.web_wasm_rebuild]
+[tasks.web_wasm_rebuild_debug]
 private = true
 command = "wasm-bindgen"
-args = [ "--target", "web", "--out-dir", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/wasm32-unknown-unknown/debug/game_template.wasm" ]
+args = [
+  "--target", "web",
+  "--out-dir", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web",
+  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/wasm32-unknown-unknown/debug/game_template.wasm",
+  "--debug",
+  "--keep-debug",
+]
 
-[tasks.web_wasm_build]
-extend = "web_wasm_rebuild"
+[tasks.web_wasm_build_debug]
+extend = "web_wasm_rebuild_debug"
 install_crate = "wasm-bindgen-cli"
 
-[tasks.web_build_copy_static]
+[tasks.web_wasm_build_release]
+private = true
+install_crate = "wasm-bindgen-cli"
+command = "wasm-bindgen"
+args = [
+  "--target", "web",
+  "--out-dir", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web",
+  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/wasm32-unknown-unknown/debug/game_template.wasm",
+]
+
+[tasks.web_build_copy_static] # qqq : hardlink files?
 private = true
 script_runner = "@duckscript" # qqq : replace all @shell -> @duckscript aaa:replaced where possible
 script = '''
@@ -49,7 +84,7 @@ args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/BrowserSync
 
 # Public
 
-[tasks.web_install_dependencies]
+[tasks.web_install_dependencies] # qqq : ?
 description = "Install web dependencies"
 private = false
 category = "Prerequisites"
@@ -60,16 +95,23 @@ exec npm ci
 '''
 
 [tasks.web_build]
-description = "Build web target. Rebuilds on change."
+description = "Build web target. Rebuilds on change." # qqq : ??
 private = false
 category = "Web"
-dependencies = [ "web_build_target", "web_wasm_build", "web_build_copy_static" ]
+dependencies = [ "web_install_wasm", "web_build_target_debug", "web_wasm_build_debug", "web_build_copy_static" ]
+
+[tasks.web_build_release]
+description = "Build release of web target."
+private = false
+category = "Web"
+dependencies = [ "web_install_wasm", "web_build_target_release", "web_wasm_build_release", "web_build_copy_static" ]
 
 [tasks.web_rebuild]
 description = "Build web target. Rebuilds on change." # qqq : ??
 private = false
 category = "Web"
-dependencies = [ "web_build_target", "web_wasm_rebuild" ]
+dependencies = [ "web_build_target_debug", "web_wasm_rebuild_debug" ]
+# qqq : why no web_build_copy_static??
 
 [tasks.web_run]
 description = "Run web target. Rebuilds app on change"

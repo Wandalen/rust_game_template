@@ -46,6 +46,8 @@ impl common::Renderer for App
     #[ cfg( debug ) ]
     std::panic::set_hook( Box::new( console_error_panic_hook::hook ) );
 
+    // panic!( "abc!" );
+
     web_sys::window()
     .and_then( | win | win.document() )
     .and_then( | doc | doc.body() )

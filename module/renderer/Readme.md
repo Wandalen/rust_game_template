@@ -78,9 +78,13 @@ Generated Xcode project can be found at `module/renderer/platform/ios/xcode`.
 
 ## Commands
 
-Avaiable commands:
+To get list of commands use command `cargo make --list-all-steps`
 
 ```
+Prerequisites
+----------
+web_install_dependencies - Install web dependencies
+
 Android
 ----------
 build_android - Build android target. Rebuilds on change.
@@ -91,10 +95,6 @@ Desktop
 desktop_build - Build desktop target.
 desktop_run - Run desktop target
 desktop_run_watching - Run desktop target. Rebuilds app on change
-
-Prerequisites
-----------
-web_install_dependencies - Install web dependencies
 
 Web
 ----------
@@ -109,7 +109,3 @@ build_ios - Build iOS target.
 clean_ios - Cleanup generated files of iOS target.
 run_ios - Run iOS target. Rebuilds on change.
 ```
-
-To execute the command use following syntax ```cargo make [command]```.
-
-Execute `cargo make --list-all-steps` to get list of commands.
