@@ -83,3 +83,7 @@ log = "0.4" # qqq : ?
 # Tell `rustc` to optimize for small code size aggressively.
 opt-level = "z"
 lto = true
+
+[profile.release.package."*"]
+opt-level = "z"
+# lto = true
