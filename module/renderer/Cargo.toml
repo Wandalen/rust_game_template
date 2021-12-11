@@ -39,6 +39,10 @@ name = "game_template"
 crate-type = [ "staticlib", "lib", "cdylib" ]
 path = "./src/main.rs"
 
+[[bin]]
+name = "game_template_web"
+path = "./src/main.rs"
+
 [package.metadata.android]
 fullscreen = false
 launch_mode = "singleTask"
@@ -81,9 +85,12 @@ log = "0.4" # qqq : ?
 # Tell `rustc` to optimize for small code size.
 # opt-level = "s"
 # Tell `rustc` to optimize for small code size aggressively.
-opt-level = "z"
+# opt-level = "s"
 lto = true
+# panic = "abort"
+
+# [profile.dev.package."*"]
+# opt-level = "s"
 
 [profile.release.package."*"]
-opt-level = "z"
-# lto = true
+# opt-level = "s"

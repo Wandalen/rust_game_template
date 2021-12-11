@@ -21,8 +21,9 @@ install_script = "rustup target add wasm32-unknown-unknown"
 private = true
 command = "cargo"
 args = [
-  "build", "--manifest-path",
-  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
+  "build",
+  "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
+  "--bin", "game_template_web",
   "--target", "wasm32-unknown-unknown",
   "--features", "web",
 ]
@@ -32,8 +33,9 @@ private = true
 command = "cargo"
 install_script = "rustup target add wasm32-unknown-unknown"
 args = [
-  "build", "--manifest-path",
-  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
+  "build",
+  "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
+  "--bin", "game_template_web",
   "--target", "wasm32-unknown-unknown",
   "--features", "web",
   "--release",
@@ -128,6 +130,6 @@ run_task = { name = [ "web_server_browsersync", "web_rebuild" ], parallel = true
 # qqq : watching builds?
 # qqq : release builds?
 
-# [tasks.echo]
-# command = "echo"
-# args = [ "CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY : ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}" ]
+[tasks.echo]
+command = "echo"
+args = [ "CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY : ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}" ]

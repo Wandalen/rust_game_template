@@ -1,4 +1,4 @@
-#![ allow( dead_code ) ]
+#![allow( dead_code )]
 
 /* qqq : make bin targets for each platform
 is it possible to cross-compile: osx, windows, linux...?
@@ -16,6 +16,7 @@ is it possible to cross-compile: osx, windows, linux...?
 use winit::platform::web::WindowExtWebSys;
 
 #[cfg( target_arch = "wasm32" )]
+#[allow( unused_imports )]
 use web_log::{ println as println, eprintln as eprintln };
 
 pub use wgpu;

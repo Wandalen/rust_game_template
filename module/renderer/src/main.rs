@@ -59,6 +59,7 @@ impl common::Renderer for App
 
 pub fn main()
 {
+  println!( "xxx" );
   let app = App::new();
   app.run();
 }
