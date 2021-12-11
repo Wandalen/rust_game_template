@@ -47,7 +47,7 @@ command = "wasm-bindgen"
 args = [
   "--target", "web",
   "--out-dir", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web",
-  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/wasm32-unknown-unknown/debug/game_template.wasm",
+  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/wasm32-unknown-unknown/debug/game_template_web.wasm",
   "--debug",
   "--keep-debug",
 ]
@@ -63,7 +63,7 @@ command = "wasm-bindgen"
 args = [
   "--target", "web",
   "--out-dir", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web",
-  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/wasm32-unknown-unknown/release/game_template.wasm",
+  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/wasm32-unknown-unknown/release/game_template_web.wasm",
 ]
 
 [tasks.web_build_copy_static] # qqq : hardlink files?
