@@ -78,10 +78,13 @@ extend = "web_build"
 run_task = { name = [ "web_server_run" ] }
 # run_task = { name = [ "web_server_browsersync" ] }
 
-[tasks.web_rerun] # qqq : ??
+[tasks.web_rerun] # qqq : ???
 description = "Run web target. Rebuilds app on change"
 category = "Web"
 run_task = { name = [ "web_server_browsersync", "web_rebuild" ], parallel = true }
+
+# qqq : watching builds?
+# qqq : release builds?
 
 # [tasks.echo]
 # command = "echo"

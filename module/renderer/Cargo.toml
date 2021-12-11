@@ -29,7 +29,10 @@ include = [
 # webgl = [ "wgpu/webgl" ]
 # web-sys = [ "winit/web-sys" ]
 web = [ "wgpu/webgl", "winit/web-sys" ]
-default = []
+default = [ "web" ] # qqq : bad!
+
+# [target.'cfg( target_arch = "wasm32" )'.features]
+# default = [ "web" ]
 
 [lib]
 name = "game_template"
@@ -37,7 +40,7 @@ crate-type = [ "staticlib", "lib", "cdylib" ]
 path = "./src/main.rs"
 
 [dependencies]
-wgpu = "0.11.0" #qqq: Update to latest, check changes https://github.com/gfx-rs/wgpu/blob/v0.11/CHANGELOG.md
+wgpu = "0.11.0" #qqq : Update to latest, check changes https://github.com/gfx-rs/wgpu/blob/v0.11/CHANGELOG.md
 winit = "0.25.0"
 pollster = "0.2"
 byte-slice-cast = "1.2.0"
