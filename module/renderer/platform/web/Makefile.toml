@@ -147,6 +147,7 @@ run_task = { name = [ "web_build", "web_server_browsersync" ], parallel = true }
 
 # qqq : watching builds?
 # qqq : release builds?
+# qqq : add to prerequisities wasm-opt
 
 # [tasks.echo]
 # command = "echo"
