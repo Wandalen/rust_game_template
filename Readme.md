@@ -9,15 +9,13 @@ Neutral cross-platform Rust game template.
 cargo install cargo-make
 ```
 
-## How to run
-
-**Desktop:**
+## How to run on Desktop
 
 ```
 cargo make desktop_run
 ```
 
-**Web:**
+## How to run on Web
 
 Install dev dependencies:
 ```
@@ -38,7 +36,7 @@ cargo make web_rerun
 
 This command doesn't perform crate installation checks to reduce total build time.
 
-**Android:**
+## How to run on Android
 
 Prerequisites:
 
@@ -52,7 +50,7 @@ Connect your Android device or start an emulator and then execute:
 cargo make run_android
 ```
 
-**iOS:**
+## How to run on iOS
 
 Create the file `private.toml` at the root of the repo and add next fields:
 
@@ -77,7 +75,6 @@ cargo make run_ios
 ```
 
 Generated Xcode project can be found at `module/renderer/platform/ios/xcode`.
-
 
 ## Commands
 

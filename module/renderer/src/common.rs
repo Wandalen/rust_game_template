@@ -232,7 +232,6 @@ impl Context
       label: Some( "time_bind_group" ),
     });
 
-    /* qqq : add uniform time */
     /* - uniform - */
 
     let pipeline_layout = device.create_pipeline_layout( &wgpu::PipelineLayoutDescriptor
