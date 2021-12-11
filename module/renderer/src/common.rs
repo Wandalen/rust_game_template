@@ -12,6 +12,10 @@ is it possible to cross-compile: osx, windows, linux...?
 
 /* qqq : all variables should be move to public config. now template have lots of variables inlined into different files */
 
+#[cfg( feature = "wee_alloc" )]
+#[global_allocator]
+static ALLOC : wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
 #[cfg( target_arch = "wasm32" )]
 use winit::platform::web::WindowExtWebSys;
 

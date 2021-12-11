@@ -1,3 +1,8 @@
+# cargo-features = [
+#   "strip", # strip either symbols or debuginfo
+#   "weak-dep-features", # ability to use dep_name?/feat_name syntax
+# ]
+
 [package]
 name = "game_template"
 version = "0.0.1"
@@ -26,10 +31,9 @@ include = [
 ]
 
 [features]
-# webgl = [ "wgpu/webgl" ]
-# web-sys = [ "winit/web-sys" ]
+# web = [ "wgpu/webgl", "winit/web-sys", "wee_alloc" ]
 web = [ "wgpu/webgl", "winit/web-sys" ]
-default = [ "wee_alloc" ] # qqq : bad!
+default = []
 
 # [target.'cfg( target_arch = "wasm32" )'.features]
 # default = [ "web" ]
@@ -42,13 +46,14 @@ path = "./src/main.rs"
 [[bin]]
 name = "game_template_web"
 path = "./src/main.rs"
+required-features = [ "web" ]
 
 [package.metadata.android]
 fullscreen = false
 launch_mode = "singleTask"
 min_sdk_version = 30
 target_sdk_version = 30
-build_targets = ["aarch64-linux-android"]
+build_targets = [ "aarch64-linux-android" ]
 
 # qqq : explain each dependency
 
@@ -73,11 +78,11 @@ console_error_panic_hook = { version = "0.1.7" }
 # wasm-bindgen-test = "0.3.13"
 
 [target.'cfg( target_os = "ios" )'.dependencies]
-mobile-entry-point = "0.1.0" # qqq : ?
+mobile-entry-point = "0.1.0" # qqq : talk?
 
 [target.'cfg( target_os = "android" )'.dependencies]
 android_logger = "0.10.1"
-ndk-glue = {version = "0.3.0", features = ["logger"]}
+ndk-glue = { version = "0.3.0", features = [ "logger" ] }
 ndk-sys = "0.2.1"
 log = "0.4" # qqq : ?
 
@@ -85,12 +90,15 @@ log = "0.4" # qqq : ?
 # Tell `rustc` to optimize for small code size.
 # opt-level = "s"
 # Tell `rustc` to optimize for small code size aggressively.
-# opt-level = "s"
-lto = true
+# opt-level = "z"
+# lto = true
 # panic = "abort"
+# strip = "symbols"
 
-# [profile.dev.package."*"]
+[profile.dev.package."*"]
 # opt-level = "s"
+# opt-level = "z"
 
 [profile.release.package."*"]
+# opt-level = "z"
 # opt-level = "s"

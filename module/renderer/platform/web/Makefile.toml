@@ -30,15 +30,17 @@ args = [
 
 [tasks.web_build_target_release]
 private = true
-command = "cargo"
 install_script = "rustup target add wasm32-unknown-unknown"
+command = "cargo"
 args = [
+  "+nightly",
   "build",
   "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
   "--bin", "game_template_web",
   "--target", "wasm32-unknown-unknown",
   "--features", "web",
-  "--release",
+  "--profile", "release",
+  # "-Z", "timings",
 ]
 
 [tasks.web_wasm_rebuild_debug]
@@ -46,6 +48,7 @@ private = true
 command = "wasm-bindgen"
 args = [
   "--target", "web",
+  "--browser",
   "--out-dir", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web",
   "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/wasm32-unknown-unknown/debug/game_template_web.wasm",
   "--debug",
@@ -63,21 +66,29 @@ command = "wasm-bindgen"
 args = [
   "--target", "web",
   "--out-dir", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web",
+  "--remove-name-section",
+  "--remove-producers-section",
   "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/wasm32-unknown-unknown/release/game_template_web.wasm",
 ]
 
 [tasks.web_build_copy_static] # qqq : hardlink files?
 private = true
-script_runner = "@duckscript" # qqq : replace all @shell -> @duckscript aaa:replaced where possible
+script_runner = "@duckscript"
 script = '''
 glob_cp ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/static/* ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web
 '''
 
-[tasks.web_server_run]
+[tasks.web_wasm_optimize]
 private = true
-install_crate = "basic-http-server"
-command = "basic-http-server"
-args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web", "-a", "127.0.0.1:${CARGO_MAKE_WEB_PORT}" ]
+# install_crate = "?" # qqq : find crate installing wasm-opt
+command = "wasm-opt"
+args = [
+  "-Oz",
+  "-o", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web/game_template_web_bg.wasm",
+  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web/game_template_web_bg.wasm",
+]
+
+# wasm-opt -Oz -o target/web/game_template_web_bg.wasm target/web/game_template_web_bg.wasm
 
 [tasks.web_server_browsersync]
 private = true
@@ -85,6 +96,12 @@ command = 'node'
 args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/BrowserSync.ss" ]
 
 # Public
+
+[tasks.web_server_run]
+private = false
+install_crate = "basic-http-server"
+command = "basic-http-server"
+args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web", "-a", "127.0.0.1:${CARGO_MAKE_WEB_PORT}" ]
 
 [tasks.web_install_dependencies] # qqq : ?
 description = "Install web dependencies"
@@ -106,7 +123,8 @@ dependencies = [ "web_install_wasm", "web_build_target_debug", "web_wasm_build_d
 description = "Build release of web target."
 private = false
 category = "Web"
-dependencies = [ "web_install_wasm", "web_build_target_release", "web_wasm_build_release", "web_build_copy_static" ]
+# dependencies = [ "web_install_wasm", "web_build_target_release", "web_wasm_build_release", "web_build_copy_static" ]
+dependencies = [ "web_install_wasm", "web_build_target_release", "web_wasm_build_release", "web_build_copy_static", "web_wasm_optimize" ]
 
 [tasks.web_rebuild]
 description = "Build web target. Rebuilds on change." # qqq : ??
@@ -119,17 +137,35 @@ dependencies = [ "web_build_target_debug", "web_wasm_rebuild_debug" ]
 description = "Run web target. Rebuilds app on change"
 category = "Web"
 extend = "web_build"
-run_task = { name = [ "web_server_run" ] }
+run_task = { name = [ "web_build", "web_server_run" ] }
 # run_task = { name = [ "web_server_browsersync" ] }
 
-[tasks.web_rerun] # qqq : ???
+[tasks.web_run_watching] # qqq : ???
 description = "Run web target. Rebuilds app on change"
 category = "Web"
-run_task = { name = [ "web_server_browsersync", "web_rebuild" ], parallel = true }
+run_task = { name = [ "web_build", "web_server_browsersync" ], parallel = true }
 
 # qqq : watching builds?
 # qqq : release builds?
 
-[tasks.echo]
-command = "echo"
-args = [ "CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY : ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}" ]
+# [tasks.echo]
+# command = "echo"
+# args = [ "CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY : ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}" ]
+
+# # 20 the largest functions
+# twiggy top -n 20 target/web/game_template_web_bg.wasm
+#
+# # Optimize for size.
+# wasm-opt -Os -o target/web/game_template_web_bg.wasm target/web/game_template_web_bg.wasm
+#
+# # Optimize aggressively for size.
+# wasm-opt -Oz -o target/web/game_template_web_bg.wasm target/web/game_template_web_bg.wasm
+#
+# # Optimize for speed.
+# wasm-opt -O -o target/web/game_template_web_bg.wasm target/web/game_template_web_bg.wasm
+#
+# # Optimize aggressively for speed.
+# wasm-opt -O3 -o target/web/game_template_web_bg.wasm target/web/game_template_web_bg.wasm
+#
+# # remove a function
+# wasm-snip target/web/game_template_web_bg.wasm -o target/web/game_template_web_bg.wasm function1
