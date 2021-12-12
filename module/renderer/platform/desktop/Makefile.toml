@@ -14,7 +14,7 @@ watch = { postpone = true, watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE
 # Public
 
 [tasks.desktop_build]
-description = "Build desktop target."
+description = "Build debug of desktop target."
 private = false
 category = "Desktop"
 command = "cargo"
@@ -24,8 +24,20 @@ args = [
   "--bin", "desktop"
 ]
 
+[tasks.desktop_build_release]
+description = "Build release of desktop target."
+private = false
+category = "Desktop"
+command = "cargo"
+args = [ 
+  "build", 
+  "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
+  "--bin", "desktop",
+  "--release"
+]
+
 [tasks.desktop_run]
-description = "Run desktop target"
+description = "Run debug of desktop target"
 private = false
 category = "Desktop"
 command = "cargo"
