@@ -12,6 +12,7 @@ members = [
   # "module/renderer/platform/web",
   # "module/renderer/platform/android",
   # "module/renderer/platform/ios",
+  "module/renderer/platform/wasi",
 ]
 exclude = [
   "*",
