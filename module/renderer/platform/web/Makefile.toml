@@ -23,7 +23,7 @@ command = "cargo"
 args = [
   "build",
   "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
-  "--bin", "game_template_web",
+  "--bin", "web",
   "--target", "wasm32-unknown-unknown",
   "--features", "web",
 ]
@@ -36,11 +36,12 @@ args = [
   "+nightly",
   "build",
   "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
-  "--bin", "game_template_web",
+  "--bin", "web",
   "--target", "wasm32-unknown-unknown",
   "--features", "web",
-  "--profile", "release",
-  # "-Z", "timings",
+  "--profile", "release_web",
+  "-Z", "build-std=std,panic_abort", # rebuild std
+  "-Z", "build-std-features=panic_immediate_abort", # rebuild std with abort, without unwind
 ]
 
 [tasks.web_wasm_rebuild_debug]
@@ -50,7 +51,7 @@ args = [
   "--target", "web",
   "--browser",
   "--out-dir", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web",
-  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/wasm32-unknown-unknown/debug/game_template_web.wasm",
+  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/wasm32-unknown-unknown/debug/web.wasm",
   "--debug",
   "--keep-debug",
 ]
@@ -68,7 +69,7 @@ args = [
   "--out-dir", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web",
   "--remove-name-section",
   "--remove-producers-section",
-  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/wasm32-unknown-unknown/release/game_template_web.wasm",
+  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/wasm32-unknown-unknown/release_web/web.wasm",
 ]
 
 [tasks.web_build_copy_static] # qqq : hardlink files?
@@ -84,11 +85,14 @@ private = true
 command = "wasm-opt"
 args = [
   "-Oz",
-  "-o", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web/game_template_web_bg.wasm",
-  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web/game_template_web_bg.wasm",
+  "-o", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web/web_bg.wasm",
+  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web/web_bg.wasm",
+  "--strip-debug",
+  "--simplify-globals",
+  "--vacuum",
 ]
 
-# wasm-opt -Oz -o target/web/game_template_web_bg.wasm target/web/game_template_web_bg.wasm
+# wasm-opt -Oz -o target/web/web_bg.wasm target/web/web_bg.wasm
 
 [tasks.web_server_browsersync]
 private = true
@@ -123,8 +127,8 @@ dependencies = [ "web_install_wasm", "web_build_target_debug", "web_wasm_build_d
 description = "Build release of web target."
 private = false
 category = "Web"
-# dependencies = [ "web_install_wasm", "web_build_target_release", "web_wasm_build_release", "web_build_copy_static" ]
 dependencies = [ "web_install_wasm", "web_build_target_release", "web_wasm_build_release", "web_build_copy_static", "web_wasm_optimize" ]
+# dependencies = [ "web_install_wasm", "web_build_target_release", "web_wasm_build_release", "web_build_copy_static" ]
 
 [tasks.web_rebuild]
 description = "Build web target. Rebuilds on change." # qqq : ??
@@ -153,20 +157,25 @@ run_task = { name = [ "web_build", "web_server_browsersync" ], parallel = true }
 # command = "echo"
 # args = [ "CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY : ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}" ]
 
+#
 # # 20 the largest functions
-# twiggy top -n 20 target/web/game_template_web_bg.wasm
+# twiggy top -n 20 target/web/web_bg.wasm
 #
 # # Optimize for size.
-# wasm-opt -Os -o target/web/game_template_web_bg.wasm target/web/game_template_web_bg.wasm
+# wasm-opt -Os -o target/web/web_bg.wasm target/web/web_bg.wasm
 #
 # # Optimize aggressively for size.
-# wasm-opt -Oz -o target/web/game_template_web_bg.wasm target/web/game_template_web_bg.wasm
+# wasm-opt -Oz -o target/web/web_bg.wasm target/web/web_bg.wasm
 #
 # # Optimize for speed.
-# wasm-opt -O -o target/web/game_template_web_bg.wasm target/web/game_template_web_bg.wasm
+# wasm-opt -O -o target/web/web_bg.wasm target/web/web_bg.wasm
 #
 # # Optimize aggressively for speed.
-# wasm-opt -O3 -o target/web/game_template_web_bg.wasm target/web/game_template_web_bg.wasm
+# wasm-opt -O3 -o target/web/web_bg.wasm target/web/web_bg.wasm
 #
 # # remove a function
-# wasm-snip target/web/game_template_web_bg.wasm -o target/web/game_template_web_bg.wasm function1
+# wasm-snip target/web/web_bg.wasm -o target/web/web_bg.wasm function1
+#
+# # for object bin files
+# nm -S -td --size-sort target/x86_64-unknown-linux-gnu/release/x|rustfilt|tac|cut -d' ' -f 2-|less
+#
