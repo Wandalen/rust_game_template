@@ -63,3 +63,4 @@ dependencies = [ "desktop_run" ]
 # private = false
 # command = "echo"
 # args = [ "CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY : ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}" ]
+
