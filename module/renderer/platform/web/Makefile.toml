@@ -17,6 +17,17 @@ watch = { postpone = true, watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE
 private = true
 install_script = "rustup target add wasm32-unknown-unknown"
 
+# [tasks.web_run_wasm_opt]
+# private = true
+# script_runner = "@duckscript"
+# script = '''
+# handle = glob_array ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../bin/wasm*/wasm-opt*
+# path = array_get ${handle} 0
+# parent = dirname ${path}
+# set_env DYLD_LIBRARY_PATH ${parent}
+# exec ${path} ${1}
+# '''
+
 [tasks.web_build_target_debug]
 private = true
 command = "cargo"
@@ -81,9 +92,11 @@ glob_cp ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/static/* ${CARGO_M
 
 [tasks.web_wasm_optimize]
 private = true
-# install_crate = "?" # qqq : find crate installing wasm-opt
-command = "wasm-opt"
+# install_crate = "?" # qqq : find crate installing wasm-opt aaa:implemented in step script
+# command = "wasm-opt"
+command = "rust-script"
 args = [
+  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/wasm_opt.rs",
   "-Oz",
   "-o", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web/web_bg.wasm",
   "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web/web_bg.wasm",
@@ -159,6 +172,11 @@ run_task = { name = [ "web_rebuild", "web_server_run" ] }
 description = "Rebuild and reload debug of web target on file change."
 category = "Web"
 run_task = { name = [ "web_rebuild_watching", "web_server_browsersync" ], parallel = true }
+
+[tasks.wasm_opt]
+private = true
+command = "rust-script"
+args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/wasm_opt.rs", "${@}" ]
 
 # qqq : watching builds? aaa:done
 # qqq : release builds?
