@@ -1,4 +1,4 @@
-[config] 
+[config]
 skip_core_tasks = true
 skip_git_env_info = true
 skip_rust_env_info = true
@@ -17,9 +17,9 @@ watch = { watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../..
 [tasks.install_rust_script]
 private = true
 condition = { files_not_exist = [ "${HOME}/.cargo/bin/rust-script" ] }
-script_runner = "@duckscript"
+script_runner = "@duckscript" # qqq: update to latest after https://github.com/fornwall/rust-script/issues/42
 script = '''
-exec cargo install rust-script
+exec cargo install rust-script --version "0.7.0"
 '''
 
 [tasks.generate_ios_config]
