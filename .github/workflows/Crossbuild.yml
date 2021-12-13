@@ -1,0 +1,33 @@
+# name: Crossbuild
+#
+# on:
+#   push:
+#     branches: [ 'alpha' ]
+#
+# jobs:
+#   build:
+#     runs-on: macos-latest
+#     env:
+#       CARGO_TERM_COLOR: always
+#     steps:
+#       - uses: actions/checkout@v2
+#       - uses: davidB/rust-cargo-make@v1
+#
+#       - name: Build project for MacOS
+#         run: cargo make desktop_build_release
+#
+#       - name: Build project for GNU/Linux
+#         run: cargo make desktop_build_linux
+#
+#       - name: Build project for Windows
+#         run: cargo make desktop_build_windows
+#
+#       - name: Copy binaries
+#         run: cargo make copy_binaries
+#
+#       - uses: quizlet/commit-changes@v0.2.0
+#         with:
+#           token: ${{ secrets.PRIVATE_GITHUB_TOKEN }}
+#           message: Release binaries
+#           glob-patterns: out/
+
