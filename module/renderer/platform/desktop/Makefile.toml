@@ -9,33 +9,55 @@ skip_crate_env_info = true
 
 [tasks.desktop_watch]
 private = true
-watch = { watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../src/" ] }
+watch = { postpone = true, watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../src/" ] }
 
 # Public
 
 [tasks.desktop_build]
-description = "Build desktop target."
+description = "Build debug of desktop target."
 private = false
-# extend = "desktop_watch"
 category = "Desktop"
 command = "cargo"
-args = [ "build", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml" ]
+args = [ 
+  "build", 
+  "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
+  "--bin", "desktop"
+]
+
+[tasks.desktop_build_release]
+description = "Build release of desktop target."
+private = false
+category = "Desktop"
+command = "cargo"
+args = [ 
+  "build", 
+  "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
+  "--bin", "desktop",
+  "--release"
+]
 
 [tasks.desktop_run]
-description = "Run desktop target"
+description = "Run debug of desktop target"
 private = false
-# extend = "desktop_watch"
 category = "Desktop"
 command = "cargo"
-args = [ "run", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml" ]
+args = [ 
+  "run",
+  "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
+  "--bin", "desktop"
+]
 
-[tasks.desktop_run_watching]
-description = "Run desktop target. Rebuilds app on change"
+[tasks.desktop_build_watching]
+description = "Rebuild debug of desktop target on file change."
 private = false
 extend = "desktop_watch"
-category = "Desktop"
-command = "cargo"
-args = [ "run", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml" ]
+dependencies = [ "desktop_build" ]
+
+[tasks.desktop_run_watching]
+description = "Rerun debug desktop target on file change."
+private = false
+extend = "desktop_watch"
+dependencies = [ "desktop_run" ]
 
 # [tasks.echo]
 # private = false

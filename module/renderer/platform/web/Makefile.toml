@@ -11,7 +11,7 @@ CARGO_MAKE_WEB_PORT = 8080 # qqq : !
 
 [tasks.web_watch]
 private = true
-watch = { watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../src/" ] }
+watch = { postpone = true, watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../src/" ] }
 
 [tasks.web_install_wasm]
 private = true
@@ -49,7 +49,7 @@ private = true
 command = "wasm-bindgen"
 args = [
   "--target", "web",
-  "--browser",
+  # "--browser" #qqq: ???
   "--out-dir", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web",
   "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/wasm32-unknown-unknown/debug/web.wasm",
   "--debug",
@@ -94,8 +94,19 @@ args = [
 
 # wasm-opt -Oz -o target/web/web_bg.wasm target/web/web_bg.wasm
 
+[tasks.web_install_npm_dependencies] # qqq : ? aaa:done
+description = "Install npm dependencies for web target."
+private = true
+category = "Prerequisites"
+script_runner = "@shell"
+script = '''
+cd ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}
+npm i
+'''
+
 [tasks.web_server_browsersync]
 private = true
+dependencies = [ "web_install_npm_dependencies" ]
 command = 'node'
 args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/BrowserSync.ss" ]
 
@@ -107,18 +118,8 @@ install_crate = "basic-http-server"
 command = "basic-http-server"
 args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web", "-a", "127.0.0.1:${CARGO_MAKE_WEB_PORT}" ]
 
-[tasks.web_install_dependencies] # qqq : ?
-description = "Install web dependencies"
-private = false
-category = "Prerequisites"
-script_runner = "@duckscript"
-script = '''
-exec cd ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}
-exec npm ci
-'''
-
 [tasks.web_build]
-description = "Build web target. Rebuilds on change." # qqq : ??
+description = "Build debug of web target." # qqq : ?? aaa:done
 private = false
 category = "Web"
 dependencies = [ "web_install_wasm", "web_build_target_debug", "web_wasm_build_debug", "web_build_copy_static" ]
@@ -131,25 +132,35 @@ dependencies = [ "web_install_wasm", "web_build_target_release", "web_wasm_build
 # dependencies = [ "web_install_wasm", "web_build_target_release", "web_wasm_build_release", "web_build_copy_static" ]
 
 [tasks.web_rebuild]
-description = "Build web target. Rebuilds on change." # qqq : ??
+description = "Rebuild debug of web target." # qqq : ?? aaa:done
 private = false
 category = "Web"
-dependencies = [ "web_build_target_debug", "web_wasm_rebuild_debug" ]
-# qqq : why no web_build_copy_static??
+dependencies = [ "web_build_target_debug", "web_wasm_rebuild_debug", "web_build_copy_static" ]
+# qqq : why no web_build_copy_static?? aaa:added
+
+[tasks.web_rebuild_watching]
+description = "Rebuild debug of web target on file change."
+private = false
+category = "Web"
+extend = "web_watch"
+dependencies = [ "web_rebuild" ]
 
 [tasks.web_run]
-description = "Run web target. Rebuilds app on change"
+description = "Build and run web target."
 category = "Web"
-extend = "web_build"
 run_task = { name = [ "web_build", "web_server_run" ] }
-# run_task = { name = [ "web_server_browsersync" ] }
 
-[tasks.web_run_watching] # qqq : ???
-description = "Run web target. Rebuilds app on change"
+[tasks.web_rerun]
+description = "Rebuild debug of web target and run it."
 category = "Web"
-run_task = { name = [ "web_build", "web_server_browsersync" ], parallel = true }
+run_task = { name = [ "web_rebuild", "web_server_run" ] }
 
-# qqq : watching builds?
+[tasks.web_rerun_watching] # qqq : ??? aaa:done
+description = "Rebuild and reload debug of web target on file change."
+category = "Web"
+run_task = { name = [ "web_rebuild_watching", "web_server_browsersync" ], parallel = true }
+
+# qqq : watching builds? aaa:done
 # qqq : release builds?
 # qqq : add to prerequisities wasm-opt
 

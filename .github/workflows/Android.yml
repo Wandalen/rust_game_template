@@ -15,6 +15,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Install latest stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+            toolchain: stable
+            override: true
       - uses: actions/cache@v2
         with:
           path: |
@@ -32,5 +37,5 @@ jobs:
               unset ANDROID_HOME
               rustup target add aarch64-linux-android
               cargo make build_android
-      
-      
+
+

@@ -1,0 +1,51 @@
+[config]
+skip_core_tasks = true
+skip_git_env_info = true
+skip_rust_env_info = true
+skip_crate_env_info = true
+
+# Private
+
+[tasks.wasi_watch]
+private = true
+watch = { postpone = true, watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/src/" ] }
+
+[tasks.wasi_build_target_debug]
+private = true
+install_crate = "cargo-wasi"
+command = "cargo"
+args = [
+  "wasi",
+  "build",
+  "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml",
+]
+
+[tasks.wasi_run_target_debug]
+private = true
+install_crate = "cargo-wasi"
+command = "cargo"
+args = [
+  "wasi",
+  "run",
+  "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml"
+]
+
+# Public
+
+[tasks.wasi_build]
+description = "Build debug of wasi target."
+private = false
+category = "wasi"
+dependencies = [ "wasi_build_target_debug" ]
+
+[tasks.wasi_run]
+description = "Run debug of wasi target."
+category = "wasi"
+dependencies = [ "wasi_run_target_debug" ]
+
+[tasks.wasi_run_watching]
+description = "Run debug of wasi target."
+category = "wasi"
+extend = "wasi_watch"
+dependencies = [ "wasi_run_target_debug" ]
+
