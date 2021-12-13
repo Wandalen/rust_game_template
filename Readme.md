@@ -5,7 +5,7 @@ Neutral cross-platform Rust game template.
 
 ## Build tool
 
-This project uses [cargo-make] task runner. It's required to build the project. To install it run:
+This project uses [cargo-make](https://github.com/sagiegurari/cargo-make) task runner. It's required to build the project. To install it run:
 
 ```
 cargo install cargo-make
