@@ -45,6 +45,10 @@ name = "web"
 path = "./src/main.rs"
 required-features = [ "web" ]
 
+[[bin]]
+name = "desktop"
+path = "./src/main.rs"
+
 [package.metadata.android]
 fullscreen = false
 launch_mode = "singleTask"
