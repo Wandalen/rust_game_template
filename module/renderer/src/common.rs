@@ -1,14 +1,6 @@
 #![allow( dead_code )]
 
-/* qqq : make bin targets for each platform
-is it possible to cross-compile: osx, windows, linux...?
-*/
-
-/* qqq : esc should terminate application */
-
 /* qqq : is it possible to stop watching if application was terminated? */
-
-/* qqq : seems webgl backend of WebGPU is broken? aaa:repaired */
 
 /* qqq : all variables should be move to public config. now template have lots of variables inlined into different files */
 
@@ -23,14 +15,13 @@ use winit::platform::web::WindowExtWebSys;
 #[allow( unused_imports )]
 use web_log::{ println as println, eprintln as eprintln };
 
-pub use wgpu;
-pub use winit;
-pub use pollster;
+// pub use wgpu;
+// pub use winit;
+// pub use pollster;
 
 pub use std::borrow::Cow;
 pub use byte_slice_cast::*;
 
-/* qqq : remove what possible aaa:done*/
 pub use wgpu::util::DeviceExt;
 
 pub trait Renderer
@@ -133,6 +124,7 @@ impl Context
     .expect( "Failed to find an appropriate adapter" );
 
     // wgpu::Limits::default().using_resolution(adapter.limits());
+    //qqq: Investigate limits, find a way to use defaults
     eprintln!( "Using custom LIMITS!, qqq: investigate me" );
     // eprintln!(
     //     "wgpu::Limits::downlevel_webgl2_defaults()
@@ -321,7 +313,6 @@ pub fn window_before_redraw_handle( window : &winit::window::Window)
 {
    /*
     https://docs.rs/winit/latest/winit/event/enum.Event.html#variant.MainEventsCleared
-    qqq : Find event that fires every frame aaa:done
     Emitted when all of the event loop’s input events have been processed and redraw processing is about to begin.
   */
   #[cfg( target_arch = "wasm32" )]

@@ -9,13 +9,24 @@ CARGO_MAKE_WEB_PORT = 8080 # qqq : !
 
 # Private
 
-[tasks.web_watch]
+[tasks.web_watch] #qqq: extend watch list, add static folder
 private = true
 watch = { postpone = true, watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../src/" ] }
 
 [tasks.web_install_wasm]
 private = true
 install_script = "rustup target add wasm32-unknown-unknown"
+
+# [tasks.web_run_wasm_opt]
+# private = true
+# script_runner = "@duckscript"
+# script = '''
+# handle = glob_array ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../bin/wasm*/wasm-opt*
+# path = array_get ${handle} 0
+# parent = dirname ${path}
+# set_env DYLD_LIBRARY_PATH ${parent}
+# exec ${path} ${1}
+# '''
 
 [tasks.web_build_target_debug]
 private = true
@@ -49,7 +60,7 @@ private = true
 command = "wasm-bindgen"
 args = [
   "--target", "web",
-  # "--browser" #qqq: ???
+  # "--browser", #qqq: cannot specify `--browser` with other output types?
   "--out-dir", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web",
   "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/wasm32-unknown-unknown/debug/web.wasm",
   "--debug",
@@ -72,7 +83,7 @@ args = [
   "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/wasm32-unknown-unknown/release_web/web.wasm",
 ]
 
-[tasks.web_build_copy_static] # qqq : hardlink files?
+[tasks.web_build_copy_static] # qqq : hardlink files, find util that reflects files making hardlinks?
 private = true
 script_runner = "@duckscript"
 script = '''
@@ -81,9 +92,9 @@ glob_cp ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/static/* ${CARGO_M
 
 [tasks.web_wasm_optimize]
 private = true
-# install_crate = "?" # qqq : find crate installing wasm-opt
-command = "wasm-opt"
+command = "rust-script"
 args = [
+  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/wasm_opt.rs",
   "-Oz",
   "-o", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web/web_bg.wasm",
   "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web/web_bg.wasm",
@@ -94,7 +105,7 @@ args = [
 
 # wasm-opt -Oz -o target/web/web_bg.wasm target/web/web_bg.wasm
 
-[tasks.web_install_npm_dependencies] # qqq : ? aaa:done
+[tasks.web_install_npm_dependencies]
 description = "Install npm dependencies for web target."
 private = true
 category = "Prerequisites"
@@ -119,7 +130,7 @@ command = "basic-http-server"
 args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web", "-a", "127.0.0.1:${CARGO_MAKE_WEB_PORT}" ]
 
 [tasks.web_build]
-description = "Build debug of web target." # qqq : ?? aaa:done
+description = "Build debug of web target."
 private = false
 category = "Web"
 dependencies = [ "web_install_wasm", "web_build_target_debug", "web_wasm_build_debug", "web_build_copy_static" ]
@@ -132,18 +143,11 @@ dependencies = [ "web_install_wasm", "web_build_target_release", "web_wasm_build
 # dependencies = [ "web_install_wasm", "web_build_target_release", "web_wasm_build_release", "web_build_copy_static" ]
 
 [tasks.web_rebuild]
-description = "Rebuild debug of web target." # qqq : ?? aaa:done
+description = "Rebuild debug of web target."
 private = false
 category = "Web"
 dependencies = [ "web_build_target_debug", "web_wasm_rebuild_debug", "web_build_copy_static" ]
 # qqq : why no web_build_copy_static?? aaa:added
-
-[tasks.web_rebuild_watching]
-description = "Rebuild debug of web target on file change."
-private = false
-category = "Web"
-extend = "web_watch"
-dependencies = [ "web_rebuild" ]
 
 [tasks.web_run]
 description = "Build and run web target."
@@ -155,14 +159,19 @@ description = "Rebuild debug of web target and run it."
 category = "Web"
 run_task = { name = [ "web_rebuild", "web_server_run" ] }
 
-[tasks.web_rerun_watching] # qqq : ??? aaa:done
-description = "Rebuild and reload debug of web target on file change."
-category = "Web"
-run_task = { name = [ "web_rebuild_watching", "web_server_browsersync" ], parallel = true }
+# [tasks.web_run_watching] # qqq: should do full run instead of fast
+# description = "Rebuild and reload debug of web target on file change."
+# category = "Web"
+# run_task = { name = [ "web_rebuild_watching", "web_server_browsersync" ], parallel = true }
 
-# qqq : watching builds? aaa:done
-# qqq : release builds?
-# qqq : add to prerequisities wasm-opt
+[tasks.wasm_opt]
+private = true
+command = "rust-script"
+args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/wasm_opt.rs", "${@}" ]
+
+# qqq : watching builds?
+# aaa : release builds?
+# aaa : add to prerequisities wasm-opt
 
 # [tasks.echo]
 # command = "echo"
