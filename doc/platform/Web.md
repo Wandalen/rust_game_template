@@ -1,5 +1,9 @@
 ## Web
 
+Prerequisites:
+
+- Node.js
+
 To run web target execute:
 ```
 cargo make web_run
