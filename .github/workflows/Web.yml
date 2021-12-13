@@ -1,11 +1,11 @@
 
 name: Web
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [ pull_request ]
+  # push:
+  #   branches: [ 'master' ]
+  # pull_request:
+  #   branches: [ 'master' ]
 
 env:
   CARGO_TERM_COLOR: always
@@ -13,6 +13,9 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    if: ${{ contains(github.event.head_commit.message, '[build]') }}
+
     steps:
       - uses: actions/checkout@v2
       - name: Install latest stable toolchain
