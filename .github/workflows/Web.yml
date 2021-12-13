@@ -14,7 +14,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    if: ${{ contains(github.event.head_commit.message, '[build]') }}
+    if: "startsWith( github.event.head_commit.message, '[build]' )"
 
     steps:
       - uses: actions/checkout@v2
