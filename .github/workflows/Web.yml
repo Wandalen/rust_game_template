@@ -1,0 +1,22 @@
+
+name: Web
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: davidB/rust-cargo-make@v1
+
+      - name: Build project for web
+        run: cargo make web_build
+

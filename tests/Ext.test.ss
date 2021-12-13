@@ -22,15 +22,15 @@ async function trivial ( test ) {
     }   
 
     let got = await a.colorAt( 492, 405 );
-    let expected = [ 1.0, 0, 0 ];
-    test.identical( got, expected );
-
+    let expected = [ 1.0, 0.67, 1 ];
+    test.equivalent( got, expected );
 
   });
 
 }
 
 trivial.timeOut = 60000;
+trivial.accuracy = 0.5;
 
 //
 

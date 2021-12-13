@@ -41,10 +41,12 @@ impl common::Renderer for App
       Init function: https://docs.rs/console_log/0.2.0/console_log/fn.init_with_level.html
       Levels: https://docs.rs/log/0.4.8/log/enum.Level.html
     */
-    let max_log_level = if cfg!( debug_assertions ) { log::Level::Info } else { log::Level::Warn };
-    console_log::init_with_level( max_log_level ).expect( "Could not initialize logger" );
+    console_log::init_with_level( log::Level::Warn ).expect( "Could not initialize logger" );
 
+    #[ cfg( debug ) ]
     std::panic::set_hook( Box::new( console_error_panic_hook::hook ) );
+
+    // panic!( "abc!" );
 
     web_sys::window()
     .and_then( | win | win.document() )
@@ -57,6 +59,7 @@ impl common::Renderer for App
 
 pub fn main()
 {
+  println!( "xxx" );
   let app = App::new();
   app.run();
 }

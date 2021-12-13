@@ -1,12 +1,7 @@
-
-/* qqq : move all code to renderer/src and maybe remove submodules?
-*/
+#![allow( dead_code )]
 
 /* qqq : make bin targets for each platform
 is it possible to cross-compile: osx, windows, linux...?
-*/
-
-/* qqq : main should be single
 */
 
 /* qqq : esc should terminate application */
@@ -16,26 +11,27 @@ is it possible to cross-compile: osx, windows, linux...?
 /* qqq : seems webgl backend of WebGPU is broken? aaa:repaired */
 
 /* qqq : all variables should be move to public config. now template have lots of variables inlined into different files */
+
+#[cfg( feature = "wee_alloc" )]
+#[global_allocator]
+static ALLOC : wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
 #[cfg( target_arch = "wasm32" )]
 use winit::platform::web::WindowExtWebSys;
 
 #[cfg( target_arch = "wasm32" )]
-use web_log::println as println;
+#[allow( unused_imports )]
+use web_log::{ println as println, eprintln as eprintln };
 
 pub use wgpu;
 pub use winit;
 pub use pollster;
-
-// pub use self::common::*;
 
 pub use std::borrow::Cow;
 pub use byte_slice_cast::*;
 
 /* qqq : remove what possible aaa:done*/
 pub use wgpu::util::DeviceExt;
-
-/* qqq : remove aaa:done */
-
 
 pub trait Renderer
 {
@@ -55,7 +51,7 @@ pub trait Renderer
 #[derive( Debug, Copy, Clone )]
 struct TimeUniformData
 {
-  time : [ f32; 4 ],
+  time : [ i32; 4 ],
 }
 
 impl TimeUniformData
@@ -64,7 +60,7 @@ impl TimeUniformData
   {
     Self
     {
-      time : [ 0.0, 0.0, 0.0, 0.0 ],
+      time : [ 0, 0, 0, 0 ],
     }
   }
 }
@@ -118,21 +114,13 @@ impl Context
   {
     let size = window.inner_size();
 
-    // #[cfg(target_arch = "wasm32")]
-    // log::debug!( "{:?}", size );
-    // qqq : discuss
-    println!( "size : {:?}", &size );
-
-    eprintln!( "Get instance" );
     #[cfg( not( target_os = "android" ) )]
     let instance = wgpu::Instance::new( wgpu::Backends::all() );
     #[cfg( target_os = "android" )]
     let instance = wgpu::Instance::new( wgpu::Backends::GL );
 
-    eprintln!( "Get surface" );
     let surface = unsafe { instance.create_surface( window ) };
 
-    eprintln!( "Get adapter" );
     let adapter_options = wgpu::RequestAdapterOptions
     {
       power_preference : wgpu::PowerPreference::default(),
@@ -145,7 +133,7 @@ impl Context
     .expect( "Failed to find an appropriate adapter" );
 
     // wgpu::Limits::default().using_resolution(adapter.limits());
-    eprintln!( "using my custom LIMITS!" );
+    eprintln!( "Using custom LIMITS!, qqq: investigate me" );
     // eprintln!(
     //     "wgpu::Limits::downlevel_webgl2_defaults()
     // .using_resolution(adapter.limits())"
@@ -153,7 +141,7 @@ impl Context
     // limits: wgpu::Limits::downlevel_webgl2_defaults()
     //     .using_resolution(adapter.limits()),
     let limits = wgpu::Limits
-     {
+    {
       max_texture_dimension_1d : 2048,
       max_texture_dimension_2d : 2048,
       max_texture_dimension_3d : 256,
@@ -182,7 +170,6 @@ impl Context
       max_vertex_buffer_array_stride : 255,
     };
 
-    eprintln!( "Get device and queue" );
     // Create the logical device and command queue
     let ( device, queue ) = adapter.request_device( &wgpu::DeviceDescriptor
     {
@@ -194,7 +181,6 @@ impl Context
     .await
     .expect( "Failed to create device" );
 
-    eprintln!( "Get shader" );
     // Load the shaders from disk
     let shader = device.create_shader_module( &wgpu::ShaderModuleDescriptor
     {
@@ -251,10 +237,8 @@ impl Context
       label: Some( "time_bind_group" ),
     });
 
-    /* qqq : add uniform time */
     /* - uniform - */
 
-    eprintln!( "Get pipeline layout" );
     let pipeline_layout = device.create_pipeline_layout( &wgpu::PipelineLayoutDescriptor
     {
       label : None,
@@ -265,10 +249,8 @@ impl Context
       push_constant_ranges : &[],
     });
 
-    eprintln!( "Get swap chain format" );
     let swapchain_format = surface.get_preferred_format( &adapter ).unwrap();
 
-    eprintln!( "Get render pipeline" );
     let render_pipeline = device.create_render_pipeline( &wgpu::RenderPipelineDescriptor
     {
       label : None,
@@ -300,10 +282,8 @@ impl Context
       present_mode : wgpu::PresentMode::Fifo,
     };
 
-    eprintln!( "Surface configure!" );
     surface.configure( &device, &config );
 
-    eprintln!( "Setup DONE!" );
     Self
     {
 
@@ -326,10 +306,10 @@ impl Context
 // Event handlers
 //
 
-pub fn window_resize_handle( c: &mut Context, size : winit::dpi::PhysicalSize< u32 > )
+pub fn window_resize_handle( c : &mut Context, size : winit::dpi::PhysicalSize< u32 > )
 {
     // Reconfigure the surface with the new size
-    println!( "Resized to: {:#?}", size );
+    // println!( "Resized to: {:#?}", size );
     c.config.width = size.width;
     c.config.height = size.height;
     c.surface.configure( &c.device, &c.config );
@@ -370,14 +350,7 @@ pub fn window_redraw_handle( c: &mut Context )
   .get_current_texture()
   .expect( "Failed to acquire next swap chain texture" );
 
-  if c.time_uniform_data.time[ 0 ] >= 1.0
-  {
-    c.time_uniform_data.time[ 0 ] = 0.001;
-  }
-  else
-  {
-    c.time_uniform_data.time[ 0 ] += 0.001;
-  }
+  c.time_uniform_data.time[ 0 ] += 1;
 
   // c.queue.write_buffer( &c.time_buffer, 0, &[ c.time_uniform_data ].as_byte_slice() );
   c.queue.write_buffer( &c.time_buffer, 0, unsafe{ any_as_u8_slice( &c.time_uniform_data ) } );

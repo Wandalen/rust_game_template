@@ -1,4 +1,5 @@
-# Rust Game Template [![stability-experimental](https://img.shields.io/badge/stability-experimental-orange.svg)](https://github.com/emersion/stability-badges#experimental) [![ios](https://github.com/Wandalen/rust_game_template/actions/workflows/iOS.yml/badge.svg)](https://github.com/Wandalen/rust_game_template/actions/workflows/iOS.yml) [![android](https://github.com/Wandalen/rust_game_template/actions/workflows/Android.yml/badge.svg)](https://github.com/Wandalen/rust_game_template/actions/workflows/Android.yml)
+# Rust Game Template
+[![stability-experimental](https://img.shields.io/badge/stability-experimental-orange.svg)](https://github.com/emersion/stability-badges#experimental) [![ios](https://github.com/Wandalen/rust_game_template/actions/workflows/iOS.yml/badge.svg)](https://github.com/Wandalen/rust_game_template/actions/workflows/iOS.yml) [![android](https://github.com/Wandalen/rust_game_template/actions/workflows/Android.yml/badge.svg)](https://github.com/Wandalen/rust_game_template/actions/workflows/Android.yml) [![desktop](https://github.com/Wandalen/rust_game_template/actions/workflows/Desktop.yml/badge.svg)](https://github.com/Wandalen/rust_game_template/actions/workflows/Desktop.yml) [![web](https://github.com/Wandalen/rust_game_template/actions/workflows/Web.yml/badge.svg)](https://github.com/Wandalen/rust_game_template/actions/workflows/Web.yml)
 
 Neutral cross-platform Rust game template.
 
@@ -8,15 +9,13 @@ Neutral cross-platform Rust game template.
 cargo install cargo-make
 ```
 
-## How to run
-
-**Desktop:**
+## How to run on Desktop
 
 ```
 cargo make desktop_run
 ```
 
-**Web:**
+## How to run on Web
 
 Install dev dependencies:
 ```
@@ -37,7 +36,7 @@ cargo make web_rerun
 
 This command doesn't perform crate installation checks to reduce total build time.
 
-**Android:**
+## How to run on Android
 
 Prerequisites:
 
@@ -51,7 +50,7 @@ Connect your Android device or start an emulator and then execute:
 cargo make run_android
 ```
 
-**iOS:**
+## How to run on iOS
 
 Create the file `private.toml` at the root of the repo and add next fields:
 
@@ -77,12 +76,15 @@ cargo make run_ios
 
 Generated Xcode project can be found at `module/renderer/platform/ios/xcode`.
 
-
 ## Commands
 
-Avaiable commands:
+To get list of commands use command `cargo make --list-all-steps`
 
 ```
+Prerequisites
+----------
+web_install_dependencies - Install web dependencies
+
 Android
 ----------
 build_android - Build android target. Rebuilds on change.
@@ -93,10 +95,6 @@ Desktop
 desktop_build - Build desktop target.
 desktop_run - Run desktop target
 desktop_run_watching - Run desktop target. Rebuilds app on change
-
-Prerequisites
-----------
-web_install_dependencies - Install web dependencies
 
 Web
 ----------
@@ -111,7 +109,3 @@ build_ios - Build iOS target.
 clean_ios - Cleanup generated files of iOS target.
 run_ios - Run iOS target. Rebuilds on change.
 ```
-
-To execute the command use following syntax ```cargo make [command]```.
-
-Execute `cargo make --list-all-steps` to get list of commands.

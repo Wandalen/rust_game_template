@@ -2,15 +2,15 @@
 
 require( 'wTesting' );
 
-const Puppeteer = require( 'puppeteer' );
-const Revisions = require( 'puppeteer/lib/cjs/puppeteer/revisions.js' );
 const Express = require( 'express' );
 const cv = require( 'opencv4nodejs-prebuilt' );
 require( 'wpuppet' );
-const BrowserStackLocal = require( 'browserstack-local' );
 
+
+const _ = _global_.wTools;
 const __ = _globals_.testing.wTools;
-const puppet = _global_.wTools.puppet;
+
+__.include( 'wTestVisual' );
 
 //
 
@@ -50,64 +50,49 @@ async function onRoutineEnd ( tro )
 
 //
 
-function browserStackBegin () 
-{
+async function browserStackBegin () {
+
   const self = this;
-  const ready = __.Consequence();
 
   if( !self.browserStackEnabled )
   return false;
 
-  self.browserStackLocal = new BrowserStackLocal.Local();
-  self.browserStackLocal.start( { 'key': self.browserStackAccessKey }, () => 
-  {
-      ready.take( null );
-  });
+  __.assert( __.strDefined( self.browserStackUser ), "Env variable BROWSERSTACK_USER should be set." )
+  __.assert( __.strDefined( self.browserStackAccessKey ), "Env variable BROWSERSTACK_KEY should be set." )
 
-  return ready;
+  self.browserStackLocal = await _.test.visual.browserstack.localBegin( self.browserStackAccessKey )
+  return null;
+
 }
 
 //
 
-function browserStackEnd () 
-{
+function browserStackEnd () {
+
   const self = this;
 
   if( !self.browserStackEnabled )
   return false;
+  return _.test.visual.browserstack.localEnd( self.browserStackLocal );
 
-  const ready = __.Consequence();
-  self.browserStackLocal.stop( () => ready.take( null ) );
-  return ready;
 }
 
 //
 
 async function browserStackSessionStatusSet( tro )
 {
-  let context = this;
+    let context = this;
 
-  if( !context.browserStackEnabled ) return;
-  if( !context.browserStackCurrentSession ) return 
+    if( !context.browserStackEnabled ) return;
+    if( !context.browserStackCurrentSession ) return 
 
-  const sid = context.browserStackCurrentSession;
-  const status = tro.report.outcome ? 'passed' : 'failed';
-  const reason = !tro.report.outcome ? tro.report.reason || 'test check failed' : '';
-  const url = `https://api.browserstack.com/automate/sessions/${sid}.json`;
-  const data = { status, reason }
-  const opts = { json : true, username : context.browserStackUser, password: context.browserStackAccessKey  };
-  const putReady = __.Consequence();
-
-  needle.put( url, data, opts, ( err, resp ) => 
-  {
-    if( resp && resp.statusMessage === 'OK' )
-    putReady.take( resp );
-    else
-    putReady.error( __.err( `Failed to set status of BrowserStack session ${sid}. \nErr:${err}, \nResponse:${resp}` ) )
-
-  });
-
-  return putReady;
+    return _.test.visual.browserstack.sessionStatusSet
+    ({ 
+      sid: context.browserStackCurrentSession, 
+      user: context.browserStackUser, 
+      key: context.browserStackAccessKey,
+      tro 
+    })
 }
 
 //
@@ -133,22 +118,16 @@ async function browserStackSessionClose()
 
 let ChromiumInstalled = false;
 
-async function chromiumDownloadMaybe () 
+async function chromiumDownloadMaybe ( suite ) 
 {
   if( ChromiumInstalled ) return true;
-  const browserFetcher = Puppeteer.createBrowserFetcher();
-  const targetRevision = Revisions.PUPPETEER_REVISIONS.chromium;
-  const localRevisions = await browserFetcher.localRevisions();
-  if( !__.longHas( localRevisions, targetRevision ) ) {
-
-      suite.logger.log( `Downloading Chromium ${targetRevision}...` );
-      await browserFetcher.download( targetRevision );
-      suite.logger.log( `Downloaded.` );
-
+  const downloadedVersion = await _.test.visual.puppeteer.chromiumDownload();
+  if( downloadedVersion ) 
+  {
+    suite.logger.log( `Downloaded Chromium ${downloadedVersion}` );
   }
   ChromiumInstalled = true;
   return true;
-
 }
 
 //
@@ -194,13 +173,25 @@ function assetFor ( test, assetName )
   const context = this;
   const routinePath = __.path.join( context.suiteTempPath, test.name );
 
-  const a = test.assetFor({ assetName, routinePath });
+  const a = _.test.visual.assetFor
+  ({
+    test,
+    assetName,
+    routinePath,
+    browserDimensions: context.browserDimensions,
+    browserStackEnabled: context.browserStackEnabled,
+    browserStackUser: context.browserStackUser,
+    browserStackAccessKey: context.browserStackAccessKey,
+    browserStackIdleTimeoutInSec: context.browserStackIdleTimeoutInSec,
+    browserStackConfigs: context.configs,
+
+  });
 
   a.serverPath = __.uri.join( `http://localhost:${context.port}` );
   a.canvasSelector = 'canvas';
-  a.inBrowser = inBrowser;
-  a.abs = abs;
-  a.memoryUsedGb = memoryUsedGb;
+  a.onBrowserStackSessionChanged = onBrowserStackSessionChanged;
+  a.onPageLoad = onPageLoad;
+  a.onBeforeRoutine = onBeforeRoutine;
   a.colorAt = colorAt;
   a.avgColorAt = avgColorAt;
   a.canvasSave = canvasSave;
@@ -208,240 +199,30 @@ function assetFor ( test, assetName )
 
   return a;
 
-  /* */
+  //
 
-  async function inBrowser ( routine ) 
+  function onBrowserStackSessionChanged( sid ) 
   {
-    if( context.browserStackEnabled ) return runOnBrowserStack.call( this );
-
-    return act.call( this );
-
-    function optionsForm( strategy, remoteConfig, mobile ) 
-    {
-      strategy = strategy ?? 'Puppeteer';
-      mobile = mobile ?? false;
-      remoteConfig = remoteConfig ?? null;
-      let system = puppet.System({ strategy });
-      system.form();
-      let browser = remoteConfig ? 'browserstack' : null;
-      let puppetOptions = 
-      {
-          dimensions: context.browserDimensions,
-          system,
-          remoteConfig,
-          browser,
-      }
-      return { puppetOptions, mobile };
-    }
-
-    //
-    
-    function runOnBrowserStack() 
-    {
-        const { desktop, mobile } = generateBrowserStackConfigurations.call( this );
-        let ready = __.Consequence().take( null );
-
-        desktop.forEach( ( c ) => 
-        {   
-          const testGroup = `${c.os} ${c.os_version} ${c.browser} ${c.browser_version}`;
-          const o = optionsForm( 'Puppeteer', c );
-          ready.tap( () =>  test.open( testGroup ) );
-          ready.then( () => __.Consequence.From( act.call( this, o ) ) );
-          ready.tap( () =>  test.close( testGroup ) );
-        })
-
-        mobile.forEach( ( c ) => 
-        {
-          const { deviceName } = c.capabilities[ 'bstack:options' ];
-          const testGroup = `${deviceName}`;
-          const o = optionsForm( 'WebDriverIO', c, true );
-          ready.tap( () =>  test.open( testGroup ) );
-          ready.then( () => __.Consequence.From( act.call( this, o ) ) ) 
-          ready.tap( () =>  test.close( testGroup ) );
-
-        })
-
-        return ready;
-    }
-
-    //
-
-    function generateBrowserStackConfigurations() 
-    {
-      const desktop = [];
-      const mobile = [];
-
-      context.configs.forEach( ( src ) => 
-      {
-        const splits = __.strSplitNonPreserving
-        ({ 
-          src, 
-          delimeter : [ ';', '-' ] 
-        });
-
-        if( splits.length === 1 ) 
-        {
-          const [ deviceName ] = splits;
-          const capabilities = 
-          {
-            'bstack:options' : 
-            {
-              "projectName" : __.path.name( __.path.dir( test.suite.suiteFilePath ) ),
-              "buildName" : __.path.name( __.path.dir( test.suite.suiteFilePath ) ),
-              "sessionName" : test.name,
-              "deviceName" : deviceName,
-              "realMobile" : "true",
-              "local" : true,
-              "debug" : "true",
-              "consoleLogs" : "verbose",
-            }
-          }
-          const config = 
-          {
-            user : context.browserStackUser,
-            key : context.browserStackAccessKey,
-            capabilities,
-            logLevel : 'error',
-            host: 'hub-cloud.browserstack.com',
-          }
-          mobile.push( config );
-        }
-        else 
-        {
-          const [ os, os_version, browser, browser_version ] = splits;
-          const config = 
-          { 
-            build: __.path.name( __.path.dir( test.suite.suiteFilePath ) ),
-            name: test.name,
-            
-            browser,
-            browser_version,
-            os,
-            os_version,
-
-            'browserstack.username': context.browserStackUser,
-            'browserstack.accessKey': context.browserStackAccessKey,
-            'browserstack.idleTimeout' : context.browserStackIdleTimeoutInSec,
-            'browserstack.local': 'true',
-          }
-          desktop.push( config );
-        }
-      });
-
-      return { desktop, mobile };
-    }
-
-    async function act( o ) 
-    {
-
-      o = o || optionsForm();
-
-      this.mobile = o.mobile;
-
-      try 
-      {
-        this.browser = await puppet.windowOpen( o.puppetOptions );
-        this.page = await this.browser.pageOpen();
-
-        if( this.tro.verbosity >= 5 ) {
-
-            registerPageHandlers( this.page );
-
-        }
-
-        if( context.browserStackEnabled ) {
-
-            const sessionDetails = await this.page.sessionDetailsGet();
-            context.browserStackCurrentSession = sessionDetails.hashed_id;
-        }
-
-        // __.assert( __.strDefined( this.entryPath ), 'Field entryPath should be defined on object returned by assetFor before execution of routine inBrowser.' );
-
-        // const entryPathFull = this.fileProvider.path.join( __dirname, this.entryPath );
-        // __.assert( this.fileProvider.fileExists( entryPathFull ), `Entry path: ${entryPathFull} doesn't exist.` );
-
-        await this.page.goto( this.serverPath );
-
-        await routine( this.page );
-
-        await this.browser.close();
-
-      }
-      catch ( err ) 
-      {
-        __.errAttend( err );
-
-        if( this.browser ) 
-        {
-          await this.browser.close();
-        }
-
-        throw __.err( err );
-
-      }
-
-      return null;
-
-    }
-
-    //
-
-    function registerPageHandlers( page ) 
-    {
-      page.on( 'console', async ( msg ) => 
-      {
-        console.log( msg.text() );
-      });
-
-      page.on( 'requestfailed', ( request ) => 
-      {
-        console.log( __.errBrief( `Failed to load: ${request.url()} ${request.failure().errorText}` ) );
-      });
-
-      page.on( 'pageerror', ( err ) => 
-      {
-        __.errLogOnce( `Page error: ${err.toString()}` );
-      });
-    }
-
+    context.browserStackCurrentSession = sid;
   }
 
   //
 
-  function abs ( ...args ) 
+  async function onPageLoad()
   {
-    const tro = this.tro;
+    await this.page.goto( this.serverPath );
+  }   
 
-    let routinePath = this.routinePath;
+  //
 
-    if( tro.case ) 
-    {
-      const splitted = __.strSplitNonPreserving( tro.case, ' ' );
-      splitted.unshift( routinePath );
-      routinePath = splitted.join( '_' );
-    }
-
-    args.unshift( routinePath );
-
-    return __.uri.join.apply( __.uri, args );
+  async function onBeforeRoutine() 
+  {
   }
 
   //
 
-  async function memoryUsedGb () {
-
-    return this.page.evaluate( () =>
-    {
-      const global = window;
-      let performance = global.performance;
-      return performance.memory.totalJSHeapSize / Math.pow( 1024, 3 );
-    });
-  }
-
-  //
-
-  async function colorAt( x, y ) {
-
+  async function colorAt( x, y ) 
+  {
     const path = this.mobile ? this.abs( 'canvas.png' ) : undefined;
     const buffer = await this.page.elementScreenshot( this.canvasSelector, path );
     const src = cv.imdecode( buffer );
@@ -452,8 +233,8 @@ function assetFor ( test, assetName )
 
   //
 
-  async function avgColorAt( x, y, x2, y2 ) {
-
+  async function avgColorAt( x, y, x2, y2 ) 
+  {
     __.assert( x2 > x );
     __.assert( y2 > y );
 
@@ -483,8 +264,8 @@ function assetFor ( test, assetName )
 
   async function canvasSave() 
   {
-    const path = this.mobile ? this.abs( 'canvas.png' ) : undefined;
-    await this.page.elementScreenshot( this.canvasSelector, path );
+    const canvasPath = this.abs( 'canvas.png' );
+    await this.page.elementScreenshot( this.canvasSelector, canvasPath );
   }
 
   //
