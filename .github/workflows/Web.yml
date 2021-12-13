@@ -1,11 +1,7 @@
 
 name: Web
 
-on:
-  # push:
-  #   branches: [ 'alpha' ]
-  pull_request:
-    branches: [ 'alpha' ]
+on : [ pull_request ]
 
 env:
   CARGO_TERM_COLOR: always
