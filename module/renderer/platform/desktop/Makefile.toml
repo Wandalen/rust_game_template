@@ -59,6 +59,19 @@ dependencies = [ "prepare_windows_target_on_mac" ]
 command = "cargo"
 args = [ "build", "--release", "--target", "x86_64-pc-windows-gnu", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml" ]
 
+[tasks.copy_binaries]
+private = true
+script_runner = "@shell"
+script = '''
+mkdir -p out/macos/release
+mkdir -p out/linux/release
+mkdir -p out/windows/release
+cp target/release/game_template out/macos/release/game_template
+cp target/x86_64-unknown-linux-gnu/release/game_template out/linux/release/game_template
+cp target/x86_64-pc-windows-gnu/release/game_template.exe out/windows/release/game_template.exe
+cp target/x86_64-pc-windows-gnu/release/game_template.dll out/windows/release/game_template.dll
+'''
+
 # Public
 
 [tasks.desktop_build]
