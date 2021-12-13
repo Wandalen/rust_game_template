@@ -11,67 +11,6 @@ skip_crate_env_info = true
 private = true
 watch = { postpone = true, watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../src/" ] }
 
-[tasks.desktop_build_release]
-description = "Build desktop target for current OS."
-private = true
-category = "Build"
-command = "cargo"
-args = [ "build", "--release", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml" ]
-
-[tasks.prepare_linux_target_on_mac]
-private = true
-script_runner = "@shell"
-script = '''
-rustup target add x86_64-unknown-linux-gnu
-brew tap SergioBenitez/osxct
-brew install x86_64-unknown-linux-gnu
-rm -rf .cargo
-mkdir .cargo
-echo '[target.x86_64-unknown-linux-gnu]' >> .cargo/config
-echo 'linker = "x86_64-unknown-linux-gnu-gcc"' >> .cargo/config
-'''
-
-[tasks.desktop_build_linux]
-description = "Build desktop target for GNU/Linux distributives."
-private = true
-category = "Build"
-dependencies = [ "prepare_linux_target_on_mac" ]
-command = "cargo"
-args = [ "build", "--release", "--target", "x86_64-unknown-linux-gnu", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml" ]
-
-[tasks.prepare_windows_target_on_mac]
-private = true
-script_runner = "@shell"
-script = '''
-brew install mingw-w64
-rm -rf .cargo
-mkdir .cargo
-echo '[target.x86_64-pc-windows-gnu]' >> .cargo/config
-echo 'linker = "x86_64-w64-mingw32-gcc"' >> .cargo/config
-rustup target add x86_64-pc-windows-gnu
-'''
-
-[tasks.desktop_build_windows]
-description = "Build desktop target for Windows."
-private = true
-category = "Build"
-dependencies = [ "prepare_windows_target_on_mac" ]
-command = "cargo"
-args = [ "build", "--release", "--target", "x86_64-pc-windows-gnu", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml" ]
-
-[tasks.copy_binaries]
-private = true
-script_runner = "@shell"
-script = '''
-mkdir -p out/macos/release
-mkdir -p out/linux/release
-mkdir -p out/windows/release
-cp target/release/game_template out/macos/release/game_template
-cp target/x86_64-unknown-linux-gnu/release/game_template out/linux/release/game_template
-cp target/x86_64-pc-windows-gnu/release/game_template.exe out/windows/release/game_template.exe
-cp target/x86_64-pc-windows-gnu/release/game_template.dll out/windows/release/game_template.dll
-'''
-
 # Public
 
 [tasks.desktop_build]
@@ -79,8 +18,8 @@ description = "Build debug of desktop target."
 private = false
 category = "Desktop"
 command = "cargo"
-args = [ 
-  "build", 
+args = [
+  "build",
   "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
   "--bin", "desktop"
 ]
@@ -90,8 +29,8 @@ description = "Build release of desktop target."
 private = false
 category = "Desktop"
 command = "cargo"
-args = [ 
-  "build", 
+args = [
+  "build",
   "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
   "--bin", "desktop",
   "--release"
@@ -102,7 +41,7 @@ description = "Run debug of desktop target"
 private = false
 category = "Desktop"
 command = "cargo"
-args = [ 
+args = [
   "run",
   "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
   "--bin", "desktop"
