@@ -28,6 +28,6 @@ jobs:
       - uses: quizlet/commit-changes@v0.2.0
         with:
           token: ${{ secrets.PRIVATE_GITHUB_TOKEN }}
-          message: Automated commit
+          message: Release binaries
           glob-patterns: out/
 
