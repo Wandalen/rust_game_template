@@ -1,10 +1,10 @@
 name: Desktop
 
-on: [ pull_request ]
+on:
   # push:
-  #   branches: [ 'master' ]
-  # pull_request:
-  #   branches: [ 'master' ]
+  #   branches: [ 'alpha' ]
+  pull_request:
+    branches: [ 'alpha' ]
 
 env:
   CARGO_TERM_COLOR: always
