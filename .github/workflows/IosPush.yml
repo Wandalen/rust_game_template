@@ -1,5 +1,5 @@
 
-name: iOSPush
+name: IosPush
 
 on :
   push:
@@ -11,5 +11,5 @@ env:
 jobs:
   build:
     if: "startsWith( github.event.head_commit.message, '[build]' )"
-    uses: Learn-Together-Pro/rust_game_template/.github/workflows/iOSCommon.yml@alpha
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/IosCommon.yml@alpha
 

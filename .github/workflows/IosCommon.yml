@@ -1,4 +1,4 @@
-name: iOSCommon
+name: IosCommon
 
 on: [ workflow_call ]
 

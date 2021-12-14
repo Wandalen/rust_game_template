@@ -1,5 +1,5 @@
 
-name: iOSPr
+name: IosPr
 
 on :
   pull_request:
@@ -38,5 +38,5 @@ jobs:
   build:
     needs: check
     if: ${{ needs.check.outputs.shouldRun != 'false' }}
-    uses: Learn-Together-Pro/rust_game_template/.github/workflows/iOSCommon.yml@alpha
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/IosCommon.yml@alpha
 
