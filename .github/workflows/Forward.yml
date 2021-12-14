@@ -3,7 +3,7 @@ name : Forward
 
 on :
   workflow_run :
-    workflows : [ 'Android', 'Desktop', 'iOS', 'Web' ]
+    workflows : [ 'AndroidPush', 'DesktopPush', 'IosPush', 'WebPush' ]
     types : [ completed ]
 
 jobs :
