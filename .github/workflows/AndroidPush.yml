@@ -1,8 +1,6 @@
 
 name: AndroidPush
 
-on: [ workflow_call ]
-
 on :
   push :
     branches : [ master ]
