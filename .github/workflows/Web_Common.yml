@@ -1,7 +1,7 @@
 
-name: Web
+name: WebCommon
 
-on : [ push, pull_request ]
+on: [ workflow_call ]
 
 env:
   CARGO_TERM_COLOR: always
@@ -9,9 +9,6 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    if: "startsWith( github.event.head_commit.message, '[build]' )"
-
     steps:
       - uses: actions/checkout@v2
       - name: Install latest stable toolchain
