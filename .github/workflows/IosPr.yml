@@ -32,7 +32,7 @@ jobs:
           echo "::set-output name=message::$latest_commit_message"
       - name : Exit with fail
         id: run
-        if: "${{ !startsWith( steps.message.outputs.message, '[build]' ) }}"
+        if: "${{ !contains( steps.message.outputs.message, '[build]' ) }}"
         run: echo "::set-output name=shouldRun::false"
 
   build:
