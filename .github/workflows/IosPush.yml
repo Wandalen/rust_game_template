@@ -1,7 +1,9 @@
 
 name: IosPush
 
-on: [ workflow_call ]
+on :
+  push :
+    branches : [ alpha ]
 
 env:
   CARGO_TERM_COLOR: always

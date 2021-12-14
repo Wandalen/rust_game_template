@@ -3,8 +3,9 @@ name: AndroidPush
 
 on: [ workflow_call ]
 
-env:
-  CARGO_TERM_COLOR: always
+on :
+  push :
+    branches : [ master ]
 
 jobs:
   build:
