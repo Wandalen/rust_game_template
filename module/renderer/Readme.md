@@ -17,11 +17,6 @@ cargo make desktop_run
 
 ## How to run on Web
 
-Install dev dependencies:
-```
-cargo make web_install_dependencies
-```
-
 Run web target:
 
 ```
@@ -31,7 +26,7 @@ cargo make web_run
 To speedup incremental builds use:
 
 ```
-cargo make web_rerun
+cargo make web_rerun_watching
 ```
 
 This command doesn't perform crate installation checks to reduce total build time.

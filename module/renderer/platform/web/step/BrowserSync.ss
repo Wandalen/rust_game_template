@@ -4,6 +4,7 @@ let rootPath = path.join( __dirname, '../../../../..' );
 
 let o = 
 {
-  server: path.join( rootPath, 'target/web' )
+  server: path.join( rootPath, 'target/web' ),
+  watch: true
 }
 browserSync( o );

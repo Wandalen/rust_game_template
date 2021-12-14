@@ -1,11 +1,7 @@
 
-name: Web
+name: WebCommon
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [ workflow_call ]
 
 env:
   CARGO_TERM_COLOR: always
@@ -15,6 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Install latest stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+            toolchain: stable
+            override: true
       - uses: davidB/rust-cargo-make@v1
 
       - name: Build project for web

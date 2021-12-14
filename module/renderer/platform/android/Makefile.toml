@@ -8,37 +8,66 @@ skip_crate_env_info = true
 
 [tasks.watch_android]
 private = true
-watch = { watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../src/" ] }
+watch = { postpone = true, watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../src/" ] }
 
-[tasks.build_android_target]
+[tasks.build_android_target_debug]
 private = true
 command = "cargo"
-args = [ "apk", "build", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml" ]
+args = [
+  "apk",
+  "build",
+  "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml"
+]
+
+[tasks.build_android_target_release]
+private = true
+command = "cargo"
+args = [
+  "apk",
+  "build",
+  "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
+  "--release"
+]
 
 [tasks.run_android_target]
 private = true
 command = "cargo"
-args = [ "apk", "run", "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml" ]
+args = [
+  "apk",
+  "run",
+  "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml"
+]
 
 # Public
 
 [tasks.build_android]
-description = "Build android target."
+description = "Build debug of android target."
 private = false
-# extend = "watch_android"
 category = "Android"
-dependencies = [ "build_android_target" ]
+dependencies = [ "build_android_target_debug" ]
+
+[tasks.build_android_release]
+description = "Build release of android target."
+private = false
+category = "Android"
+dependencies = [ "build_android_target_release" ]
+
+[tasks.build_android_watching]
+description = "Rebuild android target on file change."
+private = false
+category = "Android"
+extend = "watch_android"
+dependencies = [ "build_android" ]
 
 [tasks.run_android]
 description = "Run android target."
 private = false
-# extend = "watch_android"
 category = "Android"
 dependencies = [ "run_android_target" ]
 
 [tasks.run_android_watching]
-description = "Run android target. Rebuilds on change."
+description = "Rebuild and reaload android target on file change."
 private = false
-extend = "watch_android"
 category = "Android"
-dependencies = [ "run_android_target" ]
+extend = "watch_android"
+dependencies = [ "run_android" ]
