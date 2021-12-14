@@ -11,6 +11,8 @@ env:
 jobs:
   check:
     runs-on : ubuntu-latest
+    outputs:
+      shouldRun: ${{ steps.run.outputs.shouldRun }}
     steps :
       - name: List commits on the pull request
         run: |
@@ -29,11 +31,12 @@ jobs:
           latest_commit_message=$(echo "$latest_commit" | jq -r '.commit.message')
           echo "::set-output name=message::$latest_commit_message"
       - name : Exit with fail
+        id: run
         if: "${{ !startsWith( steps.message.outputs.message, '[build]' ) }}"
-        run: exit 1
+        run: echo "::set-output name=shouldRun::false"
 
   build:
     needs: check
-    if: success()
+    if: ${{ needs.check.outputs.shouldRun != 'false' }}
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/AndroidCommon.yml@alpha
 
