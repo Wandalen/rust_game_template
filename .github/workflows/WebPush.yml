@@ -1,9 +1,7 @@
 
 name: WebPush
 
-on :
-  push:
-    branches: [ 'alpha' ]
+on: [ workflow_call ]
 
 env:
   CARGO_TERM_COLOR: always

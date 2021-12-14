@@ -2,12 +2,22 @@
 name : Forward
 
 on :
-  workflow_run :
-    workflows : [ 'AndroidPush', 'DesktopPush', 'IosPush', 'WebPush' ]
-    types : [ completed ]
+  push :
+    branches : [ alpha ]
 
 jobs :
+
+  android:
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/AndroidPush.yml@alpha
+  desktop:
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/DesktopPush.yml@alpha
+  ios:
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/IosPush.yml@alpha
+  web:
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/WebPush.yml@alpha
+
   merge :
+    needs: [ android, desktop, ios, web ]
     runs-on : ubuntu-latest
     steps :
       - uses: actions/checkout@v2
@@ -17,5 +27,5 @@ jobs :
           github_token : ${{ secrets.PRIVATE_GITHUB_TOKEN }}
           source_ref : alpha
           target_branch : beta
-          commit_message_template : '[Automated] Merged {source_ref} into target {target_branch}'
+          commit_message_template : 'Merged {source_ref} into target {target_branch} [Automated]'
 
