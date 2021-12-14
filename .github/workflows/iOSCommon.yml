@@ -1,10 +1,6 @@
-name: iOS
+name: iOSCommon
 
-on:
-  # push:
-  #   branches: [ 'alpha' ]
-  pull_request:
-    branches: [ 'alpha' ]
+on: [ workflow_call ]
 
 env:
   CARGO_TERM_COLOR: always
@@ -12,9 +8,6 @@ env:
 jobs:
   build:
     runs-on: macos-latest
-
-    if: ${{ contains(github.event.head_commit.message, '[ios]') }}
-
     steps:
       - uses: actions/checkout@v2
       - name: Install latest stable toolchain

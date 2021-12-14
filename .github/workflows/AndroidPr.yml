@@ -1,5 +1,5 @@
 
-name: Web_Pull
+name: AndroidPr
 
 on :
   pull_request:
@@ -35,5 +35,5 @@ jobs:
   build:
     needs: check
     if: success()
-    uses: Learn-Together-Pro/rust_game_template/.github/workflows/Web_Common.yml@alpha
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/AndroidCommon.yml@alpha
 
