@@ -27,7 +27,7 @@ exec echo '[target.x86_64-unknown-linux-gnu]' >> .cargo/config
 exec echo 'linker = "x86_64-unknown-linux-gnu-gcc"' >> .cargo/config
 '''
 
-[tasks.desktop_build_linux]
+[tasks.desktop_build_linux_on_mac]
 description = "Build desktop target for GNU/Linux distributives."
 private = true
 category = "Build"
@@ -57,7 +57,7 @@ exec echo '[target.x86_64-pc-windows-gnu]' >> .cargo/config
 exec echo 'linker = "x86_64-w64-mingw32-gcc"' >> .cargo/config
 '''
 
-[tasks.desktop_build_windows]
+[tasks.desktop_build_windows_on_mac]
 description = "Build desktop target for Windows."
 private = true
 category = "Build"
@@ -72,22 +72,27 @@ args = [
   "--bin", "desktop"
 ]
 
-[tasks.copy_binaries]
+[tasks.prepare_windows_target_on_linux]
 private = true
 script_runner = "@duckscript"
 script = '''
-dst=pwd
-dst = set ${dst}/../../
-# create directories for binaries
-exec mkdir -p ${dst}/out/macos_release
-exec mkdir -p ${dst}/out/linux_release
-exec mkdir -p ${dst}/out/windows_release
-# copy target binaries to out directories
-exec cp ${dst}/target/release/desktop out/macos_release/desktop
-exec cp ${dst}/target/x86_64-unknown-linux-gnu/release/desktop ${dst}/out/linux_release/desktop
-exec cp ${dst}/target/x86_64-pc-windows-gnu/release/desktop.exe ${dst}/out/windows_release/desktop.exe
-exec cp ${dst}/target/x86_64-pc-windows-gnu/release/desktop.dll ${dst}/out/windows_release/desktop.dll
+exec rustup target add x86_64-pc-windows-gnu
+exec sudo apt install mingw-w64
 '''
+
+[tasks.desktop_build_windows_on_linux]
+description = "Build desktop target for Windows."
+private = true
+category = "Build"
+dependencies = [ "prepare_windows_target_on_linux" ]
+command = "cargo"
+args = [
+  "build",
+  "--release",
+  "--target", "x86_64-pc-windows-gnu",
+  "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
+  "--bin", "desktop"
+]
 
 # Build from Windows to Linux and MacOs has many restrictions
 # and needs many time to write some workable task
