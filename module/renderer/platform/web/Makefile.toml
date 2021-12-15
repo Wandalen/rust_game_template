@@ -199,3 +199,6 @@ args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/wasm_opt.rs
 # # for object bin files
 # nm -S -td --size-sort target/x86_64-unknown-linux-gnu/release/x|rustfilt|tac|cut -d' ' -f 2-|less
 #
+# # dependancy graph diagram. graphviz is required
+# cargo depgraph --all-deps --dedup-transitive-deps | dot -Tpng > graph.png
+#
