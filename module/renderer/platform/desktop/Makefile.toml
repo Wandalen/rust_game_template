@@ -23,8 +23,7 @@ exec brew install x86_64-unknown-linux-gnu
 # setup linker for target
 exec rm -rf .cargo
 exec mkdir .cargo
-exec echo '[target.x86_64-unknown-linux-gnu]' >> .cargo/config
-exec echo 'linker = "x86_64-unknown-linux-gnu-gcc"' >> .cargo/config
+writefile .cargo/config "[target.x86_64-unknown-linux-gnu]\nlinker = \"x86_64-unknown-linux-gnu-gcc\""
 '''
 
 [tasks.desktop_build_linux_on_mac]
@@ -53,8 +52,7 @@ exec brew install mingw-w64
 # setup linker for target
 exec rm -rf .cargo
 exec mkdir .cargo
-exec echo '[target.x86_64-pc-windows-gnu]' >> .cargo/config
-exec echo 'linker = "x86_64-w64-mingw32-gcc"' >> .cargo/config
+writefile .cargo/config "[target.x86_64-pc-windows-gnu]\nlinker = \"x86_64-w64-mingw32-gcc\""
 '''
 
 [tasks.desktop_build_windows_on_mac]
