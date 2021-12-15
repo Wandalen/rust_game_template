@@ -14,3 +14,10 @@ skip_core_tasks = true #to skip default predefined flow
 
 [tasks.default]
 extend = "desktop_run"
+
+# [tasks.doc_dep_graph]
+# private = true
+# script_runner = "@duckscript"
+# script = '''
+# cargo depgraph --all-deps --dedup-transitive-deps | dot -Tpng > ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../doc/dep_graph.png
+# '''
