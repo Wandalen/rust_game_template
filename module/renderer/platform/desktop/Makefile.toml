@@ -15,9 +15,12 @@ watch = { postpone = true, watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE
 private = true
 script_runner = "@duckscript"
 script = '''
+# add rust toolchain
 exec rustup target add x86_64-unknown-linux-gnu
+# add OS compilers
 exec brew tap SergioBenitez/osxct
 exec brew install x86_64-unknown-linux-gnu
+# setup linker for target
 exec rm -rf .cargo
 exec mkdir .cargo
 exec echo '[target.x86_64-unknown-linux-gnu]' >> .cargo/config
@@ -43,12 +46,15 @@ args = [
 private = true
 script_runner = "@duckscript"
 script = '''
+# add rustup toolchain
+exec rustup target add x86_64-pc-windows-gnu
+# install mingw for compilation Windows apps
 exec brew install mingw-w64
+# setup linker for target
 exec rm -rf .cargo
 exec mkdir .cargo
 exec echo '[target.x86_64-pc-windows-gnu]' >> .cargo/config
 exec echo 'linker = "x86_64-w64-mingw32-gcc"' >> .cargo/config
-exec rustup target add x86_64-pc-windows-gnu
 '''
 
 [tasks.desktop_build_windows]
@@ -70,14 +76,21 @@ args = [
 private = true
 script_runner = "@duckscript"
 script = '''
-exec mkdir -p out/macos_release
-exec mkdir -p out/linux_release
-exec mkdir -p out/windows_release
-exec cp target/release/desktop out/macos_release/desktop
-exec cp target/x86_64-unknown-linux-gnu/release/desktop out/linux_release/desktop
-exec cp target/x86_64-pc-windows-gnu/release/desktop.exe out/windows_release/desktop.exe
-exec cp target/x86_64-pc-windows-gnu/release/desktop.dll out/windows_release/desktop.dll
+dst=pwd
+dst = set ${dst}/../../
+# create directories for binaries
+exec mkdir -p ${dst}/out/macos_release
+exec mkdir -p ${dst}/out/linux_release
+exec mkdir -p ${dst}/out/windows_release
+# copy target binaries to out directories
+exec cp ${dst}/target/release/desktop out/macos_release/desktop
+exec cp ${dst}/target/x86_64-unknown-linux-gnu/release/desktop ${dst}/out/linux_release/desktop
+exec cp ${dst}/target/x86_64-pc-windows-gnu/release/desktop.exe ${dst}/out/windows_release/desktop.exe
+exec cp ${dst}/target/x86_64-pc-windows-gnu/release/desktop.dll ${dst}/out/windows_release/desktop.dll
 '''
+
+# Build from Windows to Linux and MacOs has many restrictions
+# and needs many time to write some workable task
 
 # Public
 
