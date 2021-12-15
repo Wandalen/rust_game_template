@@ -1,17 +1,13 @@
-name: iOS
+name: AndroidCommon
 
-on:
-  push:
-    branches: [ 'master' ]
-  pull_request:
-    branches: [ 'master' ]
+on: [ workflow_call ]
 
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -24,7 +20,6 @@ jobs:
         with:
           path: |
             ~/.cargo/bin/
-            ~/.cargo-mobile/
             ~/.cargo/registry/index/
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
@@ -33,16 +28,10 @@ jobs:
             module/renderer/platform/*/target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - uses: davidB/rust-cargo-make@v1
-      - name: Install dependencies
-        run: |
-          brew install ios-deploy
-          brew install xcodegen
-      - name: Create private config file
-        env:
-           PRIVATE_TOML: ${{ secrets.PRIVATE_CONFIG }}
-        run: 'echo "$PRIVATE_TOML" > private.toml'
-        shell: bash
       - name: Build project
-        run: cargo make build_ios
+        run: |
+              unset ANDROID_HOME
+              rustup target add aarch64-linux-android
+              cargo make build_android
 
 

@@ -5,15 +5,7 @@ use crate::common::Renderer;
 #[cfg( target_arch = "wasm32" )]
 use winit::platform::web::WindowExtWebSys;
 
-
-
-
-// /* qqq : output file is too large 10mb
-// */
-
-// /* qqq : implement release build
-// */
-
+// qqq : implement release build
 
 struct App;
 

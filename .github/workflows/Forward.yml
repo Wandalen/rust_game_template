@@ -2,20 +2,36 @@
 name : Forward
 
 on :
-  workflow_run :
-    workflows : [ 'Android', 'Desktop', 'iOS', 'Web' ]
-    types : [ completed ]
+  push :
+    branches : [ alpha ]
+
+env:
+  CARGO_TERM_COLOR: always
 
 jobs :
-  merge :
+
+  android:
+    if: "contains( github.event.head_commit.message, '[build]' )"
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/AndroidCommon.yml@alpha
+  desktop:
+    if: "contains( github.event.head_commit.message, '[build]' )"
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/DesktopCommon.yml@alpha
+  ios:
+    if: "contains( github.event.head_commit.message, '[build]' )"
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/IosCommon.yml@alpha
+  web:
+    if: "contains( github.event.head_commit.message, '[build]' )"
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/WebCommon.yml@alpha
+
+  forward :
+    needs: [ android, desktop, ios, web ]
     runs-on : ubuntu-latest
-    if : ${{ github.event.workflow_run.conclusion == 'success' }}
     steps :
-      - uses : actions/checkout@v2
+      - uses: actions/checkout@v2
       - uses : everlytic/branch-merge@1.1.2
         with :
           github_token : ${{ secrets.PRIVATE_GITHUB_TOKEN }}
           source_ref : alpha
           target_branch : beta
-          commit_message_template : '[Automated] Merged {source_ref} into target {target_branch}'
+          commit_message_template : 'Merged {source_ref} into target {target_branch} [Automated]'
 

@@ -1,10 +1,6 @@
-name: Desktop
+name: DesktopCommon
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [ workflow_call ]
 
 env:
   CARGO_TERM_COLOR: always
