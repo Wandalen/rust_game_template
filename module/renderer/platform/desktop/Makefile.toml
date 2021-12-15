@@ -11,6 +11,74 @@ skip_crate_env_info = true
 private = true
 watch = { postpone = true, watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../src/" ] }
 
+[tasks.prepare_linux_target_on_mac]
+private = true
+script_runner = "@duckscript"
+script = '''
+exec rustup target add x86_64-unknown-linux-gnu
+exec brew tap SergioBenitez/osxct
+exec brew install x86_64-unknown-linux-gnu
+exec rm -rf .cargo
+exec mkdir .cargo
+exec echo '[target.x86_64-unknown-linux-gnu]' >> .cargo/config
+exec echo 'linker = "x86_64-unknown-linux-gnu-gcc"' >> .cargo/config
+'''
+
+[tasks.desktop_build_linux]
+description = "Build desktop target for GNU/Linux distributives."
+private = true
+category = "Build"
+dependencies = [ "prepare_linux_target_on_mac" ]
+command = "cargo"
+args = [
+  "build",
+  "--release",
+  "--target", "x86_64-unknown-linux-gnu",
+  "--manifest-path",
+  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
+  "--bin", "desktop"
+]
+
+[tasks.prepare_windows_target_on_mac]
+private = true
+script_runner = "@duckscript"
+script = '''
+exec brew install mingw-w64
+exec rm -rf .cargo
+exec mkdir .cargo
+exec echo '[target.x86_64-pc-windows-gnu]' >> .cargo/config
+exec echo 'linker = "x86_64-w64-mingw32-gcc"' >> .cargo/config
+exec rustup target add x86_64-pc-windows-gnu
+'''
+
+[tasks.desktop_build_windows]
+description = "Build desktop target for Windows."
+private = true
+category = "Build"
+dependencies = [ "prepare_windows_target_on_mac" ]
+command = "cargo"
+args = [
+  "build",
+  "--release",
+  "--target", "x86_64-pc-windows-gnu",
+  "--manifest-path",
+  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
+  "--bin", "desktop"
+]
+
+[tasks.copy_binaries]
+private = true
+script_runner = "@duckscript"
+script = '''
+exec mkdir -p out/macos_release
+exec mkdir -p out/linux_release
+exec mkdir -p out/windows_release
+exec cp target/release/desktop out/macos_release/desktop
+exec cp target/x86_64-unknown-linux-gnu/release/desktop out/linux_release/desktop
+exec cp target/x86_64-pc-windows-gnu/release/desktop.exe out/windows_release/desktop.exe
+exec cp target/x86_64-pc-windows-gnu/release/desktop.dll out/windows_release/desktop.dll
+'''
+
 # Public
 
 [tasks.desktop_build]
