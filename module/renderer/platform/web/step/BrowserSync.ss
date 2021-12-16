@@ -4,7 +4,14 @@ let rootPath = path.join( __dirname, '../../../../..' );
 
 let o = 
 {
-  server: path.join( rootPath, 'target/web' ),
-  watch: true
+  open: 'local',
+  server: 
+  { 
+    baseDir : path.join( rootPath, 'target/web' ),
+    index: 'index.html'
+  },
+  startPath : 'index.html',
+  watch: true,
+  ui: false
 }
 browserSync( o );
