@@ -38,7 +38,7 @@
 #   build:
 #     needs: check
 #     if: ${{ needs.check.outputs.shouldRun != 'false' }}
-#     uses: Learn-Together-Pro/rust_game_template/.github/workflows/DesktopCommon.yml@alpha
+#     uses: Learn-Together-Pro/rust_game_template/.github/workflows/DesktopCommon.yml@master
 #     with:
 #       artifacts: 'false'
 #
