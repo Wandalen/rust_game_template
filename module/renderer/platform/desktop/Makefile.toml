@@ -47,14 +47,9 @@ args = [
   "--bin", "desktop"
 ]
 
-[tasks.desktop_build_watching]
-description = "Rebuild debug of desktop target on file change."
-private = false
-extend = "desktop_watch"
-dependencies = [ "desktop_build" ]
-
 [tasks.desktop_run_watching]
 description = "Rerun debug desktop target on file change."
+category = "Desktop"
 private = false
 extend = "desktop_watch"
 dependencies = [ "desktop_run" ]

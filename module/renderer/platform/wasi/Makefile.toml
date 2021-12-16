@@ -17,7 +17,7 @@ command = "cargo"
 args = [
   "wasi",
   "build",
-  "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml",
+  "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
 ]
 
 [tasks.wasi_run_target_debug]
@@ -27,7 +27,7 @@ command = "cargo"
 args = [
   "wasi",
   "run",
-  "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml"
+  "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml"
 ]
 
 # Public
@@ -42,10 +42,11 @@ dependencies = [ "wasi_build_target_debug" ]
 description = "Run debug of wasi target."
 category = "wasi"
 dependencies = [ "wasi_run_target_debug" ]
+private = false
 
 [tasks.wasi_run_watching]
 description = "Run debug of wasi target."
 category = "wasi"
 extend = "wasi_watch"
 dependencies = [ "wasi_run_target_debug" ]
-
+private = false

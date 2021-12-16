@@ -103,8 +103,6 @@ args = [
   "--vacuum",
 ]
 
-# wasm-opt -Oz -o target/web/web_bg.wasm target/web/web_bg.wasm
-
 [tasks.web_install_npm_dependencies]
 description = "Install npm dependencies for web target."
 private = true
@@ -125,7 +123,9 @@ args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/BrowserSync
 
 [tasks.web_server_run]
 private = false
+category = "Desktop"
 install_crate = "basic-http-server"
+description = "Run HTTP server on port ${CARGO_MAKE_WEB_PORT}."
 command = "basic-http-server"
 args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web", "-a", "127.0.0.1:${CARGO_MAKE_WEB_PORT}" ]
 
@@ -147,7 +147,6 @@ description = "Rebuild debug of web target."
 private = false
 category = "Web"
 dependencies = [ "web_build_target_debug", "web_wasm_rebuild_debug", "web_build_copy_static" ]
-# qqq : why no web_build_copy_static?? aaa:added
 
 [tasks.web_run]
 description = "Build and run web target."
@@ -168,10 +167,6 @@ run_task = { name = [ "web_rebuild", "web_server_run" ] }
 private = true
 command = "rust-script"
 args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/wasm_opt.rs", "${@}" ]
-
-# qqq : watching builds?
-# aaa : release builds?
-# aaa : add to prerequisities wasm-opt
 
 # [tasks.echo]
 # command = "echo"
