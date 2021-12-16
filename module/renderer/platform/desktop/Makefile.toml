@@ -26,21 +26,6 @@ exec mkdir .cargo
 writefile .cargo/config "[target.x86_64-unknown-linux-gnu]\nlinker = \"x86_64-unknown-linux-gnu-gcc\""
 '''
 
-[tasks.desktop_build_linux_on_mac]
-description = "Build desktop target for GNU/Linux distributives."
-private = true
-category = "Build"
-dependencies = [ "prepare_linux_target_on_mac" ]
-command = "cargo"
-args = [
-  "build",
-  "--release",
-  "--target", "x86_64-unknown-linux-gnu",
-  "--manifest-path",
-  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
-  "--bin", "desktop"
-]
-
 [tasks.prepare_windows_target_on_mac]
 private = true
 script_runner = "@duckscript"
@@ -55,42 +40,15 @@ exec mkdir .cargo
 writefile .cargo/config "[target.x86_64-pc-windows-gnu]\nlinker = \"x86_64-w64-mingw32-gcc\""
 '''
 
-[tasks.desktop_build_windows_on_mac]
-description = "Build desktop target for Windows."
-private = true
-category = "Build"
-dependencies = [ "prepare_windows_target_on_mac" ]
-command = "cargo"
-args = [
-  "build",
-  "--release",
-  "--target", "x86_64-pc-windows-gnu",
-  "--manifest-path",
-  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
-  "--bin", "desktop"
-]
-
 [tasks.prepare_windows_target_on_linux]
 private = true
 script_runner = "@duckscript"
 script = '''
+# add rustup toolchain
 exec rustup target add x86_64-pc-windows-gnu
+# install mingw for compilation Windows apps
 exec sudo apt install mingw-w64
 '''
-
-[tasks.desktop_build_windows_on_linux]
-description = "Build desktop target for Windows."
-private = true
-category = "Build"
-dependencies = [ "prepare_windows_target_on_linux" ]
-command = "cargo"
-args = [
-  "build",
-  "--release",
-  "--target", "x86_64-pc-windows-gnu",
-  "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
-  "--bin", "desktop"
-]
 
 # Build from Windows to Linux and MacOs has many restrictions
 # and needs many time to write some workable task
@@ -120,6 +78,61 @@ args = [
   "--release"
 ]
 
+[tasks.desktop_build_linux_on_mac]
+description = "Build desktop target for GNU/Linux distributives on MacOS."
+private = false
+category = "Desktop"
+dependencies = [ "prepare_linux_target_on_mac" ]
+command = "cargo"
+args = [
+  "build",
+  "--release",
+  "--target", "x86_64-unknown-linux-gnu",
+  "--manifest-path",
+  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
+  "--bin", "desktop"
+]
+
+[tasks.desktop_build_windows_on_mac]
+description = "Build target for Windows on MacOS."
+private = false
+category = "Desktop"
+dependencies = [ "prepare_windows_target_on_mac" ]
+command = "cargo"
+args = [
+  "build",
+  "--release",
+  "--target", "x86_64-pc-windows-gnu",
+  "--manifest-path",
+  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
+  "--bin", "desktop"
+]
+
+[tasks.desktop_build_windows_on_linux]
+description = "Build target for Windows on Debian-based GNU/Linux disributives."
+private = false
+category = "Desktop"
+dependencies = [ "prepare_windows_target_on_linux" ]
+command = "cargo"
+args = [
+  "build",
+  "--release",
+  "--target", "x86_64-pc-windows-gnu",
+  "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
+  "--bin", "desktop"
+]
+
+[tasks.desktop_rebuild]
+description = "Rebuild debug of desktop target."
+private = false
+category = "Desktop"
+command = "cargo"
+args = [
+  "build",
+  "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
+  "--bin", "desktop"
+]
+
 [tasks.desktop_run]
 description = "Run debug of desktop target"
 private = false
@@ -131,20 +144,10 @@ args = [
   "--bin", "desktop"
 ]
 
-[tasks.desktop_build_watching]
-description = "Rebuild debug of desktop target on file change."
-private = false
-extend = "desktop_watch"
-dependencies = [ "desktop_build" ]
-
 [tasks.desktop_run_watching]
 description = "Rerun debug desktop target on file change."
+category = "Desktop"
 private = false
 extend = "desktop_watch"
 dependencies = [ "desktop_run" ]
-
-# [tasks.echo]
-# private = false
-# command = "echo"
-# args = [ "CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY : ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}" ]
 

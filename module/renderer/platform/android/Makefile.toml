@@ -40,32 +40,31 @@ args = [
 
 # Public
 
-[tasks.build_android]
+[tasks.android_build]
 description = "Build debug of android target."
 private = false
 category = "Android"
 dependencies = [ "build_android_target_debug" ]
 
-[tasks.build_android_release]
+[tasks.android_build_release]
 description = "Build release of android target."
 private = false
 category = "Android"
 dependencies = [ "build_android_target_release" ]
 
-[tasks.build_android_watching]
-description = "Rebuild android target on file change."
+[tasks.android_rebuild]
+description = "Rebuild debug of android target."
 private = false
 category = "Android"
-extend = "watch_android"
-dependencies = [ "build_android" ]
+dependencies = [ "build_android_target_debug" ]
 
-[tasks.run_android]
+[tasks.android_run]
 description = "Run android target."
 private = false
 category = "Android"
 dependencies = [ "run_android_target" ]
 
-[tasks.run_android_watching]
+[tasks.android_run_watching]
 description = "Rebuild and reaload android target on file change."
 private = false
 category = "Android"

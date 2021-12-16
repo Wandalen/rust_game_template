@@ -5,17 +5,27 @@ skip_rust_env_info = true
 skip_crate_env_info = true
 
 [env]
-CARGO_MAKE_WEB_PORT = 8080 # qqq : !
+CARGO_MAKE_WEB_PORT = 9999 # qqq : !
 
 # Private
 
-[tasks.web_watch] #qqq: extend watch list, add static folder
+[tasks.web_watch] #aaa: extend watch list, add static folder
 private = true
-watch = { postpone = true, watch = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../src/" ] }
+watch = { postpone = true, watch = [
+  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../src/", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/static/",
+]}
 
 [tasks.web_install_wasm]
 private = true
 install_script = "rustup target add wasm32-unknown-unknown"
+
+[tasks.web_install_rust_script]
+private = true
+condition = { files_not_exist = [ "${HOME}/.cargo/bin/rust-script" ] }
+script_runner = "@duckscript"
+script = '''
+exec cargo install rust-script --version "0.7.0"
+'''
 
 # [tasks.web_run_wasm_opt]
 # private = true
@@ -92,6 +102,7 @@ glob_cp ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/static/* ${CARGO_M
 
 [tasks.web_wasm_optimize]
 private = true
+dependencies = [ "web_install_rust_script" ]
 command = "rust-script"
 args = [
   "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/wasm_opt.rs",
@@ -121,6 +132,11 @@ dependencies = [ "web_install_npm_dependencies" ]
 command = 'node'
 args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/BrowserSync.ss" ]
 
+[tasks.web_rebuild_watching]
+private = true
+extend = "web_watch"
+dependencies = [ "web_build_target_debug", "web_wasm_rebuild_debug", "web_build_copy_static" ]
+
 # Public
 
 [tasks.web_server_run]
@@ -147,35 +163,27 @@ description = "Rebuild debug of web target."
 private = false
 category = "Web"
 dependencies = [ "web_build_target_debug", "web_wasm_rebuild_debug", "web_build_copy_static" ]
-# qqq : why no web_build_copy_static?? aaa:added
+# aaa : why no web_build_copy_static??
 
 [tasks.web_run]
 description = "Build and run web target."
 category = "Web"
 run_task = { name = [ "web_build", "web_server_run" ] }
 
-[tasks.web_rerun]
+[tasks.web_run_watching] # aaa: should do full run instead of fast
 description = "Rebuild debug of web target and run it."
 category = "Web"
-run_task = { name = [ "web_rebuild", "web_server_run" ] }
-
-# [tasks.web_run_watching] # qqq: should do full run instead of fast
-# description = "Rebuild and reload debug of web target on file change."
-# category = "Web"
-# run_task = { name = [ "web_rebuild_watching", "web_server_browsersync" ], parallel = true }
+run_task = { name = [ "web_rebuild_watching", "web_server_browsersync" ], parallel = true }
 
 [tasks.wasm_opt]
 private = true
+dependencies = [ "web_install_rust_script" ]
 command = "rust-script"
 args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/wasm_opt.rs", "${@}" ]
 
-# qqq : watching builds?
+# aaa : watching builds?
 # aaa : release builds?
 # aaa : add to prerequisities wasm-opt
-
-# [tasks.echo]
-# command = "echo"
-# args = [ "CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY : ${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}" ]
 
 #
 # # 20 the largest functions
