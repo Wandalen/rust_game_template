@@ -31,6 +31,7 @@ cargo depgraph --all-deps --dedup-transitive-deps |
   dot -Tjpg > ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../doc/dep_graph.jpg
 '''
 
+
 [tasks.doc_ref]
 category = "General"
 description = "Generate reference"
