@@ -24,8 +24,6 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             target/
-            module/renderer/target/
-            module/renderer/platform/*/target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - uses: davidB/rust-cargo-make@v1
       - name: Install dependencies
@@ -38,6 +36,6 @@ jobs:
         run: 'echo "$PRIVATE_TOML" > private.toml'
         shell: bash
       - name: Build project
-        run: cargo make build_ios
+        run: cargo make ios_build
 
 
