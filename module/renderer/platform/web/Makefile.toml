@@ -139,7 +139,7 @@ dependencies = [ "web_build_target_debug", "web_wasm_rebuild_debug", "web_build_
 
 [tasks.web_server_run]
 private = false
-category = "Desktop"
+category = "Web"
 install_crate = "basic-http-server"
 description = "Run HTTP server on port ${CARGO_MAKE_WEB_PORT}."
 command = "basic-http-server"

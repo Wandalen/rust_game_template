@@ -12,7 +12,7 @@ Prerequisites:
 Connect your Android device or start an emulator and then execute:
 
 ```
-cargo make run_android
+cargo make android_run
 ```
 
 To get list of all command related this target run:
