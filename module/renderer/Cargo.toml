@@ -88,7 +88,7 @@ console_error_panic_hook = { version = "0.1.7" }
 # wasm-bindgen-test = "0.3.13"
 
 [target.'cfg( target_os = "ios" )'.dependencies]
-# `mobile-entry-point` - Generates entry-point for ios app.
+# `mobile-entry-point` - generates entry-point for ios app.
 mobile-entry-point = "0.1.0" # qqq : talk?
 
 [target.'cfg( target_os = "android" )'.dependencies]
