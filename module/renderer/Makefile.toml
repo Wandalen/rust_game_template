@@ -7,7 +7,7 @@ extend = [
 ]
 
 [config]
-skip_core_tasks = true #to skip default predefined flow
+skip_core_tasks = true # to skip default predefined flow
 # skip_git_env_info = true #??
 # skip_rust_env_info = true #??
 # skip_crate_env_info = true #??
@@ -21,19 +21,28 @@ description = "Run tests"
 command = "cargo"
 args = [ "test" ]
 
-# [tasks.doc_dep_graph]
-# description = "Generate dependancy graph."
-# private = true
-# script_runner = "@duckscript"
-# script = '''
-# cargo depgraph --all-deps --dedup-transitive-deps | dot -Tpng > ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../doc/dep_graph.png
-# '''
-
-[tasks.doc]
+[tasks.doc_dep_graph]
 category = "General"
-description = "Generate documentation"
+description = "Generate dependancy graph."
+private = false
+script_runner = "@shell"
+script = '''
+cargo depgraph --all-deps --dedup-transitive-deps |
+  dot -Tjpg > ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../doc/dep_graph.jpg
+'''
+
+
+[tasks.doc_ref]
+category = "General"
+description = "Generate reference"
 command = "cargo"
 args = [
   "doc",
   "--target-dir", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../target/reference",
 ]
+
+[tasks.doc]
+category = "General"
+description = "Generate full documentation"
+run_task = { name = [ "doc_dep_graph", "doc_ref" ], parallel = true }
+# dependencies = [ "doc_dep_graph", "doc_ref" ]
