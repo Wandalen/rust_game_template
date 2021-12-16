@@ -39,4 +39,6 @@ jobs:
     needs: check
     if: ${{ needs.check.outputs.shouldRun != 'false' }}
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/DesktopCommon.yml@alpha
+    with:
+      artifacts: 'false'
 
