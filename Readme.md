@@ -25,3 +25,5 @@ To run the project on default platform execute:
 ```
 cargo make
 ```
+
+## Experiment1
