@@ -58,45 +58,45 @@ build_targets = [ "aarch64-linux-android" ]
 # aaa : explain each dependency
 
 [dependencies]
-# `wgpu` - cross-platform graphics api
+# Cross-platform graphics api
 wgpu = "0.11.0" #qqq : Update to latest, check changes https://github.com/gfx-rs/wgpu/blob/v0.11/CHANGELOG.md
-# `winit` - cross-platform window manager
+# Cross-platform window manager
 winit = { version = "0.25.0", features = [] } 
-# `pollster` - async code runner without heavy dependencies like tokio
+# Async code runner without heavy dependencies like tokio
 pollster = "0.2"
-# `byte-slice-cast` - slice -> byte slice caster, used in wgpu buffer creation
+# Casts slice into a byte slice. Used to create wgpu buffer
 # byte-slice-cast = "1.2.0"
 
 [target.'cfg( target_arch = "wasm32" )'.dependencies]
-# `wasm-bindgen-futures` - async code runner for web
+# Async code runner for web
 wasm-bindgen-futures = "0.4.28"
-# `console_log` - logger that forwards messages into browser console. Filters messages using verbosity level
+# Logger that forwards messages into browser console. Filters messages using verbosity level
 console_log = "0.2.0"
-# `web-sys` - gives access to the Web API( window, WebGL, etc )
+# Gives access to the Web API( window, WebGL, etc )
 web-sys = "0.3.53"
-# `web-log` - provides println/eprintln macros
+# Provides println/eprintln macros
 web-log = "1.0.0"
-# `log` - provides verbosity levels for console_log
+# Provides verbosity levels for console_log
 log = "0.4"
-# `wee_alloc` - tiny allocator for wasm that is only ~1K in code size compared to the default allocator's ~10K
+# Tiny allocator for wasm that is only ~1K in code size compared to the default allocator's ~10K
 wee_alloc = { version = "0.4.5", optional = true }
 
 [target.'cfg( target_arch = "wasm32" )'.dev-dependencies]
-# `console_error_panic_hook` - catches panic and forwards it message to the console.error
+# Catches panic and forwards it message to the console.error
 console_error_panic_hook = { version = "0.1.7" }
-# `wasm-bindgen-test` - wasm testing under browser
+# Wasm testing under browser
 # wasm-bindgen-test = "0.3.13"
 
 [target.'cfg( target_os = "ios" )'.dependencies]
-# `mobile-entry-point` - generates entry-point for ios app.
+# Generates entry-point for ios app.
 mobile-entry-point = "0.1.0" # qqq : talk?
 
 [target.'cfg( target_os = "android" )'.dependencies]
-# `android_logger` - forwards rust log into android logcat
+# Forwards rust log into android logcat
 android_logger = "0.10.1"
-# `ndk-glue` - generates entry-point for android app.
+# Generates entry-point for android app.
 ndk-glue = { version = "0.3.0", features = [ "logger" ] }
-# `ndk-sys` - raw ffi bindings to Android NDK
+# Raw ffi bindings to Android NDK
 ndk-sys = "0.2.1"
-# `log` - provides verbosity levels for android_logger
+# Provides verbosity levels for android_logger
 log = "0.4" # qqq : ?
