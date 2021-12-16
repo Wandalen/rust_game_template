@@ -1,0 +1,8 @@
+# This is private configuration file.
+# Rename this file to private.toml and keep it secret.
+
+[ios]
+# Apple developer team ID 
+# Guide: https://support.customchurchapps.com/hc/en-us/articles/360038612853-Locating-your-Apple-Team-ID
+# Leave it empty if you don't need to run built app on the simulator or real device
+development_team = " "

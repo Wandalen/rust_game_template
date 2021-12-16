@@ -7,6 +7,8 @@ Prerequisites:
   Install with command: ```cargo install cargo-make```
 - [ios-deploy](https://github.com/ios-control/ios-deploy)
   Install with command: ```brew install ios-deploy```
+- [xcodegen](https://github.com/yonaskolb/XcodeGen)
+  Install with command: ```brew install xcodegen```
 - [Xdode](https://apps.apple.com/us/app/xcode/id497799835)
 - iOS Simulator
 
@@ -29,7 +31,7 @@ In this case value will be taken from your environment variable during the build
 Then run:
 
 ```
-cargo make run_ios
+cargo make ios_run
 ```
 
 Generated Xcode project can be found at `module/renderer/platform/ios/xcode`.

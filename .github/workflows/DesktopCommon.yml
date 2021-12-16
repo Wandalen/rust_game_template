@@ -1,6 +1,11 @@
 name: DesktopCommon
 
-on: [ workflow_call ]
+on:
+  workflow_call:
+    inputs:
+      artifacts:
+        required: true
+        type: string
 
 env:
   CARGO_TERM_COLOR: always
@@ -11,12 +16,21 @@ jobs:
     strategy :
       fail-fast : false
       matrix :
-        os : [ ubuntu-latest, windows-latest, macos-latest ]
+        os : [ ubuntu, windows, macos ]
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}-latest
 
     steps:
     - uses: actions/checkout@v2
+    - uses: actions/cache@v2
+      with:
+        path: |
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+          target/
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
     - name: Install latest stable toolchain
       uses: actions-rs/toolchain@v1
       with:
@@ -26,4 +40,11 @@ jobs:
       run: cargo build
     - name: Run tests
       run: cargo test
+    - name: Upload
+      if: ${{ inputs.artifacts == 'true' }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ matrix.os }}
+        path: target/release/test
+        retention-days: 1
 

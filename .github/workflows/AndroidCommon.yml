@@ -20,18 +20,17 @@ jobs:
         with:
           path: |
             ~/.cargo/bin/
+            ~/.cargo-mobile/
             ~/.cargo/registry/index/
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             target/
-            module/renderer/target/
-            module/renderer/platform/*/target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - uses: davidB/rust-cargo-make@v1
       - name: Build project
         run: |
               unset ANDROID_HOME
               rustup target add aarch64-linux-android
-              cargo make build_android
+              cargo make android_build
 
 
