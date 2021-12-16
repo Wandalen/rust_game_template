@@ -1,8 +1,9 @@
-# cargo-features = [
+cargo-features = [
+  "named-profiles", # custom named profile
 #  "build-std", # rebuild srd
 #  "strip", # strip either symbols or debuginfo
 #  "weak-dep-features", # ability to use dep_name?/feat_name syntax
-# ]
+]
 
 [workspace]
 resolver = "2"

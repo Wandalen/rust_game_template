@@ -1,5 +1,4 @@
 extend = [
-  
   { path = "./module/renderer/Makefile.toml" }
 ]
 

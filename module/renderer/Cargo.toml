@@ -1,5 +1,3 @@
-
-
 [package]
 name = "game_template"
 version = "0.0.1"
@@ -19,7 +17,7 @@ Neutral cross-platform Rust game template.
 """
 categories = [ "game-development", "game-engines" ]
 keywords = [ "game-template", "gamedev" ]
-
+default-run = "desktop"
 include = [
   "/src",
   "/Cargo.toml",
@@ -30,6 +28,7 @@ include = [
 [features]
 # web = [ "wgpu/webgl", "winit/web-sys", "wee_alloc" ]
 web = [ "wgpu/webgl", "winit/web-sys" ]
+# web = [ "wgpu/webgl" ]
 default = []
 
 # [target.'cfg( target_arch = "wasm32" )'.features]
