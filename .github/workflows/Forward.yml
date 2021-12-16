@@ -11,16 +11,16 @@ env:
 jobs :
 
   android:
-    if: "contains( github.event.head_commit.message, '[build]' ) || !startsWith( github.event.head_commit.message, 'Merge ' )"
+    if: "contains( github.event.head_commit.message, '[build]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/AndroidCommon.yml@alpha
   desktop:
-    if: "contains( github.event.head_commit.message, '[build]' ) || !startsWith( github.event.head_commit.message, 'Merge ' )"
+    if: "contains( github.event.head_commit.message, '[build]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/DesktopCommon.yml@alpha
   ios:
-    if: "contains( github.event.head_commit.message, '[build]' ) || !startsWith( github.event.head_commit.message, 'Merge ' )"
+    if: "contains( github.event.head_commit.message, '[build]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/IosCommon.yml@alpha
   web:
-    if: "contains( github.event.head_commit.message, '[build]' ) || !startsWith( github.event.head_commit.message, 'Merge ' )"
+    if: "contains( github.event.head_commit.message, '[build]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/WebCommon.yml@alpha
 
   forward :
