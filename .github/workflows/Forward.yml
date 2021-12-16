@@ -35,7 +35,7 @@ jobs :
           github_token : ${{ secrets.PRIVATE_GITHUB_TOKEN }}
           source_ref : alpha
           target_branch : beta
-          commit_message_template : 'Merged {source_ref} into {target_branch} [Automated]'
+          commit_message_template : 'Merge {source_ref} into {target_branch} [Automated]'
 
   # artifacts_forward :
   #   needs: [ android, desktop, ios, web ]
