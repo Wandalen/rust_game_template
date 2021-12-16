@@ -32,5 +32,3 @@ jobs:
               unset ANDROID_HOME
               rustup target add aarch64-linux-android
               cargo make android_build
-
-
