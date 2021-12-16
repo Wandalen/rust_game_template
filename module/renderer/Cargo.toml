@@ -65,7 +65,7 @@ winit = { version = "0.25.0", features = [] }
 # `pollster` - async code runner without heavy dependencies like tokio
 pollster = "0.2"
 # `byte-slice-cast` - Slice -> byte slice caster, used in wgpu buffer creation
-byte-slice-cast = "1.2.0"
+# byte-slice-cast = "1.2.0"
 
 [target.'cfg( target_arch = "wasm32" )'.dependencies]
 # `wasm-bindgen-futures` - async code runner for web
