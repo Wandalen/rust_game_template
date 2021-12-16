@@ -1,5 +1,3 @@
-
-
 [package]
 name = "game_template"
 version = "0.0.1"
@@ -19,7 +17,7 @@ Neutral cross-platform Rust game template.
 """
 categories = [ "game-development", "game-engines" ]
 keywords = [ "game-template", "gamedev" ]
-
+default-run = "desktop"
 include = [
   "/src",
   "/Cargo.toml",
@@ -30,6 +28,7 @@ include = [
 [features]
 # web = [ "wgpu/webgl", "winit/web-sys", "wee_alloc" ]
 web = [ "wgpu/webgl", "winit/web-sys" ]
+# web = [ "wgpu/webgl" ]
 default = []
 
 # [target.'cfg( target_arch = "wasm32" )'.features]
@@ -56,33 +55,48 @@ min_sdk_version = 30
 target_sdk_version = 30
 build_targets = [ "aarch64-linux-android" ]
 
-# qqq : explain each dependency
+# aaa : explain each dependency
 
 [dependencies]
+# Cross-platform graphics api
 wgpu = "0.11.0" #qqq : Update to latest, check changes https://github.com/gfx-rs/wgpu/blob/v0.11/CHANGELOG.md
-winit = { version = "0.25.0", features = [] }
+# Cross-platform window manager
+winit = { version = "0.25.0", features = [] } 
+# Async code runner without heavy dependencies like tokio
 pollster = "0.2"
-byte-slice-cast = "1.2.0"
+# Casts slice into a byte slice. Used to create wgpu buffer
+# byte-slice-cast = "1.2.0"
 
 [target.'cfg( target_arch = "wasm32" )'.dependencies]
+# Async code runner for web
 wasm-bindgen-futures = "0.4.28"
+# Logger that forwards messages into browser console. Filters messages using verbosity level
 console_log = "0.2.0"
+# Gives access to the Web API( window, WebGL, etc )
 web-sys = "0.3.53"
+# Provides println/eprintln macros
 web-log = "1.0.0"
+# Provides verbosity levels for console_log
 log = "0.4"
-# `wee_alloc` is a tiny allocator for wasm that is only ~1K in code size compared to the default allocator's ~10K
+# Tiny allocator for wasm that is only ~1K in code size compared to the default allocator's ~10K
 wee_alloc = { version = "0.4.5", optional = true }
 
 [target.'cfg( target_arch = "wasm32" )'.dev-dependencies]
+# Catches panic and forwards it message to the console.error
 console_error_panic_hook = { version = "0.1.7" }
-# wasm testing under browser
+# Wasm testing under browser
 # wasm-bindgen-test = "0.3.13"
 
 [target.'cfg( target_os = "ios" )'.dependencies]
+# Generates entry-point for ios app.
 mobile-entry-point = "0.1.0" # qqq : talk?
 
 [target.'cfg( target_os = "android" )'.dependencies]
+# Forwards rust log into android logcat
 android_logger = "0.10.1"
+# Generates entry-point for android app.
 ndk-glue = { version = "0.3.0", features = [ "logger" ] }
+# Raw ffi bindings to Android NDK
 ndk-sys = "0.2.1"
+# Provides verbosity levels for android_logger
 log = "0.4" # qqq : ?

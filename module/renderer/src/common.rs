@@ -1,4 +1,5 @@
 #![allow( dead_code )]
+#![ warn( missing_docs ) ]
 
 /* qqq : is it possible to stop watching if application was terminated? */
 
@@ -20,7 +21,7 @@ use web_log::{ println as println, eprintln as eprintln };
 // pub use pollster;
 
 pub use std::borrow::Cow;
-pub use byte_slice_cast::*;
+// pub use byte_slice_cast::*;
 
 pub use wgpu::util::DeviceExt;
 

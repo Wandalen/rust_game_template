@@ -6,7 +6,7 @@ skip_crate_env_info = true
 
 
 [env]
-GAME_TEMPLATE_IOS_TARGET_NAME = "game_template"
+IOS_TARGET_NAME = "game_template"
 
 # Private
 
@@ -32,7 +32,7 @@ args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/generate_io
 [tasks.generate_ios_project]
 private = true
 dependencies = [ "generate_ios_config" ]
-# condition = { files_not_exist = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/${GAME_TEMPLATE_IOS_TARGET_NAME}.xcodeproj" ] }
+# condition = { files_not_exist = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/${IOS_TARGET_NAME}.xcodeproj" ] }
 command = "xcodegen"
 args = [ "--spec", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/project.yml" ]
 
@@ -51,7 +51,17 @@ script_runner = "@duckscript"
 script = '''
 exec rustup target add x86_64-apple-ios
 exec cargo build --manifest-path ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml --target=x86_64-apple-ios
-exec xcrun xcodebuild -project ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/${GAME_TEMPLATE_IOS_TARGET_NAME}.xcodeproj -scheme ${GAME_TEMPLATE_IOS_TARGET_NAME}_iOS -arch x86_64 -derivedDataPath ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out
+exec xcrun xcodebuild -project ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/${IOS_TARGET_NAME}.xcodeproj -scheme ${IOS_TARGET_NAME}_iOS -arch x86_64 -derivedDataPath ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out
+'''
+
+[tasks.build_ios_target_release]
+private = true
+dependencies = [ "install_cargo_mobile" ]
+script_runner = "@duckscript"
+script = '''
+exec rustup target add x86_64-apple-ios
+exec cargo build --manifest-path ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml --target=x86_64-apple-ios --release
+exec xcrun xcodebuild -project ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/${GAME_TEMPLATE_IOS_TARGET_NAME}.xcodeproj -scheme ${GAME_TEMPLATE_IOS_TARGET_NAME}_iOS -arch x86_64 -derivedDataPath ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out -configuration release
 '''
 
 [tasks.run_ios_target]
@@ -60,26 +70,45 @@ script_runner = "@duckscript"
 script = '''
 exec open -a simulator
 exec sleep 5
-exec xcrun simctl install booted ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out/Build/Products/debug-iphonesimulator/${GAME_TEMPLATE_IOS_TARGET_NAME}.app
-exec xcrun simctl launch booted com.example.${GAME_TEMPLATE_IOS_TARGET_NAME}
+exec xcrun simctl install booted ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out/Build/Products/debug-iphonesimulator/${IOS_TARGET_NAME}.app
+exec xcrun simctl launch booted com.example.${IOS_TARGET_NAME}
 '''
 
 # Public
 
 
-[tasks.build_ios]
-description = "Build ios target."
+[tasks.ios_build]
+description = "Build debug of ios target."
 private = false
 category = "iOS"
 dependencies = [ "generate_ios_project", "build_ios_target" ]
 
-[tasks.run_ios]
-description = "Run ios target. Rebuilds on change."
+[tasks.ios_build_release]
+description = "Build release of ios target."
+private = false
+category = "iOS"
+dependencies = [ "generate_ios_project", "build_ios_target_release" ]
+
+[tasks.ios_rebuild]
+description = "Rebuild debug of ios target."
+private = false
+category = "iOS"
+dependencies = [ "build_ios_target" ]
+
+[tasks.ios_run]
+description = "Run debug of ios target."
 private = false
 category = "iOS"
 dependencies = [ "generate_ios_project", "build_ios_target", "run_ios_target" ]
 
-[tasks.clean_ios]
+[tasks.ios_run_watching]
+description = "Rerun debug of ios target on file change."
+private = false
+category = "iOS"
+extend = "watch_ios"
+dependencies = [ "generate_ios_project", "build_ios_target", "run_ios_target" ]
+
+[tasks.ios_clean]
 description = "Cleanup generated files of ios target."
 category = "iOS"
 script_runner = "@duckscript"
@@ -87,6 +116,6 @@ script = '''
 rm ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../mobile.toml
 rm ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/project.yml
 rm -r ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/out
-rm -r ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/${GAME_TEMPLATE_IOS_TARGET_NAME}_iOS
-rm -r ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/${GAME_TEMPLATE_IOS_TARGET_NAME}.xcodeproj
+rm -r ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/${IOS_TARGET_NAME}_iOS
+rm -r ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/xcode/${IOS_TARGET_NAME}.xcodeproj
 '''

@@ -10,7 +10,7 @@
 /target
 node_modules
 /.module
-/package-lock.json
+package-lock.json
 /Cargo.lock
 /.vscode
 /private.*
