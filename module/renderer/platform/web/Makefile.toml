@@ -5,7 +5,7 @@ skip_rust_env_info = true
 skip_crate_env_info = true
 
 [env]
-CARGO_MAKE_WEB_PORT = 8080 # qqq : !
+CARGO_MAKE_WEB_PORT = 8888 # qqq : !
 
 # Private
 

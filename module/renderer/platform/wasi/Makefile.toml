@@ -18,6 +18,7 @@ args = [
   "wasi",
   "build",
   "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
+  "--features", "web",
 ]
 
 [tasks.wasi_run_target_debug]
@@ -27,7 +28,8 @@ command = "cargo"
 args = [
   "wasi",
   "run",
-  "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml"
+  "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml",
+  "--features", "web",
 ]
 
 # Public
