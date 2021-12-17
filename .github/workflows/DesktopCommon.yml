@@ -36,6 +36,8 @@ jobs:
       with:
           toolchain: stable
           override: true
+    - uses: davidB/rust-cargo-make@v1
+
     - name: Build
       run: cargo build
     - name: Run tests

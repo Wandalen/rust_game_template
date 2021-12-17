@@ -12,18 +12,18 @@ jobs :
 
   android:
     if: "contains( github.event.head_commit.message, '[build]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
-    uses: Learn-Together-Pro/rust_game_template/.github/workflows/AndroidCommon.yml@alpha
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/AndroidCommon.yml@master
   desktop:
     if: "contains( github.event.head_commit.message, '[build]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
-    uses: Learn-Together-Pro/rust_game_template/.github/workflows/DesktopCommon.yml@alpha
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/DesktopCommon.yml@master
     with:
       artifacts: 'true'
   ios:
     if: "contains( github.event.head_commit.message, '[build]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
-    uses: Learn-Together-Pro/rust_game_template/.github/workflows/IosCommon.yml@alpha
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/IosCommon.yml@master
   web:
     if: "contains( github.event.head_commit.message, '[build]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
-    uses: Learn-Together-Pro/rust_game_template/.github/workflows/WebCommon.yml@alpha
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/WebCommon.yml@master
 
   forward :
     needs: [ android, desktop, ios, web ]
