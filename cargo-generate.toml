@@ -4,6 +4,9 @@ prompt = "What template to use?"
 choices = [ "wgpu", "bevy" ]
 default = "wgpu"
 
+[template]
+ignore = [ "module/renderer/.gitignore" ]
+
 [conditional.'template_name == "wgpu"']
 ignore = [ "module/renderer/bevy" ]
 

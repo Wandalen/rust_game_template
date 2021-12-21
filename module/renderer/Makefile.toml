@@ -2,11 +2,11 @@ extend = [
 
   { path = "./platform/desktop/Makefile.toml" },
   { path = "./platform/web/Makefile.toml" },
-  {% if template_name == "wgpu" %}
+  # {% if template_name == "wgpu" %}
   { path = "./platform/ios/Makefile.toml" },
   { path = "./platform/android/Makefile.toml" },
   { path = "./platform/wasi/Makefile.toml" }
-  {% endif %}
+  # {% endif %}
 
 ]
 
@@ -15,6 +15,13 @@ skip_core_tasks = true # to skip default predefined flow
 # skip_git_env_info = true #??
 # skip_rust_env_info = true #??
 # skip_crate_env_info = true #??
+
+[tasks.init]
+script_runner = "@duckscript"
+script = '''
+glob_cp ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/${CARGO_MAKE_CURRENT_TEMPLATE}/src/* ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/src
+cp ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/${CARGO_MAKE_CURRENT_TEMPLATE}/Cargo.toml ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/Cargo.toml
+'''
 
 [tasks.default]
 extend = "desktop_run"
