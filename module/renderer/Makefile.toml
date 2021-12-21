@@ -5,7 +5,8 @@ extend = [
   # {% if template_name == "wgpu" %}
   { path = "./platform/ios/Makefile.toml" },
   { path = "./platform/android/Makefile.toml" },
-  { path = "./platform/wasi/Makefile.toml" }
+  { path = "./platform/wasi/Makefile.toml" },
+  { path = "./Makefile.dev.toml", optional = true }
   # {% endif %}
 
 ]
@@ -15,26 +16,6 @@ skip_core_tasks = true # to skip default predefined flow
 # skip_git_env_info = true #??
 # skip_rust_env_info = true #??
 # skip_crate_env_info = true #??
-
-[tasks.step_install_dependencies]
-private = true
-condition = { files_not_exist = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/node_modules" ] }
-script_runner = "@shell"
-script = '''
-cd ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step
-npm i
-'''
-
-[tasks.init]
-private = true
-script_runner = "@duckscript"
-condition = { env_set = [ "GAME_TEMPLATE" ] }
-dependencies = [ "step_install_dependencies" ]
-command = "node"
-args = [
-  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/hard_link.ss"
-]
-
 
 [tasks.default]
 extend = "desktop_run"

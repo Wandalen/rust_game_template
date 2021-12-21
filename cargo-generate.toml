@@ -7,7 +7,8 @@ default = "wgpu"
 [template]
 ignore = [ 
   "module/renderer/.gitignore",
-  "module/renderer/step"
+  "module/renderer/step",
+  "module/renderer/Makefile.dev.toml"
 ]
 
 [conditional.'template_name == "wgpu"']
