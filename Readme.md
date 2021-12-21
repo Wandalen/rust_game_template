@@ -1,4 +1,5 @@
-# Rust Game Template [![stability-experimental](https://img.shields.io/badge/stability-experimental-orange.svg)](https://github.com/emersion/stability-badges#experimental) [![alpha](https://github.com/Wandalen/rust_game_template/actions/workflows/Push.yml/badge.svg)](https://github.com/Wandalen/rust_game_template/actions/workflows/Push.yml)
+# Rust Game Template
+[![stability-experimental](https://img.shields.io/badge/stability-experimental-orange.svg)](https://github.com/emersion/stability-badges#experimental) [![ios](https://github.com/Wandalen/rust_game_template/actions/workflows/IosPush.yml/badge.svg)](https://github.com/Wandalen/rust_game_template/actions/workflows/IosPush.yml) [![android](https://github.com/Wandalen/rust_game_template/actions/workflows/AndroidPush.yml/badge.svg)](https://github.com/Wandalen/rust_game_template/actions/workflows/AndroidPush.yml) [![desktop](https://github.com/Wandalen/rust_game_template/actions/workflows/DesktopPush.yml/badge.svg)](https://github.com/Wandalen/rust_game_template/actions/workflows/DesktopPush.yml) [![web](https://github.com/Wandalen/rust_game_template/actions/workflows/WebPush.yml/badge.svg)](https://github.com/Wandalen/rust_game_template/actions/workflows/WebPush.yml)
 
 Neutral cross-platform Rust game template.
 
