@@ -1,0 +1,5 @@
+[placeholders.hypervisor]
+type = "string"
+prompt = "What template to use?"
+choices = ["wgpu", "bevy"]
+default = "wgpu"
