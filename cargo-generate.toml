@@ -5,7 +5,10 @@ choices = [ "wgpu", "bevy" ]
 default = "wgpu"
 
 [template]
-ignore = [ "module/renderer/.gitignore" ]
+ignore = [ 
+  "module/renderer/.gitignore",
+  "module/renderer/step"
+]
 
 [conditional.'template_name == "wgpu"']
 ignore = [ "module/renderer/bevy" ]
