@@ -29,9 +29,9 @@ include = [
 {% if template_name == "wgpu" %}
 # web = [ "wgpu/webgl", "winit/web-sys", "wee_alloc" ]
 web = [ "wgpu/webgl", "winit/web-sys" ]
-with_wgpu = [ "wgpu" ]
+# with_wgpu = [ "wgpu" ]
 # web = [ "wgpu/webgl" ]
-default = [ "with_wgpu" ]
+# default = [ "with_wgpu" ]
 {% endif %}
 {% if template_name == "bevy" %}
 web = []
