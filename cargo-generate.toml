@@ -1,4 +1,4 @@
-[placeholders.hypervisor]
+[placeholders.template]
 type = "string"
 prompt = "What template to use?"
 choices = ["wgpu", "bevy"]
