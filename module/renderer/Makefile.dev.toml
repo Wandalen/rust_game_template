@@ -11,6 +11,7 @@ npm i
 '''
 
 [tasks.sync_profile]
+private = true
 script_runner = "@duckscript"
 condition = { profiles = [ "wgpu", "bevy" ] }
 dependencies = [ "step_install_dependencies" ]
@@ -18,3 +19,13 @@ command = "node"
 args = [
   "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/hard_link.ss"
 ]
+
+[tasks.use_wgpu]
+category = "Development"
+env = { "CARGO_MAKE_PROFILE" = "wgpu" }
+run_task = "sync_profile"
+
+[tasks.use_bevy]
+category = "Development"
+env = { "CARGO_MAKE_PROFILE" = "wgpu" }
+run_task = "sync_profile"
