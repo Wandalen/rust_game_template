@@ -27,10 +27,16 @@ include = [
 
 [features]
 # web = [ "wgpu/webgl", "winit/web-sys", "wee_alloc" ]
+{% if template_name == "wgpu" %}
 web = [ "wgpu/webgl", "winit/web-sys" ]
 with_wgpu = [ "wgpu" ]
 # web = [ "wgpu/webgl" ]
 default = [ "with_wgpu" ]
+{% endif %}
+{% if template_name == "bevy" %}
+web = []
+default = [ "web" ]
+{% endif %}
 
 # [target.'cfg( target_arch = "wasm32" )'.features]
 # default = [ "web" ]
@@ -56,17 +62,19 @@ min_sdk_version = 30
 target_sdk_version = 30
 build_targets = [ "aarch64-linux-android" ]
 
+{% if template_name == "wgpu" %}
 [dependencies]
+# cross-platform rendering
+wgpu = { version = "0.11.0" } # qqq : Update to latest, check changes https://github.com/gfx-rs/wgpu/blob/v0.11/CHANGELOG.md
 # Cross-platform window manager
 winit = { version = "0.25.0", features = [] }
 # Async code runner without heavy dependencies like tokio
 pollster = "0.2"
 # Casts slice into a byte slice. Used to create wgpu buffer
 # byte-slice-cast = "1.2.0"
-# cross-platform rendering
-wgpu = { version = "0.11.0", optional = true } # qqq : Update to latest, check changes https://github.com/gfx-rs/wgpu/blob/v0.11/CHANGELOG.md
 # state of the art game engine
 # bevy = { version = "0.5", optional = true }
+
 
 [target.'cfg( target_arch = "wasm32" )'.dependencies]
 # Async code runner for web
@@ -101,3 +109,12 @@ ndk-glue = { version = "0.3.0", features = [ "logger" ] }
 ndk-sys = "0.2.1"
 # Provides verbosity levels for android_logger
 log = "0.4" # qqq : ?
+
+{% endif %}
+
+{% if template_name == "bevy" %}
+[dependencies]
+bevy = "0.5"
+{% endif %}
+
+

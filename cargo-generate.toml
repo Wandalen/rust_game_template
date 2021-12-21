@@ -1,0 +1,5 @@
+[placeholders.template_name]
+type = "string"
+prompt = "What template to use?"
+choices = ["wgpu", "bevy"]
+default = "wgpu"
