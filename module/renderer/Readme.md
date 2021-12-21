@@ -30,6 +30,7 @@ cargo make web_rerun_watching
 ```
 
 This command doesn't perform crate installation checks to reduce total build time.
+{% if template_name == "wgpu" %}
 
 ## How to run on Android
 
@@ -70,11 +71,13 @@ cargo make run_ios
 ```
 
 Generated Xcode project can be found at `module/renderer/platform/ios/xcode`.
+{% endif %}
 
 ## Commands
 
 To get list of commands use command `cargo make --list-all-steps`
 
+{% if template_name == "wgpu" %}
 ```
 Prerequisites
 ----------
@@ -104,3 +107,25 @@ build_ios - Build iOS target.
 clean_ios - Cleanup generated files of iOS target.
 run_ios - Run iOS target. Rebuilds on change.
 ```
+{% endif %}
+{% if template_name == "bevy" %}
+```
+Prerequisites
+----------
+web_install_dependencies - Install web dependencies
+
+Desktop
+----------
+desktop_build - Build desktop target.
+desktop_run - Run desktop target
+desktop_run_watching - Run desktop target. Rebuilds app on change
+
+Web
+----------
+web_build - Build web target. Rebuilds on change.
+web_rebuild - Build web target. Rebuilds on change.
+web_rerun - Run web target. Rebuilds app on change
+web_run - Run web target. Rebuilds app on change
+```
+{% endif %}
+
