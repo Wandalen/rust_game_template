@@ -3,3 +3,9 @@ type = "string"
 prompt = "What template to use?"
 choices = ["wgpu", "bevy"]
 default = "wgpu"
+
+[conditional.'template_name == "wgpu"']
+ignore = [ "module/renderer/src/bevy" ]
+
+[conditional.'template_name == "bevy"']
+ignore = [ "module/renderer/src/wgpu" ]
