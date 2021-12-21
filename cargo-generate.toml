@@ -9,3 +9,6 @@ ignore = [ "module/renderer/src/bevy" ]
 
 [conditional.'template_name == "bevy"']
 ignore = [ "module/renderer/src/wgpu" ]
+
+[hooks]
+pre = ["post-script.rhai"]
