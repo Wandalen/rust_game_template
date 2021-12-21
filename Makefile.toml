@@ -2,11 +2,6 @@ extend = [
   { path = "./module/renderer/Makefile.toml" }
 ]
 
-env_files = [
-
-   { path = "./dev.env" }
-]
-
 [env]
 # CARGO_MAKE_EXTEND_WORKSPACE_MAKEFILE = true
 # CARGO_MAKE_WORKSPACE_EMULATION = true
