@@ -19,8 +19,8 @@ ignore = [
   "module/renderer/platform/android",
   "module/renderer/platform/ios",
   "module/renderer/platform/wasi",
-  "doc/Android.md",
-  "doc/iOS.md",
+  "doc/platform/Android.md",
+  "doc/platform/iOS.md",
   "private.toml.template"
 ]
 
