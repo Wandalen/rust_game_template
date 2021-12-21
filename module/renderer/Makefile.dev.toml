@@ -21,11 +21,13 @@ args = [
 ]
 
 [tasks.use_wgpu]
-category = "Development"
+category = "Template development"
+description = "Switch to wgpu template"
 env = { "CARGO_MAKE_PROFILE" = "wgpu" }
 run_task = "sync_profile"
 
 [tasks.use_bevy]
-category = "Development"
+category = "Template development"
+description = "Switch to bevy template"
 env = { "CARGO_MAKE_PROFILE" = "wgpu" }
 run_task = "sync_profile"
