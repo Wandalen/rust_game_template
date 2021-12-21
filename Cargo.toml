@@ -55,6 +55,7 @@ panic = "abort" # abort immediately rather than unwind
 codegen-units = 1 # improves optimization, but decrease compile time
 # strip = "symbols" # strip symbols
 
+
 [profile.release_web.package."*"]
 # opt-level = "s"
 opt-level = "z"
