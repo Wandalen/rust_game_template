@@ -5,10 +5,10 @@ choices = ["wgpu", "bevy"]
 default = "wgpu"
 
 [conditional.'template_name == "wgpu"']
-ignore = [ "module/renderer/src/bevy" ]
+ignore = [ "module/renderer/bevy" ]
 
 [conditional.'template_name == "bevy"']
-ignore = [ "module/renderer/src/wgpu" ]
+ignore = [ "module/renderer/wgpu" ]
 
 [hooks]
 pre = ["post-script.rhai"]
