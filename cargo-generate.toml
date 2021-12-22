@@ -1,0 +1,29 @@
+[placeholders.template_name]
+type = "string"
+prompt = "What template to use?"
+choices = [ "wgpu", "bevy" ]
+default = "wgpu"
+
+[template]
+ignore = [ 
+  "module/renderer/.gitignore",
+  "module/renderer/step",
+  "module/renderer/Makefile.dev.toml"
+]
+
+[conditional.'template_name == "wgpu"']
+ignore = [ "module/renderer/bevy" ]
+
+[conditional.'template_name == "bevy"']
+ignore = [
+  "module/renderer/wgpu",
+  "module/renderer/platform/android",
+  "module/renderer/platform/ios",
+  "module/renderer/platform/wasi",
+  "doc/platform/Android.md",
+  "doc/platform/iOS.md",
+  "private.toml.template"
+]
+
+[hooks]
+pre = [ "post-script.rhai" ]
