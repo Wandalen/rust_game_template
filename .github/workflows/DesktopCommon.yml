@@ -38,7 +38,6 @@ jobs:
           override: true
     - uses: davidB/rust-cargo-make@v1
 
-    - run: cargo make -p wgpu --task sync_profile
     - name: Build
       run: cargo build
     - name: Run tests

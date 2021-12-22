@@ -27,7 +27,6 @@ jobs:
             override: true
       - uses: davidB/rust-cargo-make@v1
 
-      - run: cargo make -p wgpu --task sync_profile
       - name: Build project for web
         run: cargo make web_build
 
