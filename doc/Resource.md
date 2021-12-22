@@ -12,3 +12,6 @@
 - https://youtu.be/Yb3vInxzKGE
 - https://youtu.be/Dl4PJG0eRhg
 - https://youtu.be/4nEUX2hf2ZI
+- https://www.youtube.com/playlist?list=PLOc_rMRI1KqnsZhPt1dhjRqi9PZYnyjCB
+
+<!-- qqq : describe resource. apply tags format -->
