@@ -35,6 +35,7 @@ jobs:
       #      PRIVATE_TOML: ${{ secrets.PRIVATE_CONFIG }}
       #   run: 'echo "$PRIVATE_TOML" > private.toml'
         shell: bash
+      - run: cargo make use_wgpu
       - name: Build project
         run: cargo make ios_build
 
