@@ -5,7 +5,7 @@ choices = [ "wgpu", "bevy" ]
 default = "wgpu"
 
 [template]
-ignore = [ 
+ignore = [
   "module/renderer/.gitignore",
   "module/renderer/step",
   "module/renderer/Makefile.dev.toml"
@@ -22,7 +22,8 @@ ignore = [
   "module/renderer/platform/wasi",
   "doc/platform/Android.md",
   "doc/platform/iOS.md",
-  "private.toml.template"
+  "private.toml.template",
+  "graph.png"
 ]
 
 [hooks]
