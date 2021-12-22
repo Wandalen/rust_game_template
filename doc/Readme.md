@@ -1,7 +1,7 @@
 ## How to
 
-- [How to generate a repository from a template](../InstancingTemplate.md)
-- [List of resources](./Resources.md)
+- [How to generate a repository from a template](../InstantiatingTemplate.md)
+- [List of resources](./Resource.md)
 
 ## Platforms
 
