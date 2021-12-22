@@ -11,6 +11,10 @@ This project uses [cargo-make](https://github.com/sagiegurari/cargo-make) task r
 cargo install cargo-make
 ```
 
+## How to instantiate repository from the template?
+
+See instructions [here](./doc/InstancingTemplate.md)
+
 ## Platforms
 
 Supported platforms:
