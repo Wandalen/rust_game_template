@@ -29,4 +29,4 @@ cargo install cargo-make
 cargo make
 ```
 
-6. See the [README](../README.md) for futher instructions
+6. See the [README](../Readme.md) for futher instructions
