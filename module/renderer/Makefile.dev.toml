@@ -1,0 +1,33 @@
+[config]
+additional_profiles = [ "wgpu", "bevy" ]
+
+[tasks.step_install_dependencies]
+private = true
+condition = { profiles = [ "wgpu", "bevy" ], files_not_exist = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/node_modules" ] }
+script_runner = "@shell"
+script = '''
+cd ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step
+npm i
+'''
+
+[tasks.sync_profile]
+private = true
+script_runner = "@duckscript"
+condition = { profiles = [ "wgpu", "bevy" ] }
+dependencies = [ "step_install_dependencies" ]
+command = "node"
+args = [
+  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/hard_link.ss"
+]
+
+[tasks.use_wgpu]
+category = "Template development"
+description = "Switch to wgpu template"
+env = { "CARGO_MAKE_PROFILE" = "wgpu" }
+run_task = "sync_profile"
+
+[tasks.use_bevy]
+category = "Template development"
+description = "Switch to bevy template"
+env = { "CARGO_MAKE_PROFILE" = "wgpu" }
+run_task = "sync_profile"

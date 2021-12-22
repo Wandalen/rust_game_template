@@ -11,14 +11,20 @@ This project uses [cargo-make](https://github.com/sagiegurari/cargo-make) task r
 cargo install cargo-make
 ```
 
+## How to instantiate repository from the template?
+
+See instructions [here](./doc/InstancingTemplate.md)
+
 ## Platforms
 
 Supported platforms:
 
 - [Desktop](./doc/platform/Desktop.md) ( _default_ )
 - [Web](./doc/platform/Web.md)
+{% if template_name == "wgpu" %}
 - [Android](./doc/platform/Android.md)
 - [iOS](./doc/platform/iOS.md)
+{% endif %}
 
 To run the project on default platform execute:
 
