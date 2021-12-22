@@ -1,4 +1,4 @@
-#![allow( dead_code )]
+#![ allow( dead_code ) ]
 #![ warn( missing_docs ) ]
 
 /* qqq : is it possible to stop watching if application was terminated? */
