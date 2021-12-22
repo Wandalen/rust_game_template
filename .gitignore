@@ -27,4 +27,5 @@ Cargo.lock
 *.build
 .DS_Store
 .idea
+*.code-workspace
 mobile.toml

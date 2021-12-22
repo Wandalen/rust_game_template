@@ -1,9 +1,7 @@
 
 name: Conditional
 
-on :
-  pull_request:
-    branches: [ 'alpha' ]
+on : [ pull_request ]
 
 env:
   CARGO_TERM_COLOR: always
@@ -39,18 +37,31 @@ jobs:
   android:
     needs: check
     if: ${{ needs.check.outputs.shouldRun != 'false' }}
-    uses: Learn-Together-Pro/rust_game_template/.github/workflows/AndroidCommon.yml@alpha
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/AndroidCommon.yml@master
   desktop:
     needs: check
     if: ${{ needs.check.outputs.shouldRun != 'false' }}
-    uses: Learn-Together-Pro/rust_game_template/.github/workflows/DesktopCommon.yml@alpha
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/DesktopCommon.yml@master
     with:
       artifacts: 'false'
   ios:
     needs: check
     if: ${{ needs.check.outputs.shouldRun != 'false' }}
-    uses: Learn-Together-Pro/rust_game_template/.github/workflows/IosCommon.yml@alpha
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/IosCommon.yml@master
   web:
     needs: check
     if: ${{ needs.check.outputs.shouldRun != 'false' }}
-    uses: Learn-Together-Pro/rust_game_template/.github/workflows/WebCommon.yml@alpha
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/WebCommon.yml@master
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install latest nightly toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          override: true
+      - run: rustup component add rustfmt
+      - run: cargo +nightly fmt --check
+
