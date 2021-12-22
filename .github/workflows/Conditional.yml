@@ -21,6 +21,9 @@ jobs:
           --header 'Accept: application/vnd.github.v3+json' \
           --header 'Content-Type: application/json')
           echo $response > response.json
+          echo $response
+      - run: echo ${{ github.repository }}
+      - run: echo ${{ github.event.pull_request.number }}
       - name: Get latest commit
         id: message
         run: |
