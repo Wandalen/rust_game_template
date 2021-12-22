@@ -27,7 +27,7 @@ jobs:
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - uses: davidB/rust-cargo-make@v1
-      - run: cargo make use_wgpu
+      - run: cargo make -p wgpu --task sync_profile
       - name: Build project
         run: |
               unset ANDROID_HOME
