@@ -13,5 +13,6 @@
 - https://youtu.be/Dl4PJG0eRhg
 - https://youtu.be/4nEUX2hf2ZI
 - :star: https://www.youtube.com/playlist?-list=PLOc_rMRI1KqnsZhPt1dhjRqi9PZYnyjCB
+- :star: https://bevy-cheatbook.github.io/introduction.html
 
 <!-- qqq : describe resource. apply tags format -->
