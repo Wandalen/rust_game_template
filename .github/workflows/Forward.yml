@@ -12,18 +12,18 @@ jobs :
 
   android:
     if: "contains( github.event.head_commit.message, '[build]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
-    uses: ${{ github.repository }}/.github/workflows/AndroidCommon.yml@master
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/AndroidCommon.yml@master
   desktop:
     if: "contains( github.event.head_commit.message, '[build]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
-    uses: ${{ github.repository }}/.github/workflows/DesktopCommon.yml@master
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/DesktopCommon.yml@master
     with:
       artifacts: 'true'
   ios:
     if: "contains( github.event.head_commit.message, '[build]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
-    uses: ${{ github.repository }}/.github/workflows/IosCommon.yml@master
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/IosCommon.yml@master
   web:
     if: "contains( github.event.head_commit.message, '[build]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
-    uses: ${{ github.repository }}/.github/workflows/WebCommon.yml@master
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/WebCommon.yml@master
 
   forward :
     needs: [ android, desktop, ios, web ]
@@ -61,7 +61,7 @@ jobs :
   #       with:
   #         source-directory: 'out'
   #         target-directory: 'out'
-  #         destination-github-username: ${{ github.repository_owner }}
+  #         destination-github-username: 'Wandalen'
   #         destination-repository-name: 'rust_game_template_build'
   #         user-email: wandalen@obox.systems
   #         target-branch: master
