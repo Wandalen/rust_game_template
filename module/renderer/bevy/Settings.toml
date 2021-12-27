@@ -1,0 +1,2 @@
+[env]
+WASM_BINDGEN_VERSION = "0.2.69"
