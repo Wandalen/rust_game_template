@@ -20,14 +20,17 @@ args = [
   "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/hard_link.ss"
 ]
 
-[tasks.use_wgpu]
-category = "Template development"
-description = "Switch to wgpu template"
-env = { "CARGO_MAKE_PROFILE" = "wgpu" }
-run_task = "sync_profile"
+# cargo make works with new user variables but not rewrite global environments
+# https://github.com/sagiegurari/cargo-make#profiles-1
 
-[tasks.use_bevy]
-category = "Template development"
-description = "Switch to bevy template"
-env = { "CARGO_MAKE_PROFILE" = "wgpu" }
-run_task = "sync_profile"
+# [tasks.use_wgpu]
+# category = "Template development"
+# description = "Switch to wgpu template"
+# env = { "CARGO_MAKE_PROFILE" = "wgpu" }
+# run_task = "sync_profile"
+#
+# [tasks.use_bevy]
+# category = "Template development"
+# description = "Switch to bevy template"
+# env = { "CARGO_MAKE_PROFILE" = "wgpu" }
+# run_task = "sync_profile"

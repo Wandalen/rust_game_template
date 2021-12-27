@@ -27,8 +27,11 @@ jobs:
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - uses: davidB/rust-cargo-make@v1
+
+      - name: Setup template
+        run: cargo make -p wgpu sync_profile
       - name: Build project
         run: |
-              unset ANDROID_HOME
-              rustup target add aarch64-linux-android
-              cargo make android_build
+          unset ANDROID_HOME
+          rustup target add aarch64-linux-android
+          cargo make android_build

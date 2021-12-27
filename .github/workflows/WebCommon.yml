@@ -23,10 +23,12 @@ jobs:
       - name: Install latest stable toolchain
         uses: actions-rs/toolchain@v1
         with:
-            toolchain: stable
-            override: true
+          toolchain: stable
+          override: true
       - uses: davidB/rust-cargo-make@v1
 
+      - name: Setup template
+        run: cargo make -p wgpu sync_profile
       - name: Build project for web
         run: cargo make web_build
 
