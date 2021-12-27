@@ -3,7 +3,7 @@ name: AndroidPush
 
 on :
   push :
-    branches : [ master ]
+    branches : [ alpha ]
 
 jobs:
   build:
