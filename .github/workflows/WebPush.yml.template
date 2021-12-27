@@ -1,0 +1,27 @@
+
+name: WebPush
+
+on :
+  push :
+    branches : [ alpha ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    if: "contains( github.event.head_commit.message, '[build]' )"
+    uses: {{repository_owner}}/{{project-name}}/.github/workflows/WebCommon.yml@master
+
+  # lint:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Install latest nightly toolchain
+  #       uses: actions-rs/toolchain@v1
+  #       with:
+  #         toolchain: nightly
+  #         override: true
+  #     - run: rustup component add rustfmt
+  #     - run: cargo +nightly fmt --check
+
