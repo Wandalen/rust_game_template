@@ -1,0 +1,67 @@
+
+name: Conditional
+
+on : [ pull_request ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+
+  check:
+    runs-on : ubuntu-latest
+    outputs:
+      shouldRun: ${{ steps.run.outputs.shouldRun }}
+    steps :
+      - name: List commits on the pull request
+        run: |
+          response=$(curl --request GET \
+          --url 'https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/commits' \
+          --header 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'Accept: application/vnd.github.v3+json' \
+          --header 'Content-Type: application/json')
+          echo $response > response.json
+      - name: Get latest commit
+        id: message
+        run: |
+          length=$(jq 'length' response.json)
+          index=$(($length - 1))
+          latest_commit=$(jq --argjson index $index '.[$index]' response.json)
+          latest_commit_message=$(echo "$latest_commit" | jq -r '.commit.message')
+          echo "::set-output name=message::$latest_commit_message"
+      - name : Exit with fail
+        id: run
+        if: "!contains( steps.message.outputs.message, '[build]' ) && !startsWith( steps.message.outputs.message, 'Merge ' )"
+        run: echo "::set-output name=shouldRun::false"
+
+  android:
+    needs: check
+    if: ${{ needs.check.outputs.shouldRun != 'false' }}
+    uses: {{repository_owner}}/{{project-name}}/.github/workflows/AndroidCommon.yml@master
+  desktop:
+    needs: check
+    if: ${{ needs.check.outputs.shouldRun != 'false' }}
+    uses: {{repository_owner}}/{{project-name}}/.github/workflows/DesktopCommon.yml@master
+    with:
+      artifacts: 'false'
+  ios:
+    needs: check
+    if: ${{ needs.check.outputs.shouldRun != 'false' }}
+    uses: {{repository_owner}}/{{project-name}}/.github/workflows/IosCommon.yml@master
+  web:
+    needs: check
+    if: ${{ needs.check.outputs.shouldRun != 'false' }}
+    uses: {{repository_owner}}/{{project-name}}/.github/workflows/WebCommon.yml@master
+
+  # lint:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Install latest nightly toolchain
+  #       uses: actions-rs/toolchain@v1
+  #       with:
+  #         toolchain: nightly
+  #         override: true
+  #     - run: rustup component add rustfmt
+  #     - run: cargo +nightly fmt --check
+

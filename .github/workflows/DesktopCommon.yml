@@ -39,7 +39,7 @@ jobs:
     - uses: davidB/rust-cargo-make@v1
 
     - name: Build
-      run: cargo build
+      run: cargo make desktop_build
     - name: Run tests
       run: cargo test
     - name: Upload
