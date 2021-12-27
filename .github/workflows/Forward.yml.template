@@ -1,0 +1,68 @@
+
+name : Forward
+
+on :
+  push :
+    branches : [ alpha ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs :
+
+  android:
+    if: "contains( github.event.head_commit.message, '[build]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+    uses: {{repository_owner}}/{{project-name}}/.github/workflows/AndroidCommon.yml@master
+  desktop:
+    if: "contains( github.event.head_commit.message, '[build]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+    uses: {{repository_owner}}/{{project-name}}/.github/workflows/DesktopCommon.yml@master
+    with:
+      artifacts: 'true'
+  ios:
+    if: "contains( github.event.head_commit.message, '[build]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+    uses: {{repository_owner}}/{{project-name}}/.github/workflows/IosCommon.yml@master
+  web:
+    if: "contains( github.event.head_commit.message, '[build]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+    uses: {{repository_owner}}/{{project-name}}/.github/workflows/WebCommon.yml@master
+
+  forward :
+    needs: [ android, desktop, ios, web ]
+    runs-on : ubuntu-latest
+    steps :
+      - uses: actions/checkout@v2
+      - uses : everlytic/branch-merge@1.1.2
+        with :
+          github_token : ${{ secrets.PRIVATE_GITHUB_TOKEN }}
+          source_ref : alpha
+          target_branch : beta
+          commit_message_template : 'Merge {source_ref} into {target_branch} [Automated]'
+
+  # artifacts_forward :
+  #   needs: [ android, desktop, ios, web ]
+  #   runs-on : ubuntu-latest
+  #   steps :
+  #     - uses: actions/checkout@v2
+  #     - uses: actions/download-artifact@v2
+  #       with:
+  #         name: ubuntu
+  #         path: out/linux_release
+  #     - uses: actions/download-artifact@v2
+  #       with:
+  #         name: macos
+  #         path: out/macos_release
+  #     - uses: actions/download-artifact@v2
+  #       with:
+  #         name: windows
+  #         path: out/windows_release
+  #     - name: Pushes to another repository
+  #       uses: cpina/github-action-push-to-another-repository@v1.3
+  #       env:
+  #         API_TOKEN_GITHUB: ${{ secrets.PRIVATE_GITHUB_TOKEN }}
+  #       with:
+  #         source-directory: 'out'
+  #         target-directory: 'out'
+  #         destination-github-username: 'Wandalen'
+  #         destination-repository-name: 'rust_game_template_build'
+  #         user-email: wandalen@obox.systems
+  #         target-branch: master
+
