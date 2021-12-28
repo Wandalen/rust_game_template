@@ -21,8 +21,10 @@ Supported platforms:
 
 - [Desktop](./doc/platform/Desktop.md) ( _default_ )
 - [Web](./doc/platform/Web.md)
+{%- if template_name == "wgpu" -%}
 - [Android](./doc/platform/Android.md)
 - [iOS](./doc/platform/iOS.md)
+{%- endif -%}
 
 To run the project on default platform execute:
 

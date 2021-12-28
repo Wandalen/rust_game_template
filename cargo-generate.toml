@@ -4,11 +4,17 @@ prompt = "What template to use?"
 choices = [ "wgpu", "bevy" ]
 default = "wgpu"
 
+[placeholders.repository_owner]
+type = "string"
+prompt = "What is your GitHub username? (This information is required to generate GitHub workflows.)"
+
 [template]
 ignore = [
   "module/renderer/.gitignore",
   "module/renderer/step",
-  "module/renderer/Makefile.dev.toml"
+  "module/renderer/Makefile.dev.toml",
+  "Readme.md.template",
+  "module/renderer/Readme.md.template"
 ]
 
 [conditional.'template_name == "wgpu"']

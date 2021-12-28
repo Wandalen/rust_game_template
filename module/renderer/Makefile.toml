@@ -2,12 +2,11 @@ extend = [
 
   { path = "./platform/desktop/Makefile.toml" },
   { path = "./platform/web/Makefile.toml" },
-  # {% if template_name == "wgpu" %}
-  { path = "./platform/ios/Makefile.toml" },
-  { path = "./platform/android/Makefile.toml" },
-  { path = "./platform/wasi/Makefile.toml" },
-  { path = "./Makefile.dev.toml", optional = true }
-  # {% endif %}
+  { path = "./platform/ios/Makefile.toml", optional = true },
+  { path = "./platform/android/Makefile.toml", optional = true },
+  { path = "./platform/wasi/Makefile.toml", optional = true },
+  { path = "./Makefile.dev.toml", optional = true },
+  { path = "./Settings.toml", optional = true }
 
 ]
 
