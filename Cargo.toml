@@ -19,6 +19,7 @@ exclude = [
   "*",
   "module/renderer/wgpu",
   "module/renderer/bevy",
+  "module/renderer/miniquad",
 ]
 default-members = [ "module/renderer" ]
 

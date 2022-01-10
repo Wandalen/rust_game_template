@@ -1,7 +1,7 @@
 [placeholders.template_name]
 type = "string"
 prompt = "What template to use?"
-choices = [ "wgpu", "bevy" ]
+choices = [ "wgpu", "bevy", "miniquad" ]
 default = "wgpu"
 
 [placeholders.repository_owner]
@@ -18,11 +18,25 @@ ignore = [
 ]
 
 [conditional.'template_name == "wgpu"']
-ignore = [ "module/renderer/bevy" ]
+ignore = [ "module/renderer/bevy", "module/renderer/miniquad" ]
 
 [conditional.'template_name == "bevy"']
 ignore = [
   "module/renderer/wgpu",
+  "module/renderer/miniquad",
+  "module/renderer/platform/android",
+  "module/renderer/platform/ios",
+  "module/renderer/platform/wasi",
+  "doc/platform/Android.md",
+  "doc/platform/iOS.md",
+  "private.toml.template",
+  "graph.png"
+]
+
+[conditional.'template_name == "miniquad"']
+ignore = [
+  "module/renderer/wgpu",
+  "module/renderer/bevy",
   "module/renderer/platform/android",
   "module/renderer/platform/ios",
   "module/renderer/platform/wasi",

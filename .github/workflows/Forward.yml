@@ -42,6 +42,7 @@ jobs :
   #   runs-on : ubuntu-latest
   #   steps :
   #     - uses: actions/checkout@v2
+  #     - run: rm -rf out/*
   #     - uses: actions/download-artifact@v2
   #       with:
   #         name: ubuntu
@@ -55,14 +56,25 @@ jobs :
   #         name: windows
   #         path: out/windows_release
   #     - name: Pushes to another repository
-  #       uses: cpina/github-action-push-to-another-repository@v1.3
+  #       uses: cpina/github-action-push-to-another-repository@main
   #       env:
   #         API_TOKEN_GITHUB: ${{ secrets.PRIVATE_GITHUB_TOKEN }}
   #       with:
-  #         source-directory: 'out'
-  #         target-directory: 'out'
+  #         source-directory: out
+  #         target-directory: out/${{ github.ref_name }}
   #         destination-github-username: 'Wandalen'
-  #         destination-repository-name: 'rust_game_template_build'
-  #         user-email: wandalen@obox.systems
+  #         destination-repository-name: 'rust_game_template'
+  #         user-email: dm.vict.kr@gmail.com
   #         target-branch: master
-
+  #     - run: rm -rf out/*
+  #     - run: git checkout out/
+  #     - run: echo '[linux](https://github.com/Wandalen/rust_game_template/raw/master/out/${{ github.ref_name }}/linux_release/test)' >> out/${{ github.ref_name }}.md
+  #     - run: echo ' ' >> out/${{ github.ref_name }}.md
+  #     - run: echo '[macos](https://github.com/Wandalen/rust_game_template/raw/master/out/${{ github.ref_name }}/macos_release/test)' >> out/${{ github.ref_name }}.md
+  #     - run: echo ' ' >> out/${{ github.ref_name }}.md
+  #     - run: echo '[windows](https://github.com/Wandalen/rust_game_template/raw/master/out/${{ github.ref_name }}/windows_release)' >> out/${{ github.ref_name }}.md
+  #     - uses: quizlet/commit-changes@v0.2.0
+  #       with:
+  #         token: ${{ secrets.PRIVATE_TOKEN }}
+  #         message: 'Added links to release ${{ github.ref_name }} [automated]'
+  #         glob-patterns: out/

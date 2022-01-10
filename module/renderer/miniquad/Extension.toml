@@ -1,0 +1,32 @@
+[env]
+WASM_FILE_NAME = "web.wasm"
+
+[tasks.web_wasm_build_debug]
+disabled = true
+
+[tasks.web_wasm_build_release]
+disabled = true
+
+[tasks.web_wasm_rebuild_debug]
+disabled = true
+
+[tasks.web_wasm_build_post_debug]
+private = true
+script_runner = "@duckscript"
+script = '''
+glob_cp ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../target/wasm32-unknown-unknown/debug/web.wasm ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../target/web
+'''
+
+[tasks.web_wasm_build_post_release]
+private = true
+script_runner = "@duckscript"
+script = '''
+glob_cp ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../target/wasm32-unknown-unknown/release_web/web.wasm ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../target/web
+'''
+
+[tasks.web_build_copy_static]
+private = true
+script_runner = "@duckscript"
+script = '''
+glob_cp ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/platform/web/static_miniquad/* ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../target/web
+'''
