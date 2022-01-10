@@ -6,6 +6,7 @@ skip_crate_env_info = true
 
 [env]
 CARGO_MAKE_WEB_PORT = 9999 # qqq : !
+WASM_FILE_NAME = "web_bg.wasm"
 
 # Private
 
@@ -145,8 +146,8 @@ command = "rust-script"
 args = [
   "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/step/wasm_opt.rs",
   "-Oz",
-  "-o", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web/web_bg.wasm",
-  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web/web_bg.wasm",
+  "-o", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web/${WASM_FILE_NAME}",
+  "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../target/web/${WASM_FILE_NAME}",
   "--strip-debug",
   "--simplify-globals",
   "--vacuum",
@@ -173,6 +174,9 @@ private = true
 extend = "web_watch"
 dependencies = [ "web_build_target_debug", "web_wasm_rebuild_debug", "web_build_copy_static" ]
 
+[tasks.web_wasm_build_post_debug]
+[tasks.web_wasm_build_post_release]
+
 # Public
 
 [tasks.web_server_run]
@@ -187,20 +191,20 @@ args = [ "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../../../targ
 description = "Build debug of web target."
 private = false
 category = "Web"
-dependencies = [ "web_install_wasm", "web_build_target_debug", "web_wasm_build_debug", "web_build_copy_static" ]
+dependencies = [ "web_install_wasm", "web_build_target_debug", "web_wasm_build_debug", "web_wasm_build_post_debug", "web_build_copy_static" ]
 
 [tasks.web_build_release]
 description = "Build release of web target."
 private = false
 category = "Web"
-dependencies = [ "web_install_wasm", "web_build_target_release", "web_wasm_build_release", "web_build_copy_static", "web_wasm_optimize" ]
+dependencies = [ "web_install_wasm", "web_build_target_release", "web_wasm_build_release", "web_wasm_build_post_release", "web_build_copy_static", "web_wasm_optimize" ]
 # dependencies = [ "web_install_wasm", "web_build_target_release", "web_wasm_build_release", "web_build_copy_static" ]
 
 [tasks.web_rebuild]
 description = "Rebuild debug of web target."
 private = false
 category = "Web"
-dependencies = [ "web_build_target_debug", "web_wasm_rebuild_debug", "web_build_copy_static" ]
+dependencies = [ "web_build_target_debug", "web_wasm_rebuild_debug", "web_wasm_build_post_debug", "web_build_copy_static" ]
 
 [tasks.web_run]
 description = "Build and run web target."

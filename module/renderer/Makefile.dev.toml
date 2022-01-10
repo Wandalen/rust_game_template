@@ -1,5 +1,5 @@
 [config]
-additional_profiles = [ "wgpu", "bevy" ]
+additional_profiles = [ "wgpu", "bevy", "miniquad" ]
 
 [env]
 RUST_GAME_TEMPLATE_PROFILE = "wgpu"
@@ -33,6 +33,12 @@ run_task = "change_profile"
 category = "Template development"
 description = "Switch to bevy template"
 env = { RUST_GAME_TEMPLATE_PROFILE = "bevy" }
+run_task = "change_profile"
+
+[tasks.use_miniquad]
+category = "Template development"
+description = "Switch to miniquad template"
+env = { RUST_GAME_TEMPLATE_PROFILE = "miniquad" }
 run_task = "change_profile"
 
 [tasks.init]
