@@ -26,10 +26,10 @@ impl Stage
     #[rustfmt::skip]
     let vertices : [ Vertex; 4 ] =
     [
-        Vertex { pos : Vec2 { x : -0.5, y : -0.5 }, uv : Vec2 { x : 0., y : 0. } },
-        Vertex { pos : Vec2 { x : 0.5, y : -0.5 }, uv : Vec2 { x : 1., y : 0. } },
-        Vertex { pos : Vec2 { x : 0.5, y : 0.5 }, uv : Vec2 { x : 1., y : 1. } },
-        Vertex { pos : Vec2 { x : -0.5, y : 0.5 }, uv : Vec2 { x : 0., y : 1. } },
+      Vertex { pos : Vec2 { x : -0.5, y : -0.5 }, uv : Vec2 { x : 0., y : 0. } },
+      Vertex { pos : Vec2 { x : 0.5, y : -0.5 }, uv : Vec2 { x : 1., y : 0. } },
+      Vertex { pos : Vec2 { x : 0.5, y : 0.5 }, uv : Vec2 { x : 1., y : 1. } },
+      Vertex { pos : Vec2 { x : -0.5, y : 0.5 }, uv : Vec2 { x : 0., y : 1. } },
     ];
     let vertex_buffer = Buffer::immutable( ctx, BufferType::VertexBuffer, &vertices );
 
@@ -101,7 +101,7 @@ fn main()
 {
   miniquad::start( conf::Conf::default(), | mut ctx |
   {
-      UserData::owning( Stage::new( &mut ctx ), ctx )
+    UserData::owning( Stage::new( &mut ctx ), ctx )
   })
 }
 
