@@ -19,7 +19,8 @@ struct Stage
   bindings : Bindings,
 }
 
-impl Stage {
+impl Stage
+{
   pub fn new( ctx : &mut Context ) -> Stage
   {
     #[rustfmt::skip]
@@ -70,9 +71,9 @@ impl Stage {
 
 impl EventHandler for Stage
 {
-  fn update( &mut self, _ctx: &mut Context ) {}
+  fn update( &mut self, _ctx : &mut Context ) {}
 
-  fn draw( &mut self, ctx: &mut Context )
+  fn draw( &mut self, ctx : &mut Context )
   {
     let t = date::now();
 
