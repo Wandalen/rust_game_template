@@ -26,7 +26,7 @@ cargo make web_run
 To speedup incremental builds use:
 
 ```
-cargo make web_rerun_watching
+cargo make web_run_watching
 ```
 
 This command doesn't perform crate installation checks to reduce total build time.
@@ -42,7 +42,7 @@ Prerequisites:
 Connect your Android device or start an emulator and then execute:
 
 ```
-cargo make run_android
+cargo make android_run
 ```
 
 ## How to run on iOS
@@ -66,7 +66,7 @@ In this case value will be taken from your environment variable during the build
 Then run:
 
 ```
-cargo make run_ios
+cargo make ios_run
 ```
 
 Generated Xcode project can be found at `module/renderer/platform/ios/xcode`.
@@ -76,31 +76,52 @@ Generated Xcode project can be found at `module/renderer/platform/ios/xcode`.
 To get list of commands use command `cargo make --list-all-steps`
 
 ```
-Prerequisites
-----------
-web_install_dependencies - Install web dependencies
-
 Android
 ----------
-build_android - Build android target. Rebuilds on change.
-run_android - Run android target. Rebuilds on change.
+android_build - Build debug of android target.
+android_build_release - Build release of android target.
+android_rebuild - Rebuild debug of android target.
+android_run - Run android target.
+android_run_watching - Rebuild and reaload android target on file change.
 
 Desktop
 ----------
-desktop_build - Build desktop target.
-desktop_run - Run desktop target
-desktop_run_watching - Run desktop target. Rebuilds app on change
+default - Empty Task
+desktop_build - Build debug of desktop target.
+desktop_build_linux_on_mac - Build desktop target for GNU/Linux distributives on MacOS.
+desktop_build_release - Build release of desktop target.
+desktop_build_windows_on_linux - Build target for Windows on Debian-based GNU/Linux disributives.
+desktop_build_windows_on_mac - Build target for Windows on MacOS.
+desktop_rebuild - Rebuild debug of desktop target.
+desktop_run - Run debug of desktop target
+desktop_run_watching - Rerun debug desktop target on file change.
+
+Template development
+----------
+use_bevy - Switch to bevy template
+use_wgpu - Switch to wgpu template
 
 Web
 ----------
-web_build - Build web target. Rebuilds on change.
-web_rebuild - Build web target. Rebuilds on change.
-web_rerun - Run web target. Rebuilds app on change
-web_run - Run web target. Rebuilds app on change
+web_build - Build debug of web target.
+web_build_release - Build release of web target.
+web_rebuild - Rebuild debug of web target.
+web_run - Build and run web target.
+web_run_watching - Rebuild debug of web target and run it.
+web_server_run - Run HTTP server on port ${CARGO_MAKE_WEB_PORT}.
 
 iOS
 ----------
-build_ios - Build iOS target.
-clean_ios - Cleanup generated files of iOS target.
-run_ios - Run iOS target. Rebuilds on change.
+ios_build - Build debug of ios target.
+ios_build_release - Build release of ios target.
+ios_clean - Cleanup generated files of ios target.
+ios_rebuild - Rebuild debug of ios target.
+ios_run - Run debug of ios target.
+ios_run_watching - Rerun debug of ios target on file change.
+
+wasi
+----------
+wasi_build - Build debug of wasi target.
+wasi_run - Run debug of wasi target.
+wasi_run_watching - Run debug of wasi target.
 ```
