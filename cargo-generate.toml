@@ -1,7 +1,7 @@
 [placeholders.template_name]
 type = "string"
 prompt = "What template to use?"
-choices = [ "wgpu", "bevy" ]
+choices = [ "wgpu", "bevy", "miniquad" ]
 default = "wgpu"
 
 [placeholders.repository_owner]

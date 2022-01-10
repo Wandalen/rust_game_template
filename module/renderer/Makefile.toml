@@ -6,7 +6,7 @@ extend = [
   { path = "./platform/android/Makefile.toml", optional = true },
   { path = "./platform/wasi/Makefile.toml", optional = true },
   { path = "./Makefile.dev.toml", optional = true },
-  { path = "./Settings.toml", optional = true }
+  { path = "./Extension.toml", optional = true }
 
 ]
 
