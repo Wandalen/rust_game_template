@@ -99,7 +99,7 @@ impl EventHandler for Stage
 
 fn main()
 {
-  miniquad::start(conf::Conf::default(), | mut ctx |
+  miniquad::start( conf::Conf::default(), | mut ctx |
   {
       UserData::owning( Stage::new( &mut ctx ), ctx )
   })
@@ -117,9 +117,10 @@ mod shader
 
     varying lowp vec2 texcoord;
 
-    void main() {
-        gl_Position = vec4(pos + offset, 0, 1);
-        texcoord = uv;
+    void main()
+    {
+      gl_Position = vec4( pos + offset, 0, 1 );
+      texcoord = uv;
     }"#;
 
   pub const FRAGMENT: &str = r#"#version 100
@@ -127,8 +128,9 @@ mod shader
 
     uniform sampler2D tex;
 
-    void main() {
-        gl_FragColor = texture2D(tex, texcoord);
+    void main()
+    {
+      gl_FragColor = texture2D( tex, texcoord );
     }"#;
 
   pub fn meta() -> ShaderMeta
