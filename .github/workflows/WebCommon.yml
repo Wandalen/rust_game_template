@@ -4,6 +4,9 @@ name: WebCommon
 on:
   workflow_call:
     inputs:
+      artifacts:
+        required: true
+        type: string
       toolchain:
         required: true
         type: string
@@ -41,4 +44,11 @@ jobs:
       - name: Build
         if: ${{ inputs.build != 'fast' }}
         run: cargo make web_build_three_targets
+      - name: Upload
+        if: ${{ inputs.artifacts == 'true' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: web
+          path: target/web
+          retention-days: 1
 

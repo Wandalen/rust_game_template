@@ -3,6 +3,9 @@ name: IosCommon
 on:
   workflow_call:
     inputs:
+      artifacts:
+        required: true
+        type: string
       toolchain:
         required: true
         type: string
@@ -49,4 +52,11 @@ jobs:
       - name: Build project
         if: ${{ inputs.build != 'fast' }}
         run: cargo make ios_build_three_targets
+      - name: Upload
+        if: ${{ inputs.artifacts == 'true' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: ios
+          path: module/renderer/platform/ios/xcode/out/Build/Products
+          retention-days: 1
 

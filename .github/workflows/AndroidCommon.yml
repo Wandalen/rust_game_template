@@ -3,6 +3,9 @@ name: AndroidCommon
 on:
   workflow_call:
     inputs:
+      artifacts:
+        required: true
+        type: string
       toolchain:
         required: true
         type: string
@@ -43,3 +46,11 @@ jobs:
       - name: Build
         if: ${{ inputs.build != 'fast' }}
         run: cargo make android_build_three_targets
+      - name: Upload
+        if: ${{ inputs.artifacts == 'true' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: android
+          path: target/release/apk
+          retention-days: 1
+
