@@ -26,7 +26,12 @@ jobs :
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/WebCommon.yml@master
 
   forward :
-    needs: [ android, desktop, ios, web ]
+    needs:
+      - android
+      - desktop
+      - ios
+      - web
+      # - doc
     runs-on : ubuntu-latest
     steps :
       - uses: actions/checkout@v2
@@ -78,3 +83,21 @@ jobs :
   #         token: ${{ secrets.PRIVATE_TOKEN }}
   #         message: 'Added links to release ${{ github.ref_name }} [automated]'
   #         glob-patterns: out/
+
+  # doc :
+  #   needs: [ android, desktop, ios, web ]
+  #   runs-on : ubuntu-latest
+  #   steps :
+  #     - uses: actions/checkout@v2
+  #     - name: Install latest stable toolchain
+  #       uses: actions-rs/toolchain@v1
+  #       with:
+  #           toolchain: stable
+  #           override: true
+  #     - run : cargo doc
+  #     - run : cp -R target/doc doc/reference
+  #     - uses: quizlet/commit-changes@v0.2.0
+  #       with:
+  #         token: ${{ secrets.PRIVATE_GITHUB_TOKEN }}
+  #         message: doc
+  #         glob-patterns: doc/reference
