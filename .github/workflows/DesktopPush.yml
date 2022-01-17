@@ -14,4 +14,6 @@ jobs:
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/DesktopCommon.yml@master
     with:
       artifacts: 'false'
+      build: 'fast'
+      toolchain: 'stable'
 

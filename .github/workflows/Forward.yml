@@ -10,23 +10,73 @@ env:
 
 jobs :
 
-  android:
-    if: "contains( github.event.head_commit.message, '[build]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+  android_rapid:
+    if: "contains( github.event.head_commit.message, '[test_rapid]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/AndroidCommon.yml@master
+    with:
+      artifacts: 'false'
+      build: 'fast'
+      toolchain: 'stable'
+  android:
+    if: "contains( github.event.head_commit.message, '[test]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/AndroidCommon.yml@master
+    with:
+      artifacts: 'true'
+      build: 'slow'
+      toolchain: 'nightly'
+
+  desktop_fast:
+    if: "contains( github.event.head_commit.message, '[test_rapid]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/DesktopCommon.yml@master
+    with:
+      artifacts: 'false'
+      build: 'fast'
+      toolchain: 'stable'
   desktop:
-    if: "contains( github.event.head_commit.message, '[build]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+    if: "contains( github.event.head_commit.message, '[test]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/DesktopCommon.yml@master
     with:
       artifacts: 'true'
-  ios:
-    if: "contains( github.event.head_commit.message, '[build]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+      build: 'slow'
+      toolchain: 'nightly'
+
+  ios_fast:
+    if: "contains( github.event.head_commit.message, '[test_rapid]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/IosCommon.yml@master
-  web:
-    if: "contains( github.event.head_commit.message, '[build]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+    with:
+      artifacts: 'false'
+      build: 'fast'
+      toolchain: 'stable'
+  ios:
+    if: "contains( github.event.head_commit.message, '[test]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/IosCommon.yml@master
+    with:
+      artifacts: 'true'
+      build: 'slow'
+      toolchain: 'nightly'
+
+  web_fast:
+    if: "contains( github.event.head_commit.message, '[test_rapid]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/WebCommon.yml@master
+    with:
+      artifacts: 'false'
+      build: 'fast'
+      toolchain: 'stable'
+  web:
+    if: "contains( github.event.head_commit.message, '[test]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/WebCommon.yml@master
+    with:
+      artifacts: 'true'
+      build: 'slow'
+      toolchain: 'nightly'
 
   forward :
-    needs: [ android, desktop, ios, web ]
+    needs:
+      - android
+      - desktop
+      - ios
+      - web
+      # - artifacts_forward
     runs-on : ubuntu-latest
     steps :
       - uses: actions/checkout@v2
@@ -43,6 +93,14 @@ jobs :
   #   steps :
   #     - uses: actions/checkout@v2
   #     - run: rm -rf out/*
+  #     - uses: actions/checkout@v2
+  #     - name: Install latest stable toolchain
+  #       uses: actions-rs/toolchain@v1
+  #       with:
+  #           toolchain: stable
+  #           override: true
+  #     - run : cargo doc
+  #     - run : cp -R target/doc out/doc
   #     - uses: actions/download-artifact@v2
   #       with:
   #         name: ubuntu
@@ -55,6 +113,19 @@ jobs :
   #       with:
   #         name: windows
   #         path: out/windows_release
+  #     - uses: actions/download-artifact@v2
+  #       with:
+  #         name: android
+  #         path: out/android_release
+  #     - uses: actions/download-artifact@v2
+  #       with:
+  #         name: ios
+  #         path: out/ios_release
+  #     - uses: actions/download-artifact@v2
+  #       with:
+  #         name: web
+  #         path: out/web_release
+  #
   #     - name: Pushes to another repository
   #       uses: cpina/github-action-push-to-another-repository@main
   #       env:
@@ -66,6 +137,7 @@ jobs :
   #         destination-repository-name: 'rust_game_template'
   #         user-email: dm.vict.kr@gmail.com
   #         target-branch: master
+  #
   #     - run: rm -rf out/*
   #     - run: git checkout out/
   #     - run: echo '[linux](https://github.com/Wandalen/rust_game_template/raw/master/out/${{ github.ref_name }}/linux_release/test)' >> out/${{ github.ref_name }}.md
@@ -73,6 +145,12 @@ jobs :
   #     - run: echo '[macos](https://github.com/Wandalen/rust_game_template/raw/master/out/${{ github.ref_name }}/macos_release/test)' >> out/${{ github.ref_name }}.md
   #     - run: echo ' ' >> out/${{ github.ref_name }}.md
   #     - run: echo '[windows](https://github.com/Wandalen/rust_game_template/raw/master/out/${{ github.ref_name }}/windows_release)' >> out/${{ github.ref_name }}.md
+  #     - run: echo ' ' >> out/${{ github.ref_name }}.md
+  #     - run: echo '[android](https://github.com/Wandalen/rust_game_template/raw/master/out/${{ github.ref_name }}/android_release)' >> out/${{ github.ref_name }}.md
+  #     - run: echo ' ' >> out/${{ github.ref_name }}.md
+  #     - run: echo '[ios](https://github.com/Wandalen/rust_game_template/raw/master/out/${{ github.ref_name }}/ios_release)' >> out/${{ github.ref_name }}.md
+  #     - run: echo ' ' >> out/${{ github.ref_name }}.md
+  #     - run: echo '[web](https://github.com/Wandalen/rust_game_template/raw/master/out/${{ github.ref_name }}/web_release)' >> out/${{ github.ref_name }}.md
   #     - uses: quizlet/commit-changes@v0.2.0
   #       with:
   #         token: ${{ secrets.PRIVATE_TOKEN }}
