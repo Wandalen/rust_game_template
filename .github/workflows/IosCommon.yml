@@ -1,6 +1,14 @@
 name: IosCommon
 
-on: [ workflow_call ]
+on:
+  workflow_call:
+    inputs:
+      toolchain:
+        required: true
+        type: string
+      build:
+        required: true
+        type: string
 
 env:
   CARGO_TERM_COLOR: always
@@ -13,7 +21,7 @@ jobs:
       - name: Install latest stable toolchain
         uses: actions-rs/toolchain@v1
         with:
-            toolchain: stable
+            toolchain: ${{ inputs.toolchain }}
             override: true
       - uses: actions/cache@v2
         with:
@@ -36,6 +44,9 @@ jobs:
       #   run: 'echo "$PRIVATE_TOML" > private.toml'
         shell: bash
       - name: Build project
+        if: ${{ inputs.build == 'fast' }}
         run: cargo make ios_build
-
+      - name: Build project
+        if: ${{ inputs.build != 'fast' }}
+        run: cargo make ios_build_three_targets
 
