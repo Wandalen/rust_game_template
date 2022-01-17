@@ -10,23 +10,67 @@ env:
 
 jobs :
 
+  android_rapid:
+    if: "contains( github.event.head_commit.message, '[test_rapid]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/AndroidCommon.yml@master
+    with:
+      build: 'fast'
+      toolchain: 'stable'
   android:
-    if: "contains( github.event.head_commit.message, '[build]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
-    uses: {{repository_owner}}/{{project-name}}/.github/workflows/AndroidCommon.yml@master
-  desktop:
-    if: "contains( github.event.head_commit.message, '[build]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
-    uses: {{repository_owner}}/{{project-name}}/.github/workflows/DesktopCommon.yml@master
+    if: "contains( github.event.head_commit.message, '[test]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/AndroidCommon.yml@master
+    with:
+      build: 'slow'
+      toolchain: 'nightly'
+
+  desktop_fast:
+    if: "contains( github.event.head_commit.message, '[test_rapid]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/DesktopCommon.yml@master
     with:
       artifacts: 'true'
+      build: 'fast'
+      toolchain: 'stable'
+  desktop:
+    if: "contains( github.event.head_commit.message, '[test]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/DesktopCommon.yml@master
+    with:
+      artifacts: 'true'
+      build: 'slow'
+      toolchain: 'nightly'
+
+  ios_fast:
+    if: "contains( github.event.head_commit.message, '[test_rapid]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/IosCommon.yml@master
+    with:
+      build: 'fast'
+      toolchain: 'stable'
   ios:
-    if: "contains( github.event.head_commit.message, '[build]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
-    uses: {{repository_owner}}/{{project-name}}/.github/workflows/IosCommon.yml@master
+    if: "contains( github.event.head_commit.message, '[test]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/IosCommon.yml@master
+    with:
+      build: 'slow'
+      toolchain: 'nightly'
+
+  web_fast:
+    if: "contains( github.event.head_commit.message, '[test_rapid]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/WebCommon.yml@master
+    with:
+      build: 'fast'
+      toolchain: 'stable'
   web:
-    if: "contains( github.event.head_commit.message, '[build]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
-    uses: {{repository_owner}}/{{project-name}}/.github/workflows/WebCommon.yml@master
+    if: "contains( github.event.head_commit.message, '[test]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+    uses: Learn-Together-Pro/rust_game_template/.github/workflows/WebCommon.yml@master
+    with:
+      build: 'slow'
+      toolchain: 'nightly'
 
   forward :
-    needs: [ android, desktop, ios, web ]
+    needs:
+      - android
+      - desktop
+      - ios
+      - web
+      # - doc
     runs-on : ubuntu-latest
     steps :
       - uses: actions/checkout@v2
@@ -96,3 +140,4 @@ jobs :
   #         token: ${{ secrets.PRIVATE_GITHUB_TOKEN }}
   #         message: doc
   #         glob-patterns: doc/reference
+

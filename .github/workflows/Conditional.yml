@@ -38,20 +38,31 @@ jobs:
     needs: check
     if: ${{ needs.check.outputs.shouldRun != 'false' }}
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/AndroidCommon.yml@master
+    with:
+      build: 'fast'
+      toolchain: 'stable'
   desktop:
     needs: check
     if: ${{ needs.check.outputs.shouldRun != 'false' }}
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/DesktopCommon.yml@master
     with:
       artifacts: 'false'
+      build: 'fast'
+      toolchain: 'stable'
   ios:
     needs: check
     if: ${{ needs.check.outputs.shouldRun != 'false' }}
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/IosCommon.yml@master
+    with:
+      build: 'fast'
+      toolchain: 'stable'
   web:
     needs: check
     if: ${{ needs.check.outputs.shouldRun != 'false' }}
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/WebCommon.yml@master
+    with:
+      build: 'fast'
+      toolchain: 'stable'
 
   # lint:
   #   runs-on: ubuntu-latest
