@@ -32,6 +32,15 @@ args = [
   "--features", "web",
 ]
 
+[tasks.wasi_build_both_targets]
+dependencies = [ "stable_setup", "wasi_build" ]
+private = true
+
+[tasks.wasi_build_three_targets]
+dependencies = [ "wasi_build_both_targets", "nightly_setup" ]
+private = true
+run_task = "wasi_build"
+
 # Public
 
 [tasks.wasi_build]

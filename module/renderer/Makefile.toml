@@ -50,3 +50,17 @@ category = "General"
 description = "Generate full documentation"
 run_task = { name = [ "doc_dep_graph", "doc_ref" ], parallel = true }
 # dependencies = [ "doc_dep_graph", "doc_ref" ]
+
+[tasks.stable_setup]
+private = true
+script_runner = "@duckscript"
+script = '''
+exec rustup default stable
+'''
+
+[tasks.nightly_setup]
+private = true
+script_runner = "@duckscript"
+script = '''
+exec rustup default nightly
+'''
