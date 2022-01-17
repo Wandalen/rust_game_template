@@ -3,7 +3,7 @@ debug(`crate_type: ${template_name}`);
 
 file::rename( `module/renderer/${template_name}/src`, "module/renderer/src" );
 file::rename( `module/renderer/${template_name}/Cargo.toml`, "module/renderer/Cargo.toml" );
-file::rename( `module/renderer/${template_name}/Settings.toml`, "module/renderer/Settings.toml" );
+file::rename( `module/renderer/${template_name}/Extension.toml`, "module/renderer/Extension.toml" );
 file::delete( `module/renderer/${template_name}` );
 
 file::rename( `Readme.md.template`, "Readme.md" );
