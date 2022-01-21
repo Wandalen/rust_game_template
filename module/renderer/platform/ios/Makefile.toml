@@ -74,15 +74,6 @@ exec xcrun simctl install booted ${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRE
 exec xcrun simctl launch booted com.example.${IOS_TARGET_NAME}
 '''
 
-[tasks.ios_build_both_targets]
-dependencies = [ "stable_setup", "ios_build", "ios_build_release" ]
-private = true
-
-[tasks.ios_build_three_targets]
-dependencies = [ "ios_build_both_targets", "nightly_setup" ]
-private = true
-run_task = "ios_build_release"
-
 # Public
 
 
