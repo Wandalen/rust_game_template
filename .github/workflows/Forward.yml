@@ -11,7 +11,7 @@ env:
 jobs :
 
   android_rapid:
-    if: "contains( github.event.head_commit.message, '[test_rapid]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+    if: "contains( github.event.head_commit.message, '[test_rapid]' )"
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/AndroidCommon.yml@master
     with:
       artifacts: 'false'
@@ -26,7 +26,7 @@ jobs :
       toolchain: 'nightly'
 
   desktop_fast:
-    if: "contains( github.event.head_commit.message, '[test_rapid]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+    if: "contains( github.event.head_commit.message, '[test_rapid]' )"
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/DesktopCommon.yml@master
     with:
       artifacts: 'false'
@@ -41,7 +41,7 @@ jobs :
       toolchain: 'nightly'
 
   ios_fast:
-    if: "contains( github.event.head_commit.message, '[test_rapid]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+    if: "contains( github.event.head_commit.message, '[test_rapid]' )"
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/IosCommon.yml@master
     with:
       artifacts: 'false'
@@ -56,7 +56,7 @@ jobs :
       toolchain: 'nightly'
 
   web_fast:
-    if: "contains( github.event.head_commit.message, '[test_rapid]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+    if: "contains( github.event.head_commit.message, '[test_rapid]' )"
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/WebCommon.yml@master
     with:
       artifacts: 'false'
