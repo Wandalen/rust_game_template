@@ -14,4 +14,6 @@ jobs:
     uses: {{repository_owner}}/{{project-name}}/.github/workflows/DesktopCommon.yml@master
     with:
       artifacts: 'false'
+      build: 'fast'
+      toolchain: 'stable'
 
