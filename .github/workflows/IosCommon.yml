@@ -51,7 +51,7 @@ jobs:
         run: cargo make ios_build
       - name: Build project
         if: ${{ inputs.build != 'fast' }}
-        run: cargo make ios_build_three_targets
+        run: cargo make ios_build_release
       - name: Upload
         if: ${{ inputs.artifacts == 'true' }}
         uses: actions/upload-artifact@v2

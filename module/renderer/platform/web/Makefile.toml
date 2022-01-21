@@ -177,16 +177,6 @@ dependencies = [ "web_build_target_debug", "web_wasm_rebuild_debug", "web_build_
 [tasks.web_wasm_build_post_debug]
 [tasks.web_wasm_build_post_release]
 
-
-[tasks.web_build_both_targets]
-dependencies = [ "stable_setup", "web_build", "web_build_release" ]
-private = true
-
-[tasks.web_build_three_targets]
-dependencies = [ "web_build_both_targets", "nightly_setup" ]
-private = true
-run_task = "web_build_release"
-
 # Public
 
 [tasks.web_server_run]

@@ -38,15 +38,6 @@ args = [
   "--manifest-path", "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../../Cargo.toml"
 ]
 
-[tasks.android_build_both_targets]
-dependencies = [ "stable_setup", "android_build", "android_build_release" ]
-private = true
-
-[tasks.android_build_three_targets]
-dependencies = [ "android_build_both_targets", "nightly_setup" ]
-private = true
-run_task = "android_build_release"
-
 # Public
 
 [tasks.android_build]

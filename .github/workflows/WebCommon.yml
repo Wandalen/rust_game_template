@@ -43,7 +43,7 @@ jobs:
         run: cargo make web_build
       - name: Build
         if: ${{ inputs.build != 'fast' }}
-        run: cargo make web_build_three_targets
+        run: cargo make web_build_release
       - name: Upload
         if: ${{ inputs.artifacts == 'true' }}
         uses: actions/upload-artifact@v2

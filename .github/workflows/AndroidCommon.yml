@@ -45,7 +45,7 @@ jobs:
         run: cargo make android_build
       - name: Build
         if: ${{ inputs.build != 'fast' }}
-        run: cargo make android_build_three_targets
+        run: cargo make android_build_release
       - name: Upload
         if: ${{ inputs.artifacts == 'true' }}
         uses: actions/upload-artifact@v2
