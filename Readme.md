@@ -15,7 +15,7 @@ cargo install cargo-make
 
 ## How to instantiate repository from the template?
 
-See instructions [here](./doc/InstancingTemplate.md)
+See instructions [here](./doc/InstantiatingTemplate.md)
 
 ## Platforms
 
