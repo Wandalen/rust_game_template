@@ -37,7 +37,7 @@ jobs:
           ~/.cargo/git/db/
           target/
         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-    - name: Install latest stable toolchain
+    - name: Install latest toolchain
       uses: actions-rs/toolchain@v1
       with:
           toolchain: ${{ inputs.toolchain }}
