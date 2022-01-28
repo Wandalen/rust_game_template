@@ -1,9 +1,9 @@
 
-name: Conditional
+name: Beta
 
 on :
   pull_request :
-    branches-ignore:
+    branches:
       - main
 
 env:
@@ -81,4 +81,3 @@ jobs:
   #         override: true
   #     - run: rustup component add rustfmt
   #     - run: cargo +nightly fmt --check
-
