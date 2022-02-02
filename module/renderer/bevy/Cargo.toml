@@ -44,11 +44,8 @@ required-features = [ "web" ]
 name = "desktop"
 path = "./src/main.rs"
 
-[target.'cfg( not ( target_arch = "wasm32" ) )'.dependencies]
-# state of the art game engine
-bevy = { version = "0.5" }
+[dependencies]
+bevy = { version = "0.6" }
 
 [target.'cfg( target_arch = "wasm32" )'.dependencies]
-bevy = { version = "0.5", default-features = false }
-tracing-wasm = "=0.2.0"
-bevy_webgl2 = "0.5"
+bevy = { version = "0.6", default-features = false }

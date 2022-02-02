@@ -18,7 +18,11 @@ ignore = [
 ]
 
 [conditional.'template_name == "wgpu"']
-ignore = [ "module/renderer/bevy", "module/renderer/miniquad" ]
+ignore = [ 
+  "module/renderer/bevy", 
+  "module/renderer/miniquad",
+  "module/renderer/platform/web/static_miniquad",
+]
 
 [conditional.'template_name == "bevy"']
 ignore = [
@@ -27,6 +31,7 @@ ignore = [
   "module/renderer/platform/android",
   "module/renderer/platform/ios",
   "module/renderer/platform/wasi",
+  "module/renderer/platform/web/static_miniquad",
   "doc/platform/Android.md",
   "doc/platform/iOS.md",
   "private.toml.template",
