@@ -1,17 +1,18 @@
 
-name : Forward
+name : Alpha
 
 on :
-  push :
-    branches : [ alpha ]
+  pull_request :
+    branches:
+      - beta
 
 env:
   CARGO_TERM_COLOR: always
 
 jobs :
 
-  android_rapid:
-    if: "contains( github.event.head_commit.message, '[test_rapid]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+  android_fast:
+    if: "contains( github.event.head_commit.message, '[test_rapid]' )"
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/AndroidCommon.yml@master
     with:
       artifacts: 'false'
@@ -26,7 +27,7 @@ jobs :
       toolchain: 'stable'
 
   desktop_fast:
-    if: "contains( github.event.head_commit.message, '[test_rapid]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+    if: "contains( github.event.head_commit.message, '[test_rapid]' )"
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/DesktopCommon.yml@master
     with:
       artifacts: 'false'
@@ -41,7 +42,7 @@ jobs :
       toolchain: 'nightly'
 
   ios_fast:
-    if: "contains( github.event.head_commit.message, '[test_rapid]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+    if: "contains( github.event.head_commit.message, '[test_rapid]' )"
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/IosCommon.yml@master
     with:
       artifacts: 'false'
@@ -56,7 +57,7 @@ jobs :
       toolchain: 'stable'
 
   web_fast:
-    if: "contains( github.event.head_commit.message, '[test_rapid]' ) || startsWith( github.event.head_commit.message, 'Merge ' )"
+    if: "contains( github.event.head_commit.message, '[test_rapid]' )"
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/WebCommon.yml@master
     with:
       artifacts: 'false'
@@ -70,22 +71,22 @@ jobs :
       build: 'slow'
       toolchain: 'nightly'
 
-  forward :
-    needs:
-      - android
-      - desktop
-      - ios
-      - web
-      # - artifacts_forward
-    runs-on : ubuntu-latest
-    steps :
-      - uses: actions/checkout@v2
-      - uses : everlytic/branch-merge@1.1.2
-        with :
-          github_token : ${{ secrets.PRIVATE_GITHUB_TOKEN }}
-          source_ref : alpha
-          target_branch : beta
-          commit_message_template : 'Merge {source_ref} into {target_branch} [Automated]'
+  # forward :
+  #   needs:
+  #     - android
+  #     - desktop
+  #     - ios
+  #     - web
+  #     # - artifacts_forward
+  #   runs-on : ubuntu-latest
+  #   steps :
+  #     - uses: actions/checkout@v2
+  #     - uses : everlytic/branch-merge@1.1.2
+  #       with :
+  #         github_token : ${{ secrets.PRIVATE_GITHUB_TOKEN }}
+  #         source_ref : alpha
+  #         target_branch : beta
+  #         commit_message_template : 'Merge {source_ref} into {target_branch} [Automated]'
 
   # artifacts_forward :
   #   needs: [ android, desktop, ios, web ]
