@@ -114,6 +114,22 @@ jobs :
       build: 'slow'
       toolchain: 'nightly'
 
+  forward :
+    needs:
+      - android
+      - desktop
+      - ios
+      - web
+    runs-on : ubuntu-latest
+    steps :
+      - name: Automerge passed pull request
+        uses: juliangruber/merge-pull-request-action@v1
+        with:
+          github-token: ${{ secrets.PRIVATE_GITHUB_TOKEN }}
+          number: ${{ github.event.number }}
+          method: merge
+
+
   # artifacts_forward :
   #   needs: [ android, desktop, ios, web ]
   #   runs-on : ubuntu-latest
