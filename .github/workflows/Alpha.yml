@@ -11,7 +11,16 @@ env:
 
 jobs :
 
+  cancel:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: n1hility/cancel-previous-runs@v2
+      with:
+        token: ${{ secrets.PRIVATE_GITHUB_TOKEN }}
+
   check:
+    needs : cancel
     runs-on : ubuntu-latest
     outputs:
       slowRun: ${{ steps.run.outputs.slowRun }}
