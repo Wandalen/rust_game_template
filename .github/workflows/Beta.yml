@@ -2,7 +2,7 @@
 name: Beta
 
 on :
-  pull_request :
+  pull_request_target :
     branches:
       - master
 
@@ -12,18 +12,35 @@ env:
 jobs:
 
   check:
-    runs-on : ubuntu-latest
-    steps :
-      - uses: Vankka/pr-target-branch-action@v1.1
+    runs-on: ubuntu-latest
+    outputs:
+      shouldSkip: ${{ steps.validation.outputs.wrong-target }}
+    steps:
+      - name: Check branch
+        id: validation
+        uses: Vankka/pr-target-branch-action@v1.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.PRIVATE_GITHUB_TOKEN }}
         with:
           target: master
           exclude: Wandalen:beta
-      - name: Error message
-        if: ${{ failure() }}
-        run : echo -e 'To save the application stability the repository uses a system to forward changes from an unstable branch to a stable.\nThe unstable branch is `alpha`. All user pull requests should be opened to this branch.\nThe staging branch is `beta`. Changes to this branch are forwarded by a pull request from branch `alpha` automatically.\nThe stable branch is `master`. Changes to this branch are forwarded by a pull request from branch `beta` automatically. Forwarded changes merge manually after review.\n\nThe base branch of this PR has been automatically changed to `alpha` taking into account the described system `alpha -> beta -> master`.\nPlease, check that there are no merge conflicts.'
+          comment : |
+            To save the application stability the repository uses a system to forward changes from an unstable branch to a stable.
+            The unstable branch is `alpha`. All user pull requests should be opened to this branch.
+            The staging branch is `beta`. Changes to this branch are forwarded by a pull request from branch `alpha` automatically.
+            The stable branch is `master`. Changes to this branch are forwarded by a pull request from branch `beta` automatically. Forwarded changes merge manually after review.
+
+            The pull request was automatically converted to draft. Please, change base branch taking into account the described system `alpha -> beta -> master`.
+      - name: Convert to draft
+        if : ${{ steps.validation.outputs.wrong-target == 'true' }}
+        uses: raviraipuria/convert-to-draft@v1.0.1
+        with:
+          repo-token: ${{ secrets.PRIVATE_GITHUB_TOKEN }}
+          days-before-convert-draft: 0
 
   android:
     needs: check
+    if: ${{ needs.check.outputs.shouldSkip != 'true' }}
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/AndroidCommon.yml@master
     with:
       artifacts: 'false'
@@ -31,6 +48,7 @@ jobs:
       toolchain: 'stable'
   desktop:
     needs: check
+    if: ${{ needs.check.outputs.shouldSkip != 'true' }}
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/DesktopCommon.yml@master
     with:
       artifacts: 'false'
@@ -38,6 +56,7 @@ jobs:
       toolchain: 'stable'
   ios:
     needs: check
+    if: ${{ needs.check.outputs.shouldSkip != 'true' }}
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/IosCommon.yml@master
     with:
       artifacts: 'false'
@@ -45,6 +64,7 @@ jobs:
       toolchain: 'stable'
   web:
     needs: check
+    if: ${{ needs.check.outputs.shouldSkip != 'true' }}
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/WebCommon.yml@master
     with:
       artifacts: 'false'
