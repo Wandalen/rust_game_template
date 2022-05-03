@@ -4,7 +4,8 @@ name: Conditional
 on :
   pull_request :
     branches-ignore:
-      - main
+      - master
+      - beta
 
 env:
   CARGO_TERM_COLOR: always

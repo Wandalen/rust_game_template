@@ -22,15 +22,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PRIVATE_GITHUB_TOKEN }}
         with:
-          target: master
-          exclude: Wandalen:beta
+          target: main
+          exclude: motion-design-school:beta
           comment : |
             To save the application stability the repository uses a system to forward changes from an unstable branch to a stable.
             The unstable branch is `alpha`. All user pull requests should be opened to this branch.
             The staging branch is `beta`. Changes to this branch are forwarded by a pull request from branch `alpha` automatically.
-            The stable branch is `master`. Changes to this branch are forwarded by a pull request from branch `beta` automatically. Forwarded changes merge manually after review.
+            The stable branch is `main`. Changes to this branch are forwarded by a pull request from branch `beta` automatically. Forwarded changes merge manually after review.
 
-            The pull request was automatically converted to draft. Please, change base branch taking into account the described system `alpha -> beta -> master`.
+            The pull request was automatically converted to draft. Please, change base branch taking into account the described system `alpha -> beta -> main`.
       - name: Convert to draft
         if : ${{ steps.validation.outputs.wrong-target == 'true' }}
         uses: raviraipuria/convert-to-draft@v1.0.1
@@ -82,3 +82,4 @@ jobs:
   #         override: true
   #     - run: rustup component add rustfmt
   #     - run: cargo +nightly fmt --check
+
