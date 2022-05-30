@@ -23,6 +23,8 @@ jobs :
     needs : cancel
     runs-on : ubuntu-latest
     outputs:
+      shouldSkip: ${{ steps.validation.outputs.wrong-target }}
+    outputs:
       slowRun: ${{ steps.run.outputs.slowRun }}
     steps :
       - name: Check branch
@@ -34,7 +36,7 @@ jobs :
           target: beta
           exclude: Wandalen:alpha
           comment : |
-            To save the application stability the repository uses a system to forward changes from an unstable branch to a stable.
+            To save the application stability the repository uses a system for forwarding changes from an unstable branch to a stable.
             The unstable branch is `alpha`. All user pull requests should be opened to this branch.
             The staging branch is `beta`. Changes to this branch are forwarded by a pull request from branch `alpha` automatically.
             The stable branch is `master`. Changes to this branch are forwarded by a pull request from branch `beta` automatically. Forwarded changes merge manually after review.
@@ -42,10 +44,9 @@ jobs :
             The pull request was automatically converted to draft. Please, change base branch taking into account the described system `alpha -> beta -> master`.
       - name: Convert to draft
         if : ${{ steps.validation.outputs.wrong-target == 'true' }}
-        uses: raviraipuria/convert-to-draft@v1.0.1
+        uses: voiceflow/draft-pr@latest
         with:
-          repo-token: ${{ secrets.PRIVATE_GITHUB_TOKEN }}
-          days-before-convert-draft: 0
+          token: ${{ secrets.PRIVATE_GITHUB_TOKEN }}
       - name: List commits on the pull request
         if : ${{ steps.validation.outputs.wrong-target != 'true' }}
         run: |
@@ -69,68 +70,33 @@ jobs :
         if: "!contains( steps.message.outputs.message, '[build]' ) && !startsWith( steps.message.outputs.message, 'Merge ' ) || steps.validation.outputs.wrong-target != 'true'"
         run: echo "::set-output name=slowRun::false"
 
-  android_fast:
-    needs: check
-    if: ${{ needs.check.outputs.slowRun == 'false' }}
-    uses: Learn-Together-Pro/rust_game_template/.github/workflows/AndroidCommon.yml@master
-    with:
-      artifacts: 'false'
-      build: 'fast'
-      toolchain: 'stable'
   android:
     needs: check
-    if: ${{ needs.check.outputs.slowRun != 'false' }}
+    if: ${{ needs.check.outputs.shouldSkip != 'true' }}
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/AndroidCommon.yml@master
     with:
       artifacts: 'true'
       build: 'slow'
       toolchain: 'stable'
-
-  desktop_fast:
-    needs: check
-    if: ${{ needs.check.outputs.slowRun == 'false' }}
-    uses: Learn-Together-Pro/rust_game_template/.github/workflows/DesktopCommon.yml@master
-    with:
-      artifacts: 'false'
-      build: 'fast'
-      toolchain: 'stable'
   desktop:
     needs: check
-    if: ${{ needs.check.outputs.slowRun != 'false' }}
+    if: ${{ needs.check.outputs.shouldSkip != 'true' }}
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/DesktopCommon.yml@master
     with:
       artifacts: 'true'
       build: 'slow'
       toolchain: 'nightly'
-
-  ios_fast:
-    needs: check
-    if: ${{ needs.check.outputs.slowRun == 'false' }}
-    uses: Learn-Together-Pro/rust_game_template/.github/workflows/IosCommon.yml@master
-    with:
-      artifacts: 'false'
-      build: 'fast'
-      toolchain: 'stable'
   ios:
     needs: check
-    if: ${{ needs.check.outputs.slowRun != 'false' }}
+    if: ${{ needs.check.outputs.shouldSkip != 'true' }}
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/IosCommon.yml@master
     with:
       artifacts: 'true'
       build: 'slow'
       toolchain: 'stable'
-
-  web_fast:
-    needs: check
-    if: ${{ needs.check.outputs.slowRun == 'false' }}
-    uses: Learn-Together-Pro/rust_game_template/.github/workflows/WebCommon.yml@master
-    with:
-      artifacts: 'false'
-      build: 'fast'
-      toolchain: 'stable'
   web:
     needs: check
-    if: ${{ needs.check.outputs.slowRun != 'false' }}
+    if: ${{ needs.check.outputs.shouldSkip != 'true' }}
     uses: Learn-Together-Pro/rust_game_template/.github/workflows/WebCommon.yml@master
     with:
       artifacts: 'true'
