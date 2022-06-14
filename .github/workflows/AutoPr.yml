@@ -12,7 +12,7 @@ on :
         required : true
         type : string
     secrets :
-      PRIVATE_GITHUB_BOT_TOKEN :
+      PRIVATE_GITHUB_TOKEN :
         description : 'Github bot token'
         required : true
 
@@ -30,7 +30,7 @@ jobs :
       - name : Open PR
         uses : vsoch/pull-request-action@1.0.18
         env :
-          GITHUB_TOKEN : ${{ secrets.PRIVATE_GITHUB_BOT_TOKEN }}
+          GITHUB_TOKEN : ${{ secrets.PRIVATE_GITHUB_TOKEN }}
           PULL_REQUEST_BRANCH : ${{ inputs.dst_branch }}
           PULL_REQUEST_TITLE : 'AUTO : Forward from ${{ inputs.src_branch }} to ${{ inputs.dst_branch }}'
           PASS_IF_EXISTS : true

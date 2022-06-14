@@ -12,7 +12,7 @@ on :
         required : true
         type : string
     secrets :
-      PRIVATE_GITHUB_BOT_TOKEN :
+      PRIVATE_GITHUB_TOKEN :
         description : 'Github bot token'
         required : true
 
@@ -36,7 +36,7 @@ jobs :
         id : validation
         uses : Vankka/pr-target-branch-action@v1.1
         env :
-          GITHUB_TOKEN : ${{ secrets.PRIVATE_GITHUB_BOT_TOKEN }}
+          GITHUB_TOKEN : ${{ secrets.PRIVATE_GITHUB_TOKEN }}
         with :
           target : ${{ inputs.dst_branch }}
           exclude : ${{ inputs.src_branch }}
@@ -52,7 +52,7 @@ jobs :
         if : ${{ steps.validation.outputs.wrong-target == 'true' }}
         uses: voiceflow/draft-pr@latest
         with:
-          token: ${{ secrets.PRIVATE_GITHUB_BOT_TOKEN }}
+          token: ${{ secrets.PRIVATE_GITHUB_TOKEN }}
       - name : Failure
         if : ${{ steps.validation.outputs.wrong-target == 'true' }}
         run : exit 1
