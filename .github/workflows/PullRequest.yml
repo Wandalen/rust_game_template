@@ -43,6 +43,7 @@ jobs :
   android:
     needs: check
     if : ${{ needs.check.outputs.should_run == 'true' }}
+    uses: Wandalen/rust_game_template/.github/workflows/AndroidCommon.yml@alpha
     with:
       artifacts: 'false'
       build: 'fast'
