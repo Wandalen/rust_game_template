@@ -43,6 +43,7 @@ jobs :
   android:
     needs: check
     if : ${{ needs.check.outputs.should_run == 'true' }}
+    uses: Wandalen/rust_game_template/.github/workflows/AndroidCommon.yml@alpha
     with:
       artifacts: 'false'
       build: 'fast'
@@ -50,7 +51,7 @@ jobs :
   desktop:
     needs: check
     if : ${{ needs.check.outputs.should_run == 'true' }}
-    uses: Wandalen/rust_game_template/.github/workflows/DesktopCommon.yml@master
+    uses: Wandalen/rust_game_template/.github/workflows/DesktopCommon.yml@alpha
     with:
       artifacts: 'false'
       build: 'fast'
@@ -58,7 +59,7 @@ jobs :
   ios:
     needs: check
     if : ${{ needs.check.outputs.should_run == 'true' }}
-    uses: Wandalen/rust_game_template/.github/workflows/IosCommon.yml@master
+    uses: Wandalen/rust_game_template/.github/workflows/IosCommon.yml@alpha
     with:
       artifacts: 'false'
       build: 'fast'
@@ -66,7 +67,7 @@ jobs :
   web:
     needs: check
     if : ${{ needs.check.outputs.should_run == 'true' }}
-    uses: Wandalen/rust_game_template/.github/workflows/WebCommon.yml@master
+    uses: Wandalen/rust_game_template/.github/workflows/WebCommon.yml@alpha
     with:
       artifacts: 'false'
       build: 'fast'
