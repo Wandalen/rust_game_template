@@ -11,7 +11,7 @@ env:
 jobs:
   build:
     if: "contains( github.event.head_commit.message, '!test' )"
-    uses: {{repository_owner}}/{{project-name}}/.github/workflows/DesktopCommon.yml@master
+    uses: {{repository_owner}}/{{project-name}}/.github/workflows/DesktopCommon.yml@alpha
     with:
       artifacts: 'false'
       build: 'fast'

@@ -16,25 +16,25 @@ env:
 
 jobs :
   android:
-    uses: Wandalen/rust_game_template/.github/workflows/AndroidCommon.yml@master
+    uses: Wandalen/rust_game_template/.github/workflows/AndroidCommon.yml@alpha
     with:
       artifacts: 'true'
       build: 'slow'
       toolchain: 'stable'
   desktop:
-    uses: Wandalen/rust_game_template/.github/workflows/DesktopCommon.yml@master
+    uses: Wandalen/rust_game_template/.github/workflows/DesktopCommon.yml@alpha
     with:
       artifacts: 'true'
       build: 'slow'
       toolchain: 'nightly'
   ios:
-    uses: Wandalen/rust_game_template/.github/workflows/IosCommon.yml@master
+    uses: Wandalen/rust_game_template/.github/workflows/IosCommon.yml@alpha
     with:
       artifacts: 'true'
       build: 'slow'
       toolchain: 'stable'
   web:
-    uses: Wandalen/rust_game_template/.github/workflows/WebCommon.yml@master
+    uses: Wandalen/rust_game_template/.github/workflows/WebCommon.yml@alpha
     with:
       artifacts: 'true'
       build: 'slow'
